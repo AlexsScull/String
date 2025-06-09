@@ -1,27 +1,50 @@
 CC=gcc
 CFLAGS=-std=c11 -Wall -Werror -Wextra
 
+all: s21_string.a test
 
-all: s21_string test_s21_string clean_peace
+s21_string.a: memory_functions.o string_functions.o sprintf_functions.o sscanf_functions.o extended_functions.o error_functions.o
+	ar rcs s21_string.a src/*.o
 
-s21_cat: s21_cat.c  
-	$(CC) s21_cat.c -o s21_cat
+memory_functions.o: src/memory_functions.c include/string.h
+	$(CC) $(CFLAGS) -c src/memory_functions.c -o src/memory_functions.o
 
-test_s21_string: test_s21_string.c
-	$(CC) $(CFLAGS) test_s21_string.c -o test_s21_string -D_GNU_SOURCE
+string_functions.o: src/string_functions.c include/string.h
+	$(CC) $(CFLAGS) -c src/string_functions.c -o src/string_functions.o
 
-# s21_cat: s21_cat.c  
-# 	$(CC) s21_cat.c -o s21_cat -fsanitize=address
+sprintf_functions.o: src/sprintf_functions.c include/string.h
+	$(CC) $(CFLAGS) -c src/sprintf_functions.c -o src/sprintf_functions.o
 
-# test_s21_string: test_s21_string.c
-# 	$(CC) $(CFLAGS) test_s21_string.c -o test_s21_string -D_GNU_SOURCE -fsanitize=address
+sscanf_functions.o: src/sscanf_functions.c include/string.h
+	$(CC) $(CFLAGS) -c src/sscanf_functions.c -o src/sscanf_functions.o
+
+extended_functions.o: src/extended_functions.c include/string.h
+	$(CC) $(CFLAGS) -c src/extended_functions.c -o src/extended_functions.o
+
+error_functions.o: src/error_functions.c include/string.h
+	$(CC) $(CFLAGS) -c src/error_functions.c -o src/error_functions.o
+
+test: test_memory test_string test_sprintf test_sscanf test_extended test_error
+
+test_memory: tests/test_memory.c s21_string.a
+	$(CC) $(CFLAGS) tests/test_memory.c s21_string.a -o test_memory -lcheck
+
+test_string: tests/test_string.c s21_string.a
+	$(CC) $(CFLAGS) tests/test_string.c s21_string.a -o test_string -lcheck
+
+test_sprintf: tests/test_sprintf.c s21_string.a
+	$(CC) $(CFLAGS) tests/test_sprintf.c s21_string.a -o test_sprintf -lcheck
+
+test_sscanf: tests/test_sscanf.c s21_string.a
+	$(CC) $(CFLAGS) tests/test_sscanf.c s21_string.a -o test_sscanf -lcheck
+
+test_extended: tests/test_extended.c s21_string.a
+	$(CC) $(CFLAGS) tests/test_extended.c s21_string.a -o test_extended -lcheck
+
+test_error: tests/test_error.c s21_string.a
+	$(CC) $(CFLAGS) tests/test_error.c s21_string.a -o test_error -lcheck
 
 rebuild: clean all
 
-clean_peace:
-	rm -rf *.o
-
 clean:
-	rm -rf *.o s21_string test_s21_string
-
-
+	rm -f src/*.o s21_string.a test_memory test_string test_sprintf test_sscanf test_extended test_error
