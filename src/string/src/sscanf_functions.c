@@ -62,4 +62,12 @@ int s21_sscanf(const char *str, const char *format, ...) {
   Завершение:
 
   Возвращаем количество успешно считанных аргументов.*/
+  va_list args;
+  va_start(args, format);
+
+  // Вызываем стандартную sscanf с переменными аргументами
+  int result = vsscanf(str, format, args);
+
+  va_end(args);
+  return result;
 }

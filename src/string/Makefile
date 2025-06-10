@@ -1,6 +1,7 @@
 CC=gcc
 CFLAGS= 
-# CFLAGS=-std=c11 -Wall -Werror -Wextra
+# CFLAGS= -std=c11 -Wall -Werror -Wextra
+ENDFLAGS= -lcheck -lsubunit -lm
 
 all: s21_string.a test
 
@@ -28,22 +29,22 @@ error_functions.o: src/error_functions.c include/s21_string.h
 test: test_memory test_string test_sprintf test_sscanf test_extended test_error
 
 test_memory: tests/test_memory.c s21_string.a
-	$(CC) $(CFLAGS) tests/test_memory.c s21_string.a -o test_memory -lcheck
+	$(CC) $(CFLAGS) tests/test_memory.c s21_string.a -o test_memory $(ENDFLAGS)
 
 test_string: tests/test_string.c s21_string.a
-	$(CC) $(CFLAGS) tests/test_string.c s21_string.a -o test_string -lcheck
+	$(CC) $(CFLAGS) tests/test_string.c s21_string.a -o test_string $(ENDFLAGS)
 
-test_sprintf: tests/test_sprintf.c s21_string.a
-	$(CC) $(CFLAGS) tests/test_sprintf.c s21_string.a -o test_sprintf -lcheck
+test_sprintf: tests/test_sprintf.c s21_string.a 
+	$(CC) $(CFLAGS) tests/test_sprintf.c s21_string.a -o test_sprintf $(ENDFLAGS)
 
 test_sscanf: tests/test_sscanf.c s21_string.a
-	$(CC) $(CFLAGS) tests/test_sscanf.c s21_string.a -o test_sscanf -lcheck
+	$(CC) $(CFLAGS) tests/test_sscanf.c s21_string.a -o test_sscanf $(ENDFLAGS)
 
 test_extended: tests/test_extended.c s21_string.a
-	$(CC) $(CFLAGS) tests/test_extended.c s21_string.a -o test_extended -lcheck
+	$(CC) $(CFLAGS) tests/test_extended.c s21_string.a -o test_extended $(ENDFLAGS)
 
 test_error: tests/test_error.c s21_string.a
-	$(CC) $(CFLAGS) tests/test_error.c s21_string.a -o test_error -lcheck
+	$(CC) $(CFLAGS) tests/test_error.c s21_string.a -o test_error $(ENDFLAGS)
 
 rebuild: clean_all all
 
