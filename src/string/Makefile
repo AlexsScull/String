@@ -1,55 +1,108 @@
-CC=gcc
-CFLAGS= 
-# CFLAGS= -std=c11 -Wall -Werror -Wextra
-ENDFLAGS= -lcheck -lsubunit -lm
+# Определение операционной системы
+OS := $(shell uname)
 
-all: s21_string.a test
+# Компилятор и флаги
+CC := gcc
+CFLAGS := -Wall -Wextra -Werror -std=c11
+GCOV_FLAGS := -fprofile-arcs -ftest-coverage
 
-s21_string.a: memory_functions.o string_functions.o sprintf_functions.o sscanf_functions.o extended_functions.o error_functions.o
-	ar rcs s21_string.a src/*.o
+# Имя библиотеки
+LIB := s21_string.a
 
-memory_functions.o: src/memory_functions.c include/s21_string.h
-	$(CC) $(CFLAGS) -c src/memory_functions.c -o src/memory_functions.o
+# Флаги для линковки с библиотеками
+LIB_FLAGS := -lcheck -lm -lgcov
+ifeq ($(OS), Linux)
+  LIB_FLAGS += -lsubunit -lpthread
+endif
 
-string_functions.o: src/string_functions.c include/s21_string.h
-	$(CC) $(CFLAGS) -c src/string_functions.c -o src/string_functions.o
+# Директории
+SRC_DIR := src
+OBJ_DIR := obj
+TEST_DIR := tests
+TEST_OUT_DIR := obj_tests
+COV_DIR := coverage_report
 
-sprintf_functions.o: src/sprintf_functions.c include/s21_string.h
-	$(CC) $(CFLAGS) -c src/sprintf_functions.c -o src/sprintf_functions.o
+# Автоматическое определение исходных файлов
+SRC := $(wildcard $(SRC_DIR)/*.c)
+OBJ := $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRC))
+TEST_SRCS := $(wildcard $(TEST_DIR)/*.c)
+TEST_EXES := $(patsubst $(TEST_DIR)/%.c,$(TEST_OUT_DIR)/%,$(TEST_SRCS))
 
-sscanf_functions.o: src/sscanf_functions.c include/s21_string.h
-	$(CC) $(CFLAGS) -c src/sscanf_functions.c -o src/sscanf_functions.o
+# Основные цели
+.PHONY: all clean test gcov_report rebuild style style_fix cppcheck leaks valgrind
 
-extended_functions.o: src/extended_functions.c include/s21_string.h
-	$(CC) $(CFLAGS) -c src/extended_functions.c -o src/extended_functions.o
+# Стандартная сборка
+all: $(LIB)
 
-error_functions.o: src/error_functions.c include/s21_string.h
-	$(CC) $(CFLAGS) -c src/error_functions.c -o src/error_functions.o
+# Сборка с пересозданием всех файлов
+rebuild: clean all
 
-test: test_memory test_string test_sprintf test_sscanf test_extended test_error
+# Сборка библиотеки
+$(LIB): $(OBJ)
+	ar rcs $@ $^
+	ranlib $@
 
-test_memory: tests/test_memory.c s21_string.a
-	$(CC) $(CFLAGS) tests/test_memory.c s21_string.a -o test_memory $(ENDFLAGS)
+# Компиляция объектных файлов
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) $(if $(findstring gcov_report,$(MAKECMDGOALS)),$(GCOV_FLAGS)) -c $< -o $@
 
-test_string: tests/test_string.c s21_string.a
-	$(CC) $(CFLAGS) tests/test_string.c s21_string.a -o test_string $(ENDFLAGS)
+# Создание директорий
+$(OBJ_DIR) $(TEST_OUT_DIR) $(COV_DIR):
+	mkdir -p $@
 
-test_sprintf: tests/test_sprintf.c s21_string.a 
-	$(CC) $(CFLAGS) tests/test_sprintf.c s21_string.a -o test_sprintf $(ENDFLAGS)
+# Правило для сборки тестов
+$(TEST_OUT_DIR)/%: $(TEST_DIR)/%.c $(LIB) | $(TEST_OUT_DIR)
+	$(CC) $< $(LIB) -o $@ $(LIB_FLAGS) $(if $(findstring gcov_report,$(MAKECMDGOALS)),$(GCOV_FLAGS))
 
-test_sscanf: tests/test_sscanf.c s21_string.a
-	$(CC) $(CFLAGS) tests/test_sscanf.c s21_string.a -o test_sscanf $(ENDFLAGS)
+# Сборка и запуск всех тестов
+test: $(TEST_EXES)
+	for test in $(TEST_EXES); do \
+		$$test || exit 1; \
+	done
 
-test_extended: tests/test_extended.c s21_string.a
-	$(CC) $(CFLAGS) tests/test_extended.c s21_string.a -o test_extended $(ENDFLAGS)
+# Генерация отчета о покрытии кода
+# Генерация отчета о покрытии кода
+gcov_report: CFLAGS += $(GCOV_FLAGS)
+gcov_report: LIB_FLAGS += -lgcov
+gcov_report: clean $(LIB) $(TEST_EXES) | $(COV_DIR)
+	for test in $(TEST_EXES); do \
+		$$test || true; \
+	done
+	
+	lcov --capture --directory $(OBJ_DIR) --output-file $(COV_DIR)/coverage.info --branch-coverage
+	lcov --remove $(COV_DIR)/coverage.info '/usr/include/*' '/tmp/*' '*/tests/*' --output-file $(COV_DIR)/coverage_filtered.info || true
+	genhtml $(COV_DIR)/coverage_filtered.info --output-directory $(COV_DIR) --branch-coverage --legend
+	
+# Стиль кода
+style:
+	clang-format --style=Google -n */*.c */*.h
 
-test_error: tests/test_error.c s21_string.a
-	$(CC) $(CFLAGS) tests/test_error.c s21_string.a -o test_error $(ENDFLAGS)
+style_fix:
+	clang-format --style=Google -i */*.c */*.h
 
-rebuild: clean_all all
+cppcheck:
+	cppcheck --enable=all --suppress=missingIncludeSystem */*.c */*.h
 
+# Проверка утечек (macOS)
+leaks: test
+ifeq ($(OS), Darwin)
+	for test in $(TEST_EXES); do \
+		leaks --atExit -- $$test || exit 1; \
+	done
+else
+	@echo "Leaks check is only available on macOS"
+endif
+
+# Проверка утечек (Linux)
+valgrind: test
+ifeq ($(OS), Linux)
+	for test in $(TEST_EXES); do \
+		valgrind --leak-check=full --track-origins=yes -s $$test || exit 1; \
+	done
+else
+	echo "Valgrind is only available on Linux"
+endif
+
+# Очистка
 clean:
-	rm -f src/*.o
-
-clean_all:
-	rm -f src/*.o s21_string.a test_memory test_string test_sprintf test_sscanf test_extended test_error
+	rm -rf $(OBJ_DIR) $(TEST_OUT_DIR) $(COV_DIR) $(LIB)

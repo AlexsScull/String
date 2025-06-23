@@ -9,9 +9,7 @@
 typedef unsigned long s21_size_t;
 
 // Макрос NULL - нулевой указатель
-#ifndef NULL
-#define NULL ((void *)0)
-#endif
+#define S21_NULL ((void *)0)
 
 // ==================== ОСНОВНЫЕ ФУНКЦИИ string.h ====================
 
