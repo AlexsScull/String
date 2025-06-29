@@ -1,6 +1,7 @@
 #include <ctype.h>
 #include <stdarg.h>
 #include <stdint.h>
+#include <wchar.h>  // Для wchar_t
 
 #include "../include/s21_string.h"
 
@@ -55,8 +56,7 @@
 └── Для %n: запись текущей позиции
     │
     ▼
-Запись результата в буфер (sprintf) сдвинуть buf
-
+Запись результата в буфер сдвинуть buf
   │
   ▼
 Добавить терминирующий ноль ('\0') в конец buf
@@ -64,169 +64,7 @@
   ▼
 Вернуть кол-во записанных символов (без учёта '\0')*/
 
-int s21_sprintf(char *str, const char *format, ...) {
-  int modifier_format[4] = {0};    // [h l L null]
-  int specifier_format[15] = {0};  // [%d, %i %u, %x %f, %e %c, %s %p %n %% ]
-  int spec_format[8] = {0};        // [- + ' ' # 0] [(number) *] [.number .*]
-
-  va_list args;
-  va_start(args, format);
-  s21_size_t iterator = 0;
-  s21_size_t str_iterator = 0;
-
-  for (; format[iterator] != '\0'; ++iterator) {
-    if (format[iterator] == '%') {
-      parsing_flags_modifier(format, &iterator, modifier_format);
-      parsing_flags_specifier(format, &iterator, modifier_format,
-                              specifier_format);
-    } else {
-      str[str_iterator] = format[iterator], &modifier_format;
-      str_iterator++;
-    }
-  }
-  va_end(args);
-  str[str_iterator] = '\0';
-  return str_iterator;
-}
-
-void parsing_flags_modifier(const char *format, s21_size_t *iterator,
-                            int *modifier_format) {
-  switch (format[*iterator]) {
-    case 'h':
-      modifier_format[LENGTH_H] = 1;
-      break;
-    case 'l':
-      modifier_format[LENGTH_L] = 1;
-      break;
-    case 'L':
-      modifier_format[LENGTH_CAP_L] = 1;
-      break;
-  }
-  (*iterator)++;
-
-  if (modifier_format[LENGTH_H] == 0 && modifier_format[LENGTH_L] == 0 &&
-      modifier_format[LENGTH_CAP_L] == 0) {
-    modifier_format[LENGTH_NULL] = 1;
-  }
-}
-
-void parsing_flags_specifier(const char *format, s21_size_t *iterator,
-                             const int *modifier_format,
-                             int *specifier_format) {
-  switch (format[*iterator]) {
-    case 'd':
-    case 'i':
-      //  TYPE_SHORT,      %hd, %hi
-      if (modifier_format[LENGTH_H] == 1) {
-        specifier_format[TYPE_SHORT] = 1;
-      }
-      //  TYPE_INT,        %d, %i
-      else if (modifier_format[LENGTH_NULL] == 1) {
-        specifier_format[TYPE_INT] = 1;
-      }
-      //  TYPE_LONG,       %ld, %li
-      else if (modifier_format[LENGTH_L] == 1) {
-        specifier_format[TYPE_LONG] = 1;
-      }
-      //  Error
-      else {
-      }
-      break;
-    case 'o':
-    case 'u':
-    case 'x':
-    case 'X':
-      //  TYPE_USHORT,      %hu, %ho, %hx, %hX
-      if (modifier_format[LENGTH_H] == 1) {
-        specifier_format[TYPE_USHORT] = 1;
-      }
-      //  TYPE_UINT,        %u, %o, %x, %X
-      else if (modifier_format[LENGTH_NULL] == 1) {
-        specifier_format[TYPE_UINT] = 1;
-      }
-      //  TYPE_ULONG,       %lu, %lo, %lx, %lX
-      else if (modifier_format[LENGTH_L] == 1) {
-        specifier_format[TYPE_ULONG] = 1;
-      }
-      //  Error
-      else {
-      }
-      break;
-    case 'e':
-    case 'E':
-    case 'f':
-    case 'g':
-    case 'G':
-      // TYPE_FLOAT, %f, %e, %E, %g, %G (float/double)
-      if (modifier_format[LENGTH_NULL] == 1) {
-        specifier_format[TYPE_FLOAT] = 1;
-      }
-      // TYPE_LONGDOUBLE, %Lf, %Le, %LE, %Lg, %LG
-      else if (modifier_format[LENGTH_CAP_L] == 1) {
-        specifier_format[TYPE_LONGDOUBLE] = 1;
-      }
-      //  Error
-      else {
-      }
-      break;
-    case 'c':
-      // TYPE_CHAR %c (char)
-      if (modifier_format[LENGTH_NULL] == 1) {
-        specifier_format[TYPE_CHAR] = 1;
-      }
-      // TYPE_WCHAR  %lc (wchar_t)
-      else if (modifier_format[LENGTH_L] == 1) {
-        specifier_format[TYPE_WCHAR] = 1;
-      }
-      //  Error
-      else {
-      }
-      break;
-    case 's':
-      // TYPE_STRING %s (const char*)
-      if (modifier_format[LENGTH_NULL] == 1) {
-        specifier_format[TYPE_STRING] = 1;
-      }
-      // TYPE_WSTRING  %ls (const wchar_t*)
-      else if (modifier_format[LENGTH_L] == 1) {
-        specifier_format[TYPE_WSTRING] = 1;
-      }
-      //  Error
-      else {
-      }
-      break;
-    case 'p':
-      //  TYPE_POINTER
-      if (modifier_format[LENGTH_NULL] == 1) {
-        specifier_format[TYPE_POINTER] = 1;
-      }
-      //  Error
-      else {
-      }
-      break;
-    case 'n':
-      //  TYPE_PTR
-      if (modifier_format[LENGTH_NULL] == 1) {
-        specifier_format[TYPE_PTR] = 1;
-      }
-      //  Error
-      else {
-      }
-      break;
-    case '%':
-      //  TYPE_PERCENT
-      if (modifier_format[LENGTH_NULL] == 1) {
-        specifier_format[TYPE_PERCENT] = 1;
-      }
-      //  Error
-      else {
-      }
-      break;
-  }
-  (*iterator)++;
-}
-
-typedef enum {
+enum SpecifierFormat {
   // Целочисленные знаковые
   TYPE_SHORT,  // %hd, %hi
   TYPE_INT,    // %d, %i
@@ -251,13 +89,13 @@ typedef enum {
   TYPE_POINTER,  // %p (void*)
   TYPE_PERCENT,  // %%
   TYPE_PTR,      // %n (int*)
-} NumType;
+};
 
 enum ModifierFormat {
-  LENGTH_H,      // 'h' (short)
-  LENGTH_L,      // 'l' (long)
-  LENGTH_CAP_L,  // 'L' (long double)
-  LENGTH_NULL    // ' '
+  LENGTH_NULL,  // ' '
+  LENGTH_H,     // 'h' (short)
+  LENGTH_L,     // 'l' (long)
+  LENGTH_CAP_L  // 'L' (long double)
 };
 
 enum SpecFormat {
@@ -271,3 +109,236 @@ enum SpecFormat {
   PRECISION_NUMBER,    // (number) for precision
   PRECISION_ASTERISK,  // '.*' for precision
 };
+
+int s21_sprintf(char *str, const char *format, ...) {
+  int modifier_format = 0;   // [h l L null]
+  int specifier_format = 0;  //
+  int spec_format[8] = {0};  // [- + ' ' # 0] [(number) *] [.number .*]
+
+  va_list args;
+  va_start(args, format);
+  s21_size_t str_iterator = 0;
+
+  for (s21_size_t i = 0; format[i] != '\0'; ++i) {
+    if (format[i] == '%') {
+      parsing_flags_modifier(format, &i, modifier_format);
+      parsing_flags_specifier(format, &i, modifier_format, specifier_format);
+
+      parse_format(format, &i, specifier_format, args);
+    } else {
+      str[str_iterator++] = format[i];
+    }
+  }
+  va_end(args);
+  str[str_iterator] = '\0';
+  return str_iterator;
+}
+
+void parsing_flags_modifier(const char *format, s21_size_t *i,
+                            int modifier_format) {
+  switch (format[*i]) {
+    case 'h':
+      modifier_format = LENGTH_H;
+      break;
+    case 'l':
+      modifier_format = LENGTH_L;
+      break;
+    case 'L':
+      modifier_format = LENGTH_CAP_L;
+      break;
+  }
+  (*i)++;
+}
+
+void parsing_flags_specifier(const char *format, s21_size_t *i,
+                             const int modifier_format, int specifier_format) {
+  switch (format[*i]) {
+    case 'd':
+    case 'i':
+      //  TYPE_SHORT,      %hd, %hi
+      if (modifier_format == LENGTH_H) {
+        specifier_format = TYPE_SHORT;
+      }
+      //  TYPE_INT,        %d, %i
+      else if (modifier_format == LENGTH_NULL) {
+        specifier_format = TYPE_INT;
+      }
+      //  TYPE_LONG,       %ld, %li
+      else if (modifier_format == LENGTH_L) {
+        specifier_format = TYPE_LONG;
+      }
+      //  Error
+      else {
+      }
+      break;
+    case 'o':
+    case 'u':
+    case 'x':
+    case 'X':
+      //  TYPE_USHORT,      %hu, %ho, %hx, %hX
+      if (modifier_format == LENGTH_H) {
+        specifier_format = TYPE_USHORT;
+      }
+      //  TYPE_UINT,        %u, %o, %x, %X
+      else if (modifier_format == LENGTH_NULL) {
+        specifier_format = TYPE_UINT;
+      }
+      //  TYPE_ULONG,       %lu, %lo, %lx, %lX
+      else if (modifier_format == LENGTH_L) {
+        specifier_format = TYPE_ULONG;
+      }
+      //  Error
+      else {
+      }
+      break;
+    case 'e':
+    case 'E':
+    case 'f':
+    case 'g':
+    case 'G':
+      // TYPE_FLOAT, %f, %e, %E, %g, %G (float/double)
+      if (modifier_format == LENGTH_NULL) {
+        specifier_format = TYPE_FLOAT;
+      }
+      // TYPE_LONGDOUBLE, %Lf, %Le, %LE, %Lg, %LG
+      else if (modifier_format == LENGTH_CAP_L) {
+        specifier_format = TYPE_LONGDOUBLE;
+      }
+      //  Error
+      else {
+      }
+      break;
+    case 'c':
+      // TYPE_CHAR %c (char)
+      if (modifier_format == LENGTH_NULL) {
+        specifier_format = TYPE_CHAR;
+      }
+      // TYPE_WCHAR  %lc (wchar_t)
+      else if (modifier_format == LENGTH_L) {
+        specifier_format = TYPE_WCHAR;
+      }
+      //  Error
+      else {
+      }
+      break;
+    case 's':
+      // TYPE_STRING %s (const char*)
+      if (modifier_format == LENGTH_NULL) {
+        specifier_format = TYPE_STRING;
+      }
+      // TYPE_WSTRING  %ls (const wchar_t*)
+      else if (modifier_format == LENGTH_L) {
+        specifier_format = TYPE_WSTRING;
+      }
+      //  Error
+      else {
+      }
+      break;
+    case 'p':
+      //  TYPE_POINTER
+      if (modifier_format == LENGTH_NULL) {
+        specifier_format = TYPE_POINTER;
+      }
+      //  Error
+      else {
+      }
+      break;
+    case 'n':
+      //  TYPE_PTR
+      if (modifier_format == LENGTH_NULL) {
+        specifier_format = TYPE_PTR;
+      }
+      //  Error
+      else {
+      }
+      break;
+    case '%':
+      //  TYPE_PERCENT
+      if (modifier_format == LENGTH_NULL) {
+        specifier_format = TYPE_PERCENT;
+      }
+      //  Error
+      else {
+      }
+      break;
+  }
+  (*i)++;
+}
+
+void parse_format(const char *format, s21_size_t *i, const int specifier_format,
+       va_list args) {
+  switch (specifier_format) {
+    case TYPE_SHORT:  // short извлекается как int
+    case TYPE_INT: {
+      int ival = va_arg(args, int);
+      // Обработка int
+      break;
+    }
+    case TYPE_LONG: {
+      long lval = va_arg(args, long);
+      // Обработка long
+      break;
+    }
+    case TYPE_USHORT: {
+      unsigned short usval = (unsigned short)va_arg(args, unsigned int);
+      // Обработка unsigned short
+      break;
+    }
+    case TYPE_UINT: {
+      unsigned int uival = va_arg(args, unsigned int);
+      // Обработка unsigned int
+      break;
+    }
+    case TYPE_ULONG: {
+      unsigned long ulval = va_arg(args, unsigned long);
+      // Обработка unsigned long
+      break;
+    }
+    case TYPE_FLOAT: {
+      double dval =
+          va_arg(args, double);  // float автоматически повышается до double
+      // Обработка float
+      break;
+    }
+    case TYPE_LONGDOUBLE: {
+      long double ldval = va_arg(args, long double);
+      // Обработка long double
+      break;
+    }
+    case TYPE_CHAR: {
+      int cval = va_arg(args, int);  // char извлекается как int
+      // Обработка char
+      break;
+    }
+    case TYPE_WCHAR: {
+      wchar_t wcval = va_arg(args, wchar_t);
+      // Обработка wchar_t
+      break;
+    }
+    case TYPE_STRING: {
+      char *sval = va_arg(args, char *);
+      // Обработка char*
+      break;
+    }
+    case TYPE_WSTRING: {
+      wchar_t *wsval = va_arg(args, wchar_t *);
+      // Обработка wchar_t*
+      break;
+    }
+    case TYPE_POINTER:
+    case TYPE_PTR: {
+      void *ptrval = va_arg(args, void *);
+      // Обработка указателя
+      break;
+    }
+    case TYPE_PERCENT: {
+      // Не требует аргумента - обрабатываем символ '%'
+      break;
+    }
+    default: {
+      // Обработка неизвестного спецификатора
+      break;
+    }
+  }
+  (*i)++;
+}
