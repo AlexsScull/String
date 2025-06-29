@@ -121,8 +121,8 @@ int s21_sprintf(char *str, const char *format, ...) {
 
   for (s21_size_t i = 0; format[i] != '\0'; ++i) {
     if (format[i] == '%') {
-      parsing_flags_modifier(format, &i, modifier_format);
-      parsing_flags_specifier(format, &i, modifier_format, specifier_format);
+      parsing_flags_modifier(format, &i, &modifier_format);
+      parsing_flags_specifier(format, &i, modifier_format, &specifier_format);
 
       parse_format(format, &i, specifier_format, args);
     } else {
@@ -135,37 +135,37 @@ int s21_sprintf(char *str, const char *format, ...) {
 }
 
 void parsing_flags_modifier(const char *format, s21_size_t *i,
-                            int modifier_format) {
+                            int *modifier_format) {
   switch (format[*i]) {
     case 'h':
-      modifier_format = LENGTH_H;
+      *modifier_format = LENGTH_H;
       break;
     case 'l':
-      modifier_format = LENGTH_L;
+      *modifier_format = LENGTH_L;
       break;
     case 'L':
-      modifier_format = LENGTH_CAP_L;
+      *modifier_format = LENGTH_CAP_L;
       break;
   }
   (*i)++;
 }
 
 void parsing_flags_specifier(const char *format, s21_size_t *i,
-                             const int modifier_format, int specifier_format) {
+                             const int modifier_format, int *specifier_format) {
   switch (format[*i]) {
     case 'd':
     case 'i':
       //  TYPE_SHORT,      %hd, %hi
       if (modifier_format == LENGTH_H) {
-        specifier_format = TYPE_SHORT;
+        *specifier_format = TYPE_SHORT;
       }
       //  TYPE_INT,        %d, %i
       else if (modifier_format == LENGTH_NULL) {
-        specifier_format = TYPE_INT;
+        *specifier_format = TYPE_INT;
       }
       //  TYPE_LONG,       %ld, %li
       else if (modifier_format == LENGTH_L) {
-        specifier_format = TYPE_LONG;
+        *specifier_format = TYPE_LONG;
       }
       //  Error
       else {
@@ -177,15 +177,15 @@ void parsing_flags_specifier(const char *format, s21_size_t *i,
     case 'X':
       //  TYPE_USHORT,      %hu, %ho, %hx, %hX
       if (modifier_format == LENGTH_H) {
-        specifier_format = TYPE_USHORT;
+        *specifier_format = TYPE_USHORT;
       }
       //  TYPE_UINT,        %u, %o, %x, %X
       else if (modifier_format == LENGTH_NULL) {
-        specifier_format = TYPE_UINT;
+        *specifier_format = TYPE_UINT;
       }
       //  TYPE_ULONG,       %lu, %lo, %lx, %lX
       else if (modifier_format == LENGTH_L) {
-        specifier_format = TYPE_ULONG;
+        *specifier_format = TYPE_ULONG;
       }
       //  Error
       else {
@@ -198,11 +198,11 @@ void parsing_flags_specifier(const char *format, s21_size_t *i,
     case 'G':
       // TYPE_FLOAT, %f, %e, %E, %g, %G (float/double)
       if (modifier_format == LENGTH_NULL) {
-        specifier_format = TYPE_FLOAT;
+        *specifier_format = TYPE_FLOAT;
       }
       // TYPE_LONGDOUBLE, %Lf, %Le, %LE, %Lg, %LG
       else if (modifier_format == LENGTH_CAP_L) {
-        specifier_format = TYPE_LONGDOUBLE;
+        *specifier_format = TYPE_LONGDOUBLE;
       }
       //  Error
       else {
@@ -211,11 +211,11 @@ void parsing_flags_specifier(const char *format, s21_size_t *i,
     case 'c':
       // TYPE_CHAR %c (char)
       if (modifier_format == LENGTH_NULL) {
-        specifier_format = TYPE_CHAR;
+        *specifier_format = TYPE_CHAR;
       }
       // TYPE_WCHAR  %lc (wchar_t)
       else if (modifier_format == LENGTH_L) {
-        specifier_format = TYPE_WCHAR;
+        *specifier_format = TYPE_WCHAR;
       }
       //  Error
       else {
@@ -224,11 +224,11 @@ void parsing_flags_specifier(const char *format, s21_size_t *i,
     case 's':
       // TYPE_STRING %s (const char*)
       if (modifier_format == LENGTH_NULL) {
-        specifier_format = TYPE_STRING;
+        *specifier_format = TYPE_STRING;
       }
       // TYPE_WSTRING  %ls (const wchar_t*)
       else if (modifier_format == LENGTH_L) {
-        specifier_format = TYPE_WSTRING;
+        *specifier_format = TYPE_WSTRING;
       }
       //  Error
       else {
@@ -237,7 +237,7 @@ void parsing_flags_specifier(const char *format, s21_size_t *i,
     case 'p':
       //  TYPE_POINTER
       if (modifier_format == LENGTH_NULL) {
-        specifier_format = TYPE_POINTER;
+        *specifier_format = TYPE_POINTER;
       }
       //  Error
       else {
@@ -246,7 +246,7 @@ void parsing_flags_specifier(const char *format, s21_size_t *i,
     case 'n':
       //  TYPE_PTR
       if (modifier_format == LENGTH_NULL) {
-        specifier_format = TYPE_PTR;
+        *specifier_format = TYPE_PTR;
       }
       //  Error
       else {
@@ -255,7 +255,7 @@ void parsing_flags_specifier(const char *format, s21_size_t *i,
     case '%':
       //  TYPE_PERCENT
       if (modifier_format == LENGTH_NULL) {
-        specifier_format = TYPE_PERCENT;
+        *specifier_format = TYPE_PERCENT;
       }
       //  Error
       else {
@@ -271,7 +271,7 @@ void parse_format(const char *format, s21_size_t *i, const int specifier_format,
     case TYPE_SHORT:  // short извлекается как int
     case TYPE_INT: {
       int ival = va_arg(args, int);
-      // Обработка int
+      void rise_int(format, i, ival);
       break;
     }
     case TYPE_LONG: {
@@ -341,4 +341,8 @@ void parse_format(const char *format, s21_size_t *i, const int specifier_format,
     }
   }
   (*i)++;
+}
+
+void rise_int(const char *format, s21_size_t *i, int ival){
+
 }
