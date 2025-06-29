@@ -12,6 +12,17 @@ void *s21_memchr(const void *str, int c, s21_size_t n) {
   Если n = 0, функция должна вернуть NULL.
 
   Возвращает указатель на найденный байт или NULL, если символ не найден*/
+
+  const unsigned char *ptr_element = (const unsigned char *)str;
+    unsigned char target = (unsigned char)c;
+
+    for(size_t i = 0; i < n; i++){
+        if(ptr_element[i] ==  target){
+            return (void *)(ptr_element + i);
+
+        }
+    }
+    return NULL;
 }
 int s21_memcmp(const void *str1, const void *str2, s21_size_t n) {
   /* Задача:
