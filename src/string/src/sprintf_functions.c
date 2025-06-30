@@ -124,7 +124,7 @@ int s21_sprintf(char *str, const char *format, ...) {
       parsing_flags_modifier(format, &i, &modifier_format);
       parsing_flags_specifier(format, &i, modifier_format, &specifier_format);
 
-      parse_format(format, &i, specifier_format, args);
+      parse_format(str, &i, specifier_format, args);
     } else {
       str[str_iterator++] = format[i];
     }
@@ -265,13 +265,13 @@ void parsing_flags_specifier(const char *format, s21_size_t *i,
   (*i)++;
 }
 
-void parse_format(const char *format, s21_size_t *i, const int specifier_format,
+void parse_format(char *str, s21_size_t *i, const int specifier_format,
        va_list args) {
   switch (specifier_format) {
     case TYPE_SHORT:  // short извлекается как int
     case TYPE_INT: {
-      int ival = va_arg(args, int);
-      void rise_int(format, i, ival);
+      int value = va_arg(args, int);
+      *i += int_to_string(value, str);
       break;
     }
     case TYPE_LONG: {
@@ -343,6 +343,40 @@ void parse_format(const char *format, s21_size_t *i, const int specifier_format,
   (*i)++;
 }
 
-void rise_int(const char *format, s21_size_t *i, int ival){
 
+int int_to_string(int value, char* str) {
+    if (str == NULL) 
+        return 0;
+
+    char *p = str; // Указатель для записи символов
+    uintmax_t abs_value; // Для хранения абсолютного значения
+
+    // Обработка отрицательных чисел
+    if (value < 0) {
+        *p++ = '-'; // Записываем минус
+        // Преобразуем в положительное число без переполнения
+        abs_value = (uintmax_t)(-(value + 1)) + 1;
+    } else {
+        abs_value = (uintmax_t)value; // Положительное число
+    }
+
+    char buffer[20]; // Буфер для цифр (достаточно для 64-битных чисел)
+    int num_digits = 0; // Количество цифр
+
+    // Обработка нуля
+    if (abs_value == 0) {
+        buffer[num_digits++] = '0';
+    } else {
+        // Извлекаем цифры в обратном порядке
+        while (abs_value != 0) {
+            buffer[num_digits++] = '0' + (abs_value % 10);
+            abs_value /= 10;
+        }
+    }
+
+    // Записываем цифры в строку в правильном порядке
+    for (int i = num_digits - 1; i >= 0; i--) {
+        *p++ = buffer[i];
+    }
+    return p - str; // Возвращаем количество символов
 }
