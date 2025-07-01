@@ -275,23 +275,23 @@ void parse_format(char *str, s21_size_t *i, const int specifier_format,
       break;
     }
     case TYPE_LONG: {
-      long lval = va_arg(args, long);
-      // Обработка long
+      long value = va_arg(args, long);
+      *i += int_to_string(value, str);
       break;
     }
     case TYPE_USHORT: {
-      unsigned short usval = (unsigned short)va_arg(args, unsigned int);
-      // Обработка unsigned short
+      unsigned short value = (unsigned short)va_arg(args, unsigned int);
+      *i += uint_to_string(value, str);
       break;
     }
     case TYPE_UINT: {
-      unsigned int uival = va_arg(args, unsigned int);
-      // Обработка unsigned int
+      unsigned int value = va_arg(args, unsigned int);
+      *i += uint_to_string(value, str);
       break;
     }
     case TYPE_ULONG: {
-      unsigned long ulval = va_arg(args, unsigned long);
-      // Обработка unsigned long
+      unsigned long value = va_arg(args, unsigned long);
+      *i += uint_to_string(value, str);
       break;
     }
     case TYPE_FLOAT: {
@@ -344,26 +344,23 @@ void parse_format(char *str, s21_size_t *i, const int specifier_format,
 }
 
 
-int int_to_string(int value, char* str) {
+int int_to_string(intmax_t value, char* str) {
     if (str == NULL) 
         return 0;
 
-    char *p = str; // Указатель для записи символов
-    uintmax_t abs_value; // Для хранения абсолютного значения
+    char *p = str; 
+    uintmax_t abs_value;
 
-    // Обработка отрицательных чисел
     if (value < 0) {
-        *p++ = '-'; // Записываем минус
-        // Преобразуем в положительное число без переполнения
+        *p++ = '-';
         abs_value = (uintmax_t)(-(value + 1)) + 1;
     } else {
-        abs_value = (uintmax_t)value; // Положительное число
+        abs_value = (uintmax_t)value;
     }
 
-    char buffer[20]; // Буфер для цифр (достаточно для 64-битных чисел)
-    int num_digits = 0; // Количество цифр
+    char buffer[40]; // Буфер для цифр (достаточно для 128-битных чисел)
+    int num_digits = 0;
 
-    // Обработка нуля
     if (abs_value == 0) {
         buffer[num_digits++] = '0';
     } else {
@@ -378,5 +375,34 @@ int int_to_string(int value, char* str) {
     for (int i = num_digits - 1; i >= 0; i--) {
         *p++ = buffer[i];
     }
-    return p - str; // Возвращаем количество символов
+    return p - str;
+}
+
+int uint_to_string(uintmax_t value, char* str) {
+    if (str == NULL) 
+        return 0;
+
+    // (беззнаковые типы всегда ≥ 0)
+
+    char *p = str;
+    char buffer[40]; // Достаточно для 128-битных чисел
+    int num_digits = 0;
+
+    // Обработка нуля
+    if (value == 0) {
+        buffer[num_digits++] = '0';
+    } else {
+        // Извлекаем цифры
+        while (value != 0) {
+            buffer[num_digits++] = '0' + (value % 10);
+            value /= 10;
+        }
+    }
+
+    // Переворачиваем цифры
+    for (int i = num_digits - 1; i >= 0; i--) {
+        *p++ = buffer[i];
+    }
+    
+    return p - str; // Длина строки
 }
