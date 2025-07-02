@@ -66,14 +66,17 @@
 
 enum SpecifierFormat {
   // Целочисленные знаковые
-  TYPE_SHORT,  // %hd, %hi
-  TYPE_INT,    // %d, %i
-  TYPE_LONG,   // %ld, %li
+  TYPE_SHORT,     // %hd, %hi
+  TYPE_INT,       // %d, %i
+  TYPE_LONG,      // %ld, %li
+  TYPE_LONGLONG,  // %lld, %lli
 
   // Целочисленные беззнаковые
-  TYPE_USHORT,  // %hu, %ho, %hx, %hX
-  TYPE_UINT,    // %u, %o, %x, %X
-  TYPE_ULONG,   // %lu, %lo, %lx, %lX
+  TYPE_USHORT,     // %hu, %ho, %hx, %hX
+  TYPE_UCHAR,      // %hhu, %hho, %hhx, %hhX
+  TYPE_UINT,       // %u, %o, %x, %X
+  TYPE_ULONG,      // %lu, %lo, %lx, %lX
+  TYPE_ULONGLONG,  // %llu, %llo, %llx, %llX
 
   // Плавающая точка
   TYPE_FLOAT,       // %f, %e, %E, %g, %G (float/double)
@@ -94,7 +97,9 @@ enum SpecifierFormat {
 enum ModifierFormat {
   LENGTH_NULL,  // ' '
   LENGTH_H,     // 'h' (short)
-  LENGTH_L,     // 'l' (long)
+  LENGTH_HH,
+  LENGTH_L,  // 'l' (long)
+  LENGTH_LL,
   LENGTH_CAP_L  // 'L' (long double)
 };
 
@@ -136,134 +141,105 @@ int s21_sprintf(char *str, const char *format, ...) {
   return str_iterator;
 }
 
-void parsing_flags_modifier(const char *format, s21_size_t *i,
-                            int *modifier_format) {
-  switch (format[*i]) {
-    case 'h':
-      *modifier_format = LENGTH_H;
-      break;
-    case 'l':
-      *modifier_format = LENGTH_L;
-      break;
-    case 'L':
-      *modifier_format = LENGTH_CAP_L;
-      break;
+void parsing_flags_modifier(const char *format, s21_size_t *i, int *modifier) {
+  if (format[*i] == 'h') {
+    if (format[*i + 1] == 'h') {
+      *modifier = LENGTH_HH;
+      (*i) += 2;  // Пропускаем два символа
+    } else {
+      *modifier = LENGTH_H;
+      (*i)++;  // Пропускаем один символ
+    }
+  } else if (format[*i] == 'l') {
+    if (format[*i + 1] == 'l') {
+      *modifier = LENGTH_LL;
+      (*i) += 2;  // Пропускаем два символа
+    } else {
+      *modifier = LENGTH_L;
+      (*i)++;  // Пропускаем один символ
+    }
+  } else if (format[*i] == 'L') {
+    *modifier = LENGTH_CAP_L;
+    (*i)++;  // Пропускаем один символ
+  } else {
+    *modifier = LENGTH_NULL;
   }
-  (*i)++;
 }
 
 void parsing_flags_specifier(const char *format, s21_size_t *i,
-                             const int modifier_format, int *specifier_format) {
+                             const int modifier, int *specifier_format) {
+  int x = -1;  // Значение по умолчанию (ошибка)
+
   switch (format[*i]) {
     case 'd':
     case 'i':
-      //  TYPE_SHORT,      %hd, %hi
-      if (modifier_format == LENGTH_H) {
-        *specifier_format = TYPE_SHORT;
-      }
-      //  TYPE_INT,        %d, %i
-      else if (modifier_format == LENGTH_NULL) {
-        *specifier_format = TYPE_INT;
-      }
-      //  TYPE_LONG,       %ld, %li
-      else if (modifier_format == LENGTH_L) {
-        *specifier_format = TYPE_LONG;
-      }
-      //  Error
-      else {
-      }
+      if (modifier == LENGTH_HH)
+        x = TYPE_CHAR;
+      else if (modifier == LENGTH_H)
+        x = TYPE_SHORT;
+      else if (modifier == LENGTH_L)
+        x = TYPE_LONG;
+      else if (modifier == LENGTH_LL)
+        x = TYPE_LONGLONG;
+      else
+        x = TYPE_INT;
       break;
-    case 'o':
+
     case 'u':
+    case 'o':
     case 'x':
     case 'X':
-      //  TYPE_USHORT,      %hu, %ho, %hx, %hX
-      if (modifier_format == LENGTH_H) {
-        *specifier_format = TYPE_USHORT;
-      }
-      //  TYPE_UINT,        %u, %o, %x, %X
-      else if (modifier_format == LENGTH_NULL) {
-        *specifier_format = TYPE_UINT;
-      }
-      //  TYPE_ULONG,       %lu, %lo, %lx, %lX
-      else if (modifier_format == LENGTH_L) {
-        *specifier_format = TYPE_ULONG;
-      }
-      //  Error
-      else {
-      }
+      if (modifier == LENGTH_HH)
+        x = TYPE_UCHAR;
+      else if (modifier == LENGTH_H)
+        x = TYPE_USHORT;
+      else if (modifier == LENGTH_L)
+        x = TYPE_ULONG;
+      else if (modifier == LENGTH_LL)
+        x = TYPE_ULONGLONG;
+      else
+        x = TYPE_UINT;
       break;
+
     case 'e':
     case 'E':
     case 'f':
     case 'g':
     case 'G':
-      // TYPE_FLOAT, %f, %e, %E, %g, %G (float/double)
-      if (modifier_format == LENGTH_NULL) {
-        *specifier_format = TYPE_FLOAT;
-      }
-      // TYPE_LONGDOUBLE, %Lf, %Le, %LE, %Lg, %LG
-      else if (modifier_format == LENGTH_CAP_L) {
-        *specifier_format = TYPE_LONGDOUBLE;
-      }
-      //  Error
-      else {
-      }
+      if (modifier == LENGTH_CAP_L)
+        x = TYPE_LONGDOUBLE;
+      else
+        x = TYPE_FLOAT;
       break;
+
     case 'c':
-      // TYPE_CHAR %c (char)
-      if (modifier_format == LENGTH_NULL) {
-        *specifier_format = TYPE_CHAR;
-      }
-      // TYPE_WCHAR  %lc (wchar_t)
-      else if (modifier_format == LENGTH_L) {
-        *specifier_format = TYPE_WCHAR;
-      }
-      //  Error
-      else {
-      }
+      if (modifier == LENGTH_L)
+        x = TYPE_WCHAR;
+      else
+        x = TYPE_CHAR;
       break;
+
     case 's':
-      // TYPE_STRING %s (const char*)
-      if (modifier_format == LENGTH_NULL) {
-        *specifier_format = TYPE_STRING;
-      }
-      // TYPE_WSTRING  %ls (const wchar_t*)
-      else if (modifier_format == LENGTH_L) {
-        *specifier_format = TYPE_WSTRING;
-      }
-      //  Error
-      else {
-      }
+      if (modifier == LENGTH_L)
+        x = TYPE_WSTRING;
+      else
+        x = TYPE_STRING;
       break;
+
     case 'p':
-      //  TYPE_POINTER
-      if (modifier_format == LENGTH_NULL) {
-        *specifier_format = TYPE_POINTER;
-      }
-      //  Error
-      else {
-      }
+      x = TYPE_POINTER;
       break;
+
     case 'n':
-      //  TYPE_PTR
-      if (modifier_format == LENGTH_NULL) {
-        *specifier_format = TYPE_PTR;
-      }
-      //  Error
-      else {
-      }
+      x = TYPE_PTR;
       break;
+
     case '%':
-      //  TYPE_PERCENT
-      if (modifier_format == LENGTH_NULL) {
-        *specifier_format = TYPE_PERCENT;
-      }
-      //  Error
-      else {
-      }
+      x = TYPE_PERCENT;
       break;
   }
+
+  *specifier_format = x;
   (*i)++;
 }
 
@@ -297,8 +273,7 @@ void parse_format(char *str, s21_size_t *i, const int specifier_format,
       break;
     }
     case TYPE_FLOAT: {
-      double dval =
-          va_arg(args, double);  // float автоматически повышается до double
+      double dval = va_arg(args, double);  // float автоматически повышается до double
       // Обработка float
       break;
     }
