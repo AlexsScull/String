@@ -111,6 +111,8 @@ enum SpecFormat {
 };
 
 int s21_sprintf(char *str, const char *format, ...) {
+  if (str == NULL) return 0;
+
   int modifier_format = 0;   // [h l L null]
   int specifier_format = 0;  //
   int spec_format[8] = {0};  // [- + ' ' # 0] [(number) *] [.number .*]
@@ -124,7 +126,7 @@ int s21_sprintf(char *str, const char *format, ...) {
       parsing_flags_modifier(format, &i, &modifier_format);
       parsing_flags_specifier(format, &i, modifier_format, &specifier_format);
 
-      parse_format(str, &i, specifier_format, args);
+      parse_format(str, &str_iterator, specifier_format, args);
     } else {
       str[str_iterator++] = format[i];
     }
@@ -266,32 +268,32 @@ void parsing_flags_specifier(const char *format, s21_size_t *i,
 }
 
 void parse_format(char *str, s21_size_t *i, const int specifier_format,
-       va_list args) {
+                  va_list args) {
   switch (specifier_format) {
     case TYPE_SHORT:  // short извлекается как int
     case TYPE_INT: {
       int value = va_arg(args, int);
-      *i += int_to_string(value, str);
+      int_to_string(value, i, str);
       break;
     }
     case TYPE_LONG: {
       long value = va_arg(args, long);
-      *i += int_to_string(value, str);
+      int_to_string(value, i, str);
       break;
     }
     case TYPE_USHORT: {
       unsigned short value = (unsigned short)va_arg(args, unsigned int);
-      *i += uint_to_string(value, str);
+      uint_to_string(value, i, str);
       break;
     }
     case TYPE_UINT: {
       unsigned int value = va_arg(args, unsigned int);
-      *i += uint_to_string(value, str);
+      uint_to_string(value, i, str);
       break;
     }
     case TYPE_ULONG: {
       unsigned long value = va_arg(args, unsigned long);
-      *i += uint_to_string(value, str);
+      uint_to_string(value, i, str);
       break;
     }
     case TYPE_FLOAT: {
@@ -307,7 +309,7 @@ void parse_format(char *str, s21_size_t *i, const int specifier_format,
     }
     case TYPE_CHAR: {
       int cval = va_arg(args, int);  // char извлекается как int
-      // Обработка char
+      char_to_string(cval, i, str);
       break;
     }
     case TYPE_WCHAR: {
@@ -317,7 +319,7 @@ void parse_format(char *str, s21_size_t *i, const int specifier_format,
     }
     case TYPE_STRING: {
       char *sval = va_arg(args, char *);
-      // Обработка char*
+      string_to_string(sval, i, str);
       break;
     }
     case TYPE_WSTRING: {
@@ -326,15 +328,16 @@ void parse_format(char *str, s21_size_t *i, const int specifier_format,
       break;
     }
     case TYPE_POINTER:
+      pointer_to_string(i, str);
+      break;
     case TYPE_PTR: {
       void *ptrval = va_arg(args, void *);
-      // Обработка указателя
+      ptr_to_string(ptrval, i, str);
       break;
     }
-    case TYPE_PERCENT: {
-      // Не требует аргумента - обрабатываем символ '%'
+    case TYPE_PERCENT:
+      percent_to_string(i, str);
       break;
-    }
     default: {
       // Обработка неизвестного спецификатора
       break;
@@ -343,66 +346,54 @@ void parse_format(char *str, s21_size_t *i, const int specifier_format,
   (*i)++;
 }
 
-
-int int_to_string(intmax_t value, char* str) {
-    if (str == NULL) 
-        return 0;
-
-    char *p = str; 
-    uintmax_t abs_value;
-
-    if (value < 0) {
-        *p++ = '-';
-        abs_value = (uintmax_t)(-(value + 1)) + 1;
-    } else {
-        abs_value = (uintmax_t)value;
-    }
-
-    char buffer[40]; // Буфер для цифр (достаточно для 128-битных чисел)
-    int num_digits = 0;
-
-    if (abs_value == 0) {
-        buffer[num_digits++] = '0';
-    } else {
-        // Извлекаем цифры в обратном порядке
-        while (abs_value != 0) {
-            buffer[num_digits++] = '0' + (abs_value % 10);
-            abs_value /= 10;
-        }
-    }
-
-    // Записываем цифры в строку в правильном порядке
-    for (int i = num_digits - 1; i >= 0; i--) {
-        *p++ = buffer[i];
-    }
-    return p - str;
+void percent_to_string(s21_size_t *i, char *str) {
+  char_to_string('%', i, str);
 }
 
-int uint_to_string(uintmax_t value, char* str) {
-    if (str == NULL) 
-        return 0;
+void pointer_to_string(s21_size_t *i, char *str) { uint_to_string(*i, i, str); }
 
-    // (беззнаковые типы всегда ≥ 0)
+void ptr_to_string(void *ptrval, s21_size_t *i, char *str) {
+  uintptr_t addr = (uintptr_t)ptrval;
+  str[(*i)++] = '0';
+  str[(*i)++] = 'x';
+  uint_to_string(addr, i, str);
+}
 
-    char *p = str;
-    char buffer[40]; // Достаточно для 128-битных чисел
-    int num_digits = 0;
+void int_to_string(intmax_t value, s21_size_t *i, char *str) {
+  if (value < 0) {
+    str[(*i)++] = '-';
+    // Безопасное преобразование для INTMAX_MIN
+    uint_to_string((uintmax_t)(-(value + 1)) + 1, i, str);
+  } else {
+    uint_to_string((uintmax_t)value, i, str);
+  }
+}
+void uint_to_string(uintmax_t value, s21_size_t *i, char *str) {
+  // (беззнаковые типы всегда ≥ 0)
 
-    // Обработка нуля
-    if (value == 0) {
-        buffer[num_digits++] = '0';
-    } else {
-        // Извлекаем цифры
-        while (value != 0) {
-            buffer[num_digits++] = '0' + (value % 10);
-            value /= 10;
-        }
+  char buffer[40];  // Достаточно для 128-битных чисел
+  int x = 0;
+
+  if (value == 0) {
+    buffer[x++] = '0';
+  } else {
+    while (value != 0) {
+      buffer[x++] = '0' + (value % 10);
+      value /= 10;
     }
+  }
+  for (int j = x - 1; j >= 0; j--) {
+    str[(*i)++] = buffer[j];
+  }
+}
 
-    // Переворачиваем цифры
-    for (int i = num_digits - 1; i >= 0; i--) {
-        *p++ = buffer[i];
-    }
-    
-    return p - str; // Длина строки
+void char_to_string(int cval, s21_size_t *i, char *str) {
+  str[(*i)++] = (char)cval;
+}
+
+void string_to_string(char *sval, s21_size_t *i, char *str) {
+  int x = 0;
+  while (sval[x] != '\0') {
+    str[(*i)++] = sval[x++];
+  }
 }
