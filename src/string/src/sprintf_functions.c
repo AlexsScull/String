@@ -1,7 +1,9 @@
+
+
 #include <ctype.h>
 #include <stdarg.h>
 #include <stdint.h>
-#include <wchar.h>  // Для wchar_t
+#include <wchar.h>
 
 #include "../include/s21_string.h"
 
@@ -34,7 +36,7 @@
 Чтение точности (.число или .*)
     │
     ▼
-Парсинг модификатора [hh, h, l, ll, L, j, z, t]
+Парсинг модификатора [hh, h, l, ll, L]
     │
     ▼
 Определение типа:
@@ -209,7 +211,7 @@ void parsing_flags_specifier(const char *format, s21_size_t *i,
       if (modifier == LENGTH_CAP_L)
         x = TYPE_LONGDOUBLE;
       else
-        x = TYPE_FLOAT;
+        x = TYPE_FLOAT;  // Обрабатываем float/double
       break;
 
     case 'c':
@@ -257,9 +259,19 @@ void parse_format(char *str, s21_size_t *i, const int specifier_format,
       int_to_string(value, i, str);
       break;
     }
+    case TYPE_LONGLONG: {
+      long long value = va_arg(args, long long);
+      int_to_string(value, i, str);
+      break;
+    }
     case TYPE_USHORT: {
       unsigned short value = (unsigned short)va_arg(args, unsigned int);
       uint_to_string(value, i, str);
+      break;
+    }
+    case TYPE_UCHAR: {
+      unsigned char value = (unsigned char)va_arg(args, unsigned int);
+      char_to_string(value, i, str);
       break;
     }
     case TYPE_UINT: {
@@ -272,8 +284,14 @@ void parse_format(char *str, s21_size_t *i, const int specifier_format,
       uint_to_string(value, i, str);
       break;
     }
+    case TYPE_ULONGLONG: {
+      unsigned long long value = va_arg(args, unsigned long long);
+      uint_to_string(value, i, str);
+      break;
+    }
     case TYPE_FLOAT: {
-      double dval = va_arg(args, double);  // float автоматически повышается до double
+      double dval =
+          va_arg(args, double);  // float автоматически повышается до double
       // Обработка float
       break;
     }
@@ -345,7 +363,7 @@ void int_to_string(intmax_t value, s21_size_t *i, char *str) {
 }
 void uint_to_string(uintmax_t value, s21_size_t *i, char *str) {
   // (беззнаковые типы всегда ≥ 0)
-
+  const char* digit = "0123456789abcdef";
   char buffer[40];  // Достаточно для 128-битных чисел
   int x = 0;
 
@@ -353,7 +371,7 @@ void uint_to_string(uintmax_t value, s21_size_t *i, char *str) {
     buffer[x++] = '0';
   } else {
     while (value != 0) {
-      buffer[x++] = '0' + (value % 10);
+      buffer[x++] = digit[value % 10];
       value /= 10;
     }
   }
