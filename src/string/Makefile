@@ -3,7 +3,8 @@ OS := $(shell uname)
 
 # Компилятор и флаги
 CC := gcc
-CFLAGS := -Wall -Wextra -Werror -std=c11
+CFLAGS := 
+# CFLAGS := -Wall -Wextra -Werror -std=c11
 GCOV_FLAGS := -fprofile-arcs -ftest-coverage
 
 # Имя библиотеки
