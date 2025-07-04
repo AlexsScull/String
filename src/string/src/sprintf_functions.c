@@ -251,7 +251,7 @@ void parse_format(char *str, s21_size_t *i, const int specifier_format,
     case TYPE_SHORT:  // short извлекается как int
     case TYPE_INT: {
       int value = va_arg(args, int);
-      int_to_string(value, i, str);
+      int_to_string(value, i, str, 10);
       break;
     }
     case TYPE_LONG: {
@@ -343,25 +343,26 @@ void percent_to_string(s21_size_t *i, char *str) {
   char_to_string('%', i, str);
 }
 
-void pointer_to_string(s21_size_t *i, char *str) { uint_to_string(*i, i, str); }
+void pointer_to_string(s21_size_t *i, char *str) { uint_to_string(*i, i, str, 10); }
 
 void ptr_to_string(void *ptrval, s21_size_t *i, char *str) {
   uintptr_t addr = (uintptr_t)ptrval;
   str[(*i)++] = '0';
   str[(*i)++] = 'x';
-  uint_to_string(addr, i, str);
+  uint_to_string(addr, i, str, 16);
 }
 
-void int_to_string(intmax_t value, s21_size_t *i, char *str) {
+
+void int_to_string(intmax_t value, s21_size_t *i, char *str, int base) {
   if (value < 0) {
     str[(*i)++] = '-';
     // Безопасное преобразование для INTMAX_MIN
-    uint_to_string((uintmax_t)(-(value + 1)) + 1, i, str);
+    uint_to_string((uintmax_t)(-(value + 1)) + 1, i, str, base);
   } else {
-    uint_to_string((uintmax_t)value, i, str);
+    uint_to_string((uintmax_t)value, i, str, base);
   }
 }
-void uint_to_string(uintmax_t value, s21_size_t *i, char *str) {
+void uint_to_string(uintmax_t value, s21_size_t *i, char *str, int base) {
   // (беззнаковые типы всегда ≥ 0)
   const char* digit = "0123456789abcdef";
   char buffer[40];  // Достаточно для 128-битных чисел
@@ -371,8 +372,8 @@ void uint_to_string(uintmax_t value, s21_size_t *i, char *str) {
     buffer[x++] = '0';
   } else {
     while (value != 0) {
-      buffer[x++] = digit[value % 10];
-      value /= 10;
+      buffer[x++] = digit[value % base];
+      value /= base;
     }
   }
   for (int j = x - 1; j >= 0; j--) {

@@ -1,0 +1,235 @@
+# CC=gcc
+# CFLAGS= 
+# # CFLAGS= -std=c11 -Wall -Werror -Wextra
+# ENDFLAGS= -lcheck -lsubunit -lm
+
+# MEMORY= memory_functions
+# STRING= string_functions
+# SPRINTF= sprintf_functions
+# SSCANF= sscanf_functions
+# EXTENDED= extended_functions
+# ERROR= error_functions
+
+# MEMORY_T= test_memory
+# STRING_T= test_string
+# SPRINTF_T= test_sprintf
+# SSCANF_T= test_sscanf
+# EXTENDED_T= test_extended
+# ERROR_T= test_error
+
+# C_FL= obj
+# T_FL= tests_executable_files
+
+# S21_STR_LIB= s21_string.a
+
+
+# all: s21_string.a test
+
+# s21_string.a: $(MEMORY).o $(STRING).o $(SPRINTF).o $(SSCANF).o $(EXTENDED).o $(ERROR).o
+# 	ar rcs s21_string.a $(C_FL)/*.o
+
+# $(MEMORY).o: src/$(MEMORY).c include/s21_string.h
+# 	$(CC) $(CFLAGS) -c src/$(MEMORY).c -o $(C_FL)/$(MEMORY).o
+
+# $(STRING).o: src/$(STRING).c include/s21_string.h
+# 	$(CC) $(CFLAGS) -c src/$(STRING).c -o $(C_FL)/$(STRING).o
+
+# $(SPRINTF).o: src/$(SPRINTF).c include/s21_string.h
+# 	$(CC) $(CFLAGS) -c src/$(SPRINTF).c -o $(C_FL)/$(SPRINTF).o
+
+# $(SSCANF).o: src/$(SSCANF).c include/s21_string.h
+# 	$(CC) $(CFLAGS) -c src/$(SSCANF).c -o $(C_FL)/$(SSCANF).o
+
+# $(EXTENDED).o: src/$(EXTENDED).c include/s21_string.h
+# 	$(CC) $(CFLAGS) -c src/$(EXTENDED).c -o $(C_FL)/$(EXTENDED).o
+
+# $(ERROR).o: src/$(ERROR).c include/s21_string.h
+# 	$(CC) $(CFLAGS) -c src/$(ERROR).c -o $(C_FL)/$(ERROR).o
+
+# test: $(MEMORY_T) $(STRING_T) $(SPRINTF_T) $(SSCANF_T) $(EXTENDED_T) $(ERROR_T)
+
+# $(MEMORY_T): tests/$(MEMORY_T).c s21_string.a
+# 	$(CC) $(CFLAGS) tests/$(MEMORY_T).c s21_string.a -o $(T_FL)/$(MEMORY_T) $(ENDFLAGS)
+
+# $(STRING_T): tests/$(STRING_T).c s21_string.a
+# 	$(CC) $(CFLAGS) tests/$(STRING_T).c s21_string.a -o $(T_FL)/$(STRING_T) $(ENDFLAGS)
+
+# $(SPRINTF_T): tests/$(SPRINTF_T).c s21_string.a
+# 	$(CC) $(CFLAGS) tests/$(SPRINTF_T).c s21_string.a -o $(T_FL)/$(SPRINTF_T) $(ENDFLAGS)
+
+# $(SSCANF_T): tests/$(SSCANF_T).c s21_string.a
+# 	$(CC) $(CFLAGS) tests/$(SSCANF_T).c s21_string.a -o $(T_FL)/$(SSCANF_T) $(ENDFLAGS)
+
+# $(EXTENDED_T): tests/$(EXTENDED_T).c s21_string.a
+# 	$(CC) $(CFLAGS) tests/$(EXTENDED_T).c s21_string.a -o $(T_FL)/$(EXTENDED_T) $(ENDFLAGS)
+
+# $(ERROR_T): tests/$(ERROR_T).c s21_string.a
+# 	$(CC) $(CFLAGS) tests/$(ERROR_T).c s21_string.a -o $(T_FL)/$(ERROR_T) $(ENDFLAGS)
+
+
+# rebuild: clean_all all
+
+# clean:
+# 	rm -f $(C_FL)/*.o
+
+# clean_all: clean
+# 	rm -f s21_string.a $(T_FL)/$(MEMORY_T) $(T_FL)/$(STRING_T) $(T_FL)/$(SPRINTF_T) $(T_FL)/$(SSCANF_T) $(T_FL)/$(EXTENDED_T) $(T_FL)/$(ERROR_T)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Определение операционной системы
+OS := $(shell uname)
+
+# Компилятор и флаги
+CC := gcc
+CFLAGS := -Wall -Wextra -Werror -std=c11
+
+# Имя библиотеки
+LIB := s21_string.a
+
+# Флаги для линковки с библиотеками
+LIB_FLAGS := -lcheck -lm
+
+# Директории
+SRC_DIR := src
+OBJ_DIR := obj
+TEST_DIR := tests
+TEST_EXE := objtests
+
+# Автоматическое определение исходных файлов
+SRC := $(wildcard $(SRC_DIR)/*.c)
+OBJ := $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRC))
+TEST_SRC := $(wildcard $(TEST_DIR)/*.c)
+
+# Особые флаги для gcov (покрытие кода)
+ifeq ($(OS), Darwin)
+  GCOV_FLAGS := -fprofile-arcs -ftest-coverage
+else
+  GCOV_FLAGS := -lgcov -fprofile-arcs -ftest-coverage
+  LIB_FLAGS += -lsubunit  # Требуется для Linux
+endif
+
+# Добавляем флаги gcov если цель gcov_report
+ifeq ($(MAKECMDGOALS), gcov_report)
+  CFLAGS += $(GCOV_FLAGS)
+endif
+
+# Основные цели
+.PHONY: all clean test style style_fix style_fix_and_check valgrind leaks gcov_report rebuild
+
+# Стандартная сборка
+all: $(LIB)
+
+# Сборка с пересозданием всех файлов
+rebuild: clean all
+
+# Сборка библиотеки
+$(LIB): $(OBJ)
+	ar rcs $@ $^
+
+# Компиляция объектных файлов
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Создание директории для объектных файлов
+$(OBJ_DIR):
+	@mkdir -p $@
+
+
+# Сборка и запуск тестов
+test: $(TEST_EXE)
+	./$(TEST_EXE)
+
+# Сборка исполняемого файла тестов
+$(TEST_EXE): $(LIB) $(TEST_SRC)
+	$(CC) $(CFLAGS) $(TEST_SRC) -L. $< -o $@ $(LIB_FLAGS)
+
+# # Тесты
+# test: $(LIB) $(TEST_SRC)
+
+# # Компиляция объектных файлов
+# $(TEST_DIR)/*.c: $(TEST_DIR)/*.c | $(TEST_DIR)
+# 	$(CC) $(CFLAGS) $< s21_string.a -o $@ -lcheck -lsubunit -lm
+
+# $(TEST_DIR):
+# 	@mkdir -p $@
+
+
+
+
+
+# # Тестирование
+# test: $(LIB)
+# 	$(CC) $(CFLAGS) $(TEST_SRC) -L. $(LIB) -o $(TEST_EXE) 
+# # @./$(TEST_EXE)
+
+# Проверки на стиль
+style_fix:
+	@find . -name '*.c' -o -name '*.h' | xargs clang-format --style=Google -i
+
+style:
+	@find . -name '*.c' -o -name '*.h' | xargs clang-format --style=Google -n
+	@cppcheck --enable=all --suppress=missingIncludeSystem .
+
+style_fix_and_check: style_fix style
+
+# Проверка утечек памяти с Valgrind (только Linux)
+valgrind: $(LIB)
+ifeq ($(OS), Linux)
+	@echo "\n\033[32mBuilding for Valgrind\033[0m"
+	$(CC) $(CFLAGS) -g $(TEST_SRC) -L. $(LIB) -o $(TEST_EXE) $(LIB_FLAGS)
+	@echo "\033[32mRunning Valgrind...\033[0m"
+	valgrind --tool=memcheck --leak-check=full --track-origins=yes -s ./$(TEST_EXE)
+else
+	@echo "\033[31mValgrind is only available on Linux\033[0m"
+endif
+
+# Проверка утечек памяти с leaks (macOS)
+leaks: $(LIB)
+ifeq ($(OS), Darwin)
+	@echo "\n\033[32mBuilding for leaks check\033[0m"
+	$(CC) $(CFLAGS) $(TEST_SRC) -L. $(LIB) -o $(TEST_EXE) $(LIB_FLAGS)
+	@echo "\033[32mRunning leaks...\033[0m"
+	leaks --atExit -- ./$(TEST_EXE)
+else
+	@echo "\033[31mleaks is only available on macOS\033[0m"
+endif
+
+# Генерация отчета о покрытии кода
+gcov_report: CFLAGS += $(GCOV_FLAGS)
+gcov_report: clean $(LIB)
+	@echo "\n\033[32mBuilding for coverage report\033[0m"
+	$(CC) $(CFLAGS) $(TEST_SRC) -L. $(LIB) -o $(TEST_EXE) $(LIB_FLAGS)
+	@echo "\033[32mRunning tests for coverage...\033[0m"
+	@./$(TEST_EXE)
+	@echo "\033[32mGenerating coverage report...\033[0m"
+	@lcov -t "s21_string" -o $(TEST_DIR)/coverage.info -c -d .
+	@genhtml -o coverage_report $(TEST_DIR)/coverage.info
+	@echo "\033[32mReport generated at coverage_report/index.html\033[0m"
+ifeq ($(OS), Darwin)
+	@open coverage_report/index.html
+endif
+
+# Очистка
+clean:
+	@rm -rf $(OBJ_DIR) $(LIB) $(TEST_EXE) coverage_report
+	@find . -name '*.gcda' -o -name '*.gcno' -o -name '*.info' | xargs rm -f
