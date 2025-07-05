@@ -1,7 +1,10 @@
 #include <ctype.h>
 #include <stdarg.h>
+#include <stdbool.h>
 #include <stdint.h>
 #include <wchar.h>
+#include <math.h>
+#include <stdlib.h>
 
 #include "../include/s21_string.h"
 
@@ -77,6 +80,8 @@ void s21_ptr_to_str(char *str, s21_size_t *idx, void *ptr);
 void s21_wchar_to_str(char *str, s21_size_t *idx, wchar_t wc);
 
 void s21_wstr_to_str(char *str, s21_size_t *idx, const wchar_t *ws);
+bool s21_null_to_str(bool flag, char *str, s21_size_t *idx);
+
 
 enum SpecifierFormat {
   // Целочисленные знаковые
@@ -272,60 +277,59 @@ void parse_format(char *str, s21_size_t *str_idx, int specifier, char spec_char,
     case TYPE_SHORT:  // short извлекается как int
     case TYPE_INT: {
       int val = va_arg(args, int);
-      s21_int_to_str(str, str_idx, val, 10, 0);
+        s21_int_to_str(str, str_idx, val, 10, 0);
       break;
     }
     case TYPE_LONG: {
       long val = va_arg(args, long);
-      s21_int_to_str(str, str_idx, val, 10, 0);
+        s21_int_to_str(str, str_idx, val, 10, 0);
       break;
     }
     case TYPE_LONGLONG: {
       long long val = va_arg(args, long long);
-      s21_int_to_str(str, str_idx, val, 10, 0);
+        s21_int_to_str(str, str_idx, val, 10, 0);
       break;
     }
     case TYPE_SCHAR: {
       signed char val = va_arg(args, int);
-      s21_int_to_str(str, str_idx, val, 10, 0);
+        s21_int_to_str(str, str_idx, val, 10, 0);
       break;
     }
       // Обработка беззнаковых целых
     case TYPE_UCHAR: {
       unsigned char val = (unsigned char)va_arg(args, unsigned int);
-      s21_uint_to_str(str, str_idx, val, get_base(spec_char),
-                      isupper(spec_char));
+        s21_uint_to_str(str, str_idx, val, get_base(spec_char),
+                        isupper(spec_char));
       break;
     }
     case TYPE_USHORT:
     case TYPE_UINT: {
       unsigned int val = va_arg(args, unsigned int);
-      s21_uint_to_str(str, str_idx, val, get_base(spec_char),
-                      isupper(spec_char));
+        s21_uint_to_str(str, str_idx, val, get_base(spec_char),
+                        isupper(spec_char));
       break;
     }
     case TYPE_ULONG: {
       unsigned long val = va_arg(args, unsigned long);
-      s21_uint_to_str(str, str_idx, val, get_base(spec_char),
-                      isupper(spec_char));
+        s21_uint_to_str(str, str_idx, val, get_base(spec_char),
+                        isupper(spec_char));
       break;
     }
     case TYPE_ULONGLONG: {
       unsigned long long val = va_arg(args, unsigned long long);
-      s21_uint_to_str(str, str_idx, val, get_base(spec_char),
-                      isupper(spec_char));
+        s21_uint_to_str(str, str_idx, val, get_base(spec_char),
+                        isupper(spec_char));
       break;
     }
-    // Обработка float
+    // Обработка float (автоматически повышается до double)
     case TYPE_FLOAT: {
-      double dval =
-          va_arg(args, double);  // float автоматически повышается до double
-      // Обработка float
+      double dval = va_arg(args, double);
+      s21_double_to_str(str, str_idx, dval);
       break;
     }
     case TYPE_LONGDOUBLE: {
       long double ldval = va_arg(args, long double);
-      // Обработка long double
+      s21_double_to_str(str, str_idx, ldval);
       break;
     }
     case TYPE_CHAR: {
@@ -335,7 +339,7 @@ void parse_format(char *str, s21_size_t *str_idx, int specifier, char spec_char,
     }
     case TYPE_WCHAR: {
       wchar_t wcval = va_arg(args, wchar_t);
-      // Обработка wchar_t
+      s21_wstr_to_str(str, str_idx, wcval);
       break;
     }
     case TYPE_STRING: {
@@ -345,15 +349,17 @@ void parse_format(char *str, s21_size_t *str_idx, int specifier, char spec_char,
     }
     case TYPE_WSTRING: {
       wchar_t *wsval = va_arg(args, wchar_t *);
-      // Обработка wchar_t*
+      s21_wstr_to_str(str, str_idx, wsval);
       break;
     }
     case TYPE_POINTER:
       void *ptr = va_arg(args, void *);
+      if (! s21_null_to_str(ptr == NULL, str, str_idx))
       s21_ptr_to_str(str, str_idx, ptr);
       break;
     case TYPE_PTR: {
-      s21_int_to_str(str, str_idx, str_idx, 10, 0);
+      int *ptr = va_arg(args, int *);
+      *ptr = *str_idx;
       break;
     }
     case TYPE_PERCENT:
@@ -413,6 +419,53 @@ void s21_ptr_to_str(char *str, s21_size_t *idx, void *ptr) {
   s21_uint_to_str(str, idx, (uintptr_t)ptr, 16, 0);
 }
 
+void s21_double_to_str(char *str, s21_size_t *idx, double val) {
+  s21_int_to_str(str, idx, (int)val, 10, 0);
+
+  s21_char_to_str(str, idx, '.');
+
+  val = fabs(val); 
+
+  val = val - (int)val;
+
+  for (size_t i = 0; i < 6; i++)
+  {
+    val = val * 10;
+    s21_int_to_str(str, idx, (int)val, 10, 0);
+    val = val - (int)val;
+  }
+  
+}
+
+// void s21_double_to_str(char *str, s21_size_t *idx, double val) {
+
+//   // 123.456
+//   s21_int_to_str(str, idx, (int)val, 10, 0);   // -> 123
+
+//   s21_char_to_str(str, idx, '.'); // -> .
+
+
+//   val = fabs(val); 
+
+//   val = val - (int)val; // 123.456 - 123 = 0.456
+
+//   for (size_t i = 0; i < 6; i++)
+//   {
+//     val = val * 10; // -0.456 * 10 = 4.56
+//     s21_int_to_str(str, idx, (int)val, 10, 0); // -> 4
+//     val = val - (int)val; // 4.56 - 4 = 0.56
+//   }
+  
+// }
+
+
+
+
+
+
+
+
+
 void s21_wchar_to_str(char *str, s21_size_t *idx, wchar_t wc) {
   // Преобразуем широкий символ в многобайтовую последовательность
   char buffer[MB_LEN_MAX];
@@ -459,3 +512,10 @@ int get_base(char spec) {
 }
 
 int is_upper(char spec) { return (spec == 'X'); }
+
+bool s21_null_to_str(bool flag, char *str, s21_size_t *idx) {
+  if (flag) {
+    s21_str_to_str(str, idx, "(nil)");
+  }
+  return flag;
+}
