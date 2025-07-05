@@ -63,6 +63,20 @@
   │
   ▼
 Вернуть кол-во записанных символов (без учёта '\0')*/
+int get_base(char spec);
+void s21_int_to_str(char *str, s21_size_t *idx, long long value, int base,
+                    int uppercase);
+
+void s21_uint_to_str(char *str, s21_size_t *idx, unsigned long long value,
+                     int base, int uppercase);
+void s21_char_to_str(char *str, s21_size_t *idx, char c);
+void s21_str_to_str(char *str, s21_size_t *idx, const char *s);
+
+void s21_ptr_to_str(char *str, s21_size_t *idx, void *ptr);
+
+void s21_wchar_to_str(char *str, s21_size_t *idx, wchar_t wc);
+
+void s21_wstr_to_str(char *str, s21_size_t *idx, const wchar_t *ws);
 
 enum SpecifierFormat {
   // Целочисленные знаковые
@@ -70,6 +84,7 @@ enum SpecifierFormat {
   TYPE_INT,       // %d, %i
   TYPE_LONG,      // %ld, %li
   TYPE_LONGLONG,  // %lld, %lli
+  TYPE_SCHAR,     // %hhd, %hhi
 
   // Целочисленные беззнаковые
   TYPE_USHORT,     // %hu, %ho, %hx, %hX
@@ -97,9 +112,9 @@ enum SpecifierFormat {
 enum ModifierFormat {
   LENGTH_NULL,  // ' '
   LENGTH_H,     // 'h' (short)
-  LENGTH_HH,
-  LENGTH_L,  // 'l' (long)
-  LENGTH_LL,
+  LENGTH_HH,    // 'hh'
+  LENGTH_L,     // 'l' (long)
+  LENGTH_LL,    // 'll'
   LENGTH_CAP_L  // 'L' (long double)
 };
 
@@ -114,6 +129,8 @@ enum SpecFormat {
   PRECISION_NUMBER,    // (number) for precision
   PRECISION_ASTERISK,  // '.*' for precision
 };
+
+#define MB_LEN_MAX 1024
 
 int s21_sprintf(char *str, const char *format, ...) {
   if (!str) return -1;
@@ -130,11 +147,11 @@ int s21_sprintf(char *str, const char *format, ...) {
     if (format[i] == '%') {
       int modifier = LENGTH_NULL;
       parsing_flags_modifier(format, &i, &modifier);
-      
+
       int specifier = -1;
-      char spec_char = format[i+1];
+      char spec_char = format[i + 1];
       parsing_flags_specifier(format, &i, modifier, &specifier);
-      
+
       if (specifier != -1) {
         parse_format(str, &idx, specifier, spec_char, args);
       }
@@ -150,7 +167,7 @@ int s21_sprintf(char *str, const char *format, ...) {
 
 void parsing_flags_modifier(const char *format, s21_size_t *i, int *modifier) {
   *modifier = LENGTH_NULL;
-  
+
   if (format[*i + 1] == 'h') {
     if (format[*i + 2] == 'h') {
       *modifier = LENGTH_HH;
@@ -180,22 +197,32 @@ void parsing_flags_specifier(const char *format, s21_size_t *i,
   switch (format[*i + 1]) {
     case 'd':
     case 'i':
-      if (modifier == LENGTH_HH) *specifier_format = TYPE_CHAR;
-      else if (modifier == LENGTH_H) *specifier_format = TYPE_SHORT;
-      else if (modifier == LENGTH_L) *specifier_format = TYPE_LONG;
-      else if (modifier == LENGTH_LL) *specifier_format = TYPE_LONGLONG;
-      else *specifier_format = TYPE_INT;
+      if (modifier == LENGTH_HH)
+        *specifier_format = TYPE_SCHAR;
+      else if (modifier == LENGTH_H)
+        *specifier_format = TYPE_SHORT;
+      else if (modifier == LENGTH_L)
+        *specifier_format = TYPE_LONG;
+      else if (modifier == LENGTH_LL)
+        *specifier_format = TYPE_LONGLONG;
+      else
+        *specifier_format = TYPE_INT;
       break;
 
     case 'u':
     case 'o':
     case 'x':
     case 'X':
-      if (modifier == LENGTH_HH) *specifier_format = TYPE_UCHAR;
-      else if (modifier == LENGTH_H) *specifier_format = TYPE_USHORT;
-      else if (modifier == LENGTH_L) *specifier_format = TYPE_ULONG;
-      else if (modifier == LENGTH_LL) *specifier_format = TYPE_ULONGLONG;
-      else *specifier_format = TYPE_UINT;
+      if (modifier == LENGTH_HH)
+        *specifier_format = TYPE_UCHAR;
+      else if (modifier == LENGTH_H)
+        *specifier_format = TYPE_USHORT;
+      else if (modifier == LENGTH_L)
+        *specifier_format = TYPE_ULONG;
+      else if (modifier == LENGTH_LL)
+        *specifier_format = TYPE_ULONGLONG;
+      else
+        *specifier_format = TYPE_UINT;
       break;
 
     case 'f':
@@ -203,10 +230,12 @@ void parsing_flags_specifier(const char *format, s21_size_t *i,
     case 'E':
     case 'g':
     case 'G':
-      if (modifier == LENGTH_CAP_L) *specifier_format = TYPE_LONGDOUBLE;
-      else *specifier_format = TYPE_FLOAT;
+      if (modifier == LENGTH_CAP_L)
+        *specifier_format = TYPE_LONGDOUBLE;
+      else
+        *specifier_format = TYPE_FLOAT;
       break;
-      
+
     case 'c':
       if (modifier == LENGTH_L)
         *specifier_format = TYPE_WCHAR;
@@ -224,11 +253,11 @@ void parsing_flags_specifier(const char *format, s21_size_t *i,
     case 'p':
       *specifier_format = TYPE_POINTER;
       break;
-      
+
     case '%':
       *specifier_format = TYPE_PERCENT;
       break;
-      
+
     case 'n':
       *specifier_format = TYPE_PTR;
       break;
@@ -236,10 +265,10 @@ void parsing_flags_specifier(const char *format, s21_size_t *i,
   (*i)++;  // Переходим к следующему символу после %
 }
 
-void parse_format(char *str, s21_size_t *str_idx, int specifier, 
-                 char spec_char, va_list args) {
+void parse_format(char *str, s21_size_t *str_idx, int specifier, char spec_char,
+                  va_list args) {
   switch (specifier) {
-        // Обработка знаковых целых
+      // Обработка знаковых целых
     case TYPE_SHORT:  // short извлекается как int
     case TYPE_INT: {
       int val = va_arg(args, int);
@@ -256,26 +285,35 @@ void parse_format(char *str, s21_size_t *str_idx, int specifier,
       s21_int_to_str(str, str_idx, val, 10, 0);
       break;
     }
+    case TYPE_SCHAR: {
+      signed char val = va_arg(args, int);
+      s21_int_to_str(str, str_idx, val, 10, 0);
+      break;
+    }
       // Обработка беззнаковых целых
     case TYPE_UCHAR: {
       unsigned char val = (unsigned char)va_arg(args, unsigned int);
-      s21_uint_to_str(str, str_idx, val, get_base(spec_char), isupper(spec_char));
+      s21_uint_to_str(str, str_idx, val, get_base(spec_char),
+                      isupper(spec_char));
       break;
     }
-    case TYPE_USHORT: 
+    case TYPE_USHORT:
     case TYPE_UINT: {
       unsigned int val = va_arg(args, unsigned int);
-      s21_uint_to_str(str, str_idx, val, get_base(spec_char), isupper(spec_char));
+      s21_uint_to_str(str, str_idx, val, get_base(spec_char),
+                      isupper(spec_char));
       break;
     }
     case TYPE_ULONG: {
       unsigned long val = va_arg(args, unsigned long);
-      s21_uint_to_str(str, str_idx, val, get_base(spec_char), isupper(spec_char));
+      s21_uint_to_str(str, str_idx, val, get_base(spec_char),
+                      isupper(spec_char));
       break;
     }
     case TYPE_ULONGLONG: {
       unsigned long long val = va_arg(args, unsigned long long);
-      s21_uint_to_str(str, str_idx, val, get_base(spec_char), isupper(spec_char));
+      s21_uint_to_str(str, str_idx, val, get_base(spec_char),
+                      isupper(spec_char));
       break;
     }
     // Обработка float
@@ -301,7 +339,7 @@ void parse_format(char *str, s21_size_t *str_idx, int specifier,
       break;
     }
     case TYPE_STRING: {
-      char *s = va_arg(args, char*);
+      char *s = va_arg(args, char *);
       s21_str_to_str(str, str_idx, s);
       break;
     }
@@ -311,7 +349,7 @@ void parse_format(char *str, s21_size_t *str_idx, int specifier,
       break;
     }
     case TYPE_POINTER:
-      void *ptr = va_arg(args, void*);
+      void *ptr = va_arg(args, void *);
       s21_ptr_to_str(str, str_idx, ptr);
       break;
     case TYPE_PTR: {
@@ -319,7 +357,7 @@ void parse_format(char *str, s21_size_t *str_idx, int specifier,
       break;
     }
     case TYPE_PERCENT:
-       s21_char_to_str(str, str_idx, '%');
+      s21_char_to_str(str, str_idx, '%');
       break;
   }
 }
@@ -330,7 +368,8 @@ void parse_format(char *str, s21_size_t *str_idx, int specifier,
 //                                        //
 ////////////////////////////////////////////
 
-void s21_int_to_str(char *str, s21_size_t *idx, long long value, int base, int uppercase) {
+void s21_int_to_str(char *str, s21_size_t *idx, long long value, int base,
+                    int uppercase) {
   if (value < 0) {
     str[(*idx)++] = '-';
     s21_uint_to_str(str, idx, -value, base, uppercase);
@@ -339,11 +378,12 @@ void s21_int_to_str(char *str, s21_size_t *idx, long long value, int base, int u
   }
 }
 
-void s21_uint_to_str(char *str, s21_size_t *idx, unsigned long long value, int base, int uppercase) {
+void s21_uint_to_str(char *str, s21_size_t *idx, unsigned long long value,
+                     int base, int uppercase) {
   char buffer[65];
   const char *digits = uppercase ? "0123456789ABCDEF" : "0123456789abcdef";
   int i = 0;
-  
+
   if (value == 0) {
     buffer[i++] = '0';
   } else {
@@ -352,16 +392,14 @@ void s21_uint_to_str(char *str, s21_size_t *idx, unsigned long long value, int b
       value /= base;
     }
   }
-  
+
   // Запись в обратном порядке
   while (--i >= 0) {
     str[(*idx)++] = buffer[i];
   }
 }
 
-void s21_char_to_str(char *str, s21_size_t *idx, char c) {
-  str[(*idx)++] = c;
-}
+void s21_char_to_str(char *str, s21_size_t *idx, char c) { str[(*idx)++] = c; }
 
 void s21_str_to_str(char *str, s21_size_t *idx, const char *s) {
   while (*s) {
@@ -375,12 +413,49 @@ void s21_ptr_to_str(char *str, s21_size_t *idx, void *ptr) {
   s21_uint_to_str(str, idx, (uintptr_t)ptr, 16, 0);
 }
 
+void s21_wchar_to_str(char *str, s21_size_t *idx, wchar_t wc) {
+  // Преобразуем широкий символ в многобайтовую последовательность
+  char buffer[MB_LEN_MAX];
+  mbstate_t state = {0};
+  size_t bytes = wcrtomb(buffer, wc, &state);
+
+  if (bytes == (size_t)-1) {
+    // Ошибка преобразования: заменяем на '?'
+    buffer[0] = '?';
+    bytes = 1;
+  }
+
+  // Копируем результат в целевую строку
+  for (size_t i = 0; i < bytes; i++) {
+    str[(*idx)++] = buffer[i];
+  }
+}
+
+void s21_wstr_to_str(char *str, s21_size_t *idx, const wchar_t *ws) {
+  char buffer[MB_LEN_MAX];
+  mbstate_t state = {0};
+
+  while (*ws) {
+    // Конвертируем каждый символ
+    size_t bytes = wcrtomb(buffer, *ws, &state);
+
+    if (bytes == (size_t)-1) {
+      buffer[0] = '?';
+      bytes = 1;
+    }
+
+    // Копируем байты в выходную строку
+    for (size_t i = 0; i < bytes; i++) {
+      str[(*idx)++] = buffer[i];
+    }
+    ws++;
+  }
+}
+
 int get_base(char spec) {
   if (spec == 'o') return 8;
   if (spec == 'x' || spec == 'X' || spec == 'p') return 16;
   return 10;
 }
 
-int is_upper(char spec) {
-  return (spec == 'X');
-}
+int is_upper(char spec) { return (spec == 'X'); }
