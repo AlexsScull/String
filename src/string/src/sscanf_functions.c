@@ -12,7 +12,7 @@
   *- А у меня выходной! 
   *И уехал...*/
 
-int s21_sscanf(char *str, const char *format, ...) {
+int s21_sscanf(const char *str, const char *format, ...) {
 
 }
 
