@@ -1,6 +1,5 @@
 #include "../include/s21_string.h"
 
-// *Абонент в процессе... соображает
 
 char *s21_strncat(char *dest, const char *src, s21_size_t n) {
   /*Задача:
@@ -42,6 +41,22 @@ int s21_strncmp(const char *str1, const char *str2, s21_size_t n) {
   > 0, если str1 > str2.
 
   Если n = 0, возвращает 0.*/
+
+    char x;
+    char y;
+    int flag;
+    int i = 1;
+    while (n > 0 && flag == 0){
+        x = str1[i];
+        y = str2[i];
+        if (x != y){
+            flag = x - y;
+        }
+        n--;
+        i++;
+    }
+
+  return flag;
 }
 char *s21_strncpy(char *dest, const char *src, s21_size_t n) {
   /*Задача:
