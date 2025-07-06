@@ -385,7 +385,7 @@ START_TEST(test_strpbrk_not_found) {
 
 START_TEST(test_strpbrk_null_ptr) {
   ck_assert_ptr_eq(s21_strpbrk(NULL, "abc"),
-                   strpbrk(NULL, "abc"));  // NULL указатель
+                   NULL);  // NULL указатель (ИЗМЕНЕНО)
 }
 
 START_TEST(test_strpbrk_unicode) {
