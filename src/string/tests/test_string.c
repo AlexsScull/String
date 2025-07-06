@@ -174,7 +174,7 @@ START_TEST(test_strncmp_zero_length) {
 
 START_TEST(test_strncmp_null_ptr) {
   ck_assert_int_eq(s21_strncmp(NULL, "Hello", 5),
-                   strncmp(NULL, "Hello", 5));  // NULL указатель
+                   NULL);  // NULL указатель
 }
 
 START_TEST(test_strncmp_unicode) {

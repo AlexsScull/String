@@ -1,5 +1,6 @@
 #include "../include/s21_string.h"
 
+
 char *s21_strncat(char *dest, const char *src, s21_size_t n) {
   /*Задача:
   Добавить не более n символов из src в конец dest. (Т.е. добавить n символов
@@ -23,6 +24,29 @@ char *s21_strchr(const char *str, int c) {
   Возвращает указатель на найденный символ или NULL.
 
   Если c = '\0', возвращает указатель на конец строки.*/
+
+  char *ptr;
+  int flag = 0;
+  int i = 0;
+  int len = 0;
+  unsigned char uc = (unsigned char)c;
+  if (str != NULL){
+  while (flag == 0 && str[i] != '\0'){
+    if (str[i] == uc){
+    ptr = &str[i];
+    flag = 1;
+    }
+    i++;
+    len++;
+  }
+}
+  if (flag == 0){
+    ptr = NULL;
+  }
+  if (uc == '\0'){
+    ptr = &str[len];
+  }
+  return ptr;
 }
 int s21_strncmp(const char *str1, const char *str2, s21_size_t n) {
   /*Задача:
@@ -40,6 +64,20 @@ int s21_strncmp(const char *str1, const char *str2, s21_size_t n) {
   > 0, если str1 > str2.
 
   Если n = 0, возвращает 0.*/
+
+  int result = 0;
+  int i = 0;
+  if (str1 != NULL && str2 != NULL){
+  while (n > 0 && result == 0 && str1[i] != '\0' && str2[i] != '\0'){
+      result = (unsigned char)str1[i] - (unsigned char)str2[i];
+      n--;
+      i++;
+  }
+}
+else {
+  result = NULL;
+}
+  return result;
 }
 char *s21_strncpy(char *dest, const char *src, s21_size_t n) {
   /*Задача:
@@ -49,6 +87,7 @@ char *s21_strncpy(char *dest, const char *src, s21_size_t n) {
   Если src короче n, оставшиеся символы заполняются нулями.
 
   Возвращает указатель на dest.*/
+
 }
 s21_size_t s21_strcspn(const char *str1, const char *str2) {
   /*Задача:
