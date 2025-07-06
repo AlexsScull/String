@@ -99,6 +99,34 @@ s21_size_t s21_strcspn(const char *str1, const char *str2) {
   Возвращает количество символов до первого вхождения любого символа из str2.
 
   Если совпадений нет, возвращает strlen(str1).*/
+
+  if (str1 == NULL || str2 == NULL){
+    return NULL;
+  }
+
+  int i = 0;
+  int j = 0;
+  size_t result = 0;
+  int flag = 0;
+  while (str1[i] != '\0' && flag == 0){
+    while (str2[j] != '\0' && flag == 0){
+      if (str1[i] == str2[j]){
+        flag = 1;
+      }
+      j++;
+    }
+    if (flag == 0){
+      result++;
+    }
+    i++;
+    j = 0;
+  }
+
+  if (flag == 0){
+    result = s21_strlen(str1);
+  }
+
+  return result;
 }
 s21_size_t s21_strlen(const char *str) {
   /*Задача:

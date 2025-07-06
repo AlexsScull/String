@@ -299,7 +299,7 @@ START_TEST(test_strcspn_first_char) {
 
 START_TEST(test_strcspn_null_ptr) {
   ck_assert_int_eq(s21_strcspn(NULL, "abc"),
-                   strcspn(NULL, "abc"));  // NULL указатель
+                   NULL);  // NULL указатель (ИЗМЕНЕНО)
 }
 
 START_TEST(test_strcspn_empty_reject) {
