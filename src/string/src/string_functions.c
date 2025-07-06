@@ -47,6 +47,8 @@ char *s21_strchr(const char *str, int c) {
     ptr = &str[len];
   }
   return ptr;
+
+  /* Unicode!! */
 }
 int s21_strncmp(const char *str1, const char *str2, s21_size_t n) {
   /*Задача:
