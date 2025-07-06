@@ -502,7 +502,6 @@ TEST_SPRINTF_1(test_s21_sprintf_e_neg, "double: %e", -123.456, double)
 TEST_SPRINTF_1(test_s21_sprintf_e_zero, "double: %e", 0.0, double)
 TEST_SPRINTF_1(test_s21_sprintf_e_big, "double: %e", 1e308, double)
 TEST_SPRINTF_1(test_s21_sprintf_e_small, "double: %e", 1e-308, double)
-
 // %E - double
 TEST_SPRINTF_1(test_s21_sprintf_E, "double: %E", 123.456, double)
 TEST_SPRINTF_1(test_s21_sprintf_E_neg, "double: %E", -123.456, double)
@@ -512,8 +511,7 @@ TEST_SPRINTF_1(test_s21_sprintf_E_zero, "double: %E", 0.0, double)
 TEST_SPRINTF_1(test_s21_sprintf_f, "double: %f", 123.456, double)
 TEST_SPRINTF_1(test_s21_sprintf_f_neg, "double: %f", -123.456, double)
 TEST_SPRINTF_1(test_s21_sprintf_f_zero, "double: %f", 0.0, double)
-TEST_SPRINTF_1(test_s21_sprintf_f_prec, "double: %.2f", 123.456, double)
-
+TEST_SPRINTF_1(test_s21_sprintf_f_big, "double: %f", 1e20, double)
 // %g - double
 TEST_SPRINTF_1(test_s21_sprintf_g_switch_to_e, "double: %g", 0.0000123456,
                double)
@@ -1059,7 +1057,7 @@ Suite *s21_sprintf_suite(void) {
   tcase_add_test(tc, test_s21_sprintf_f);
   tcase_add_test(tc, test_s21_sprintf_f_neg);
   tcase_add_test(tc, test_s21_sprintf_f_zero);
-  tcase_add_test(tc, test_s21_sprintf_f_prec);
+  tcase_add_test(tc, test_s21_sprintf_f_big);
   tcase_add_test(tc, test_s21_sprintf_g_switch_to_e);
   tcase_add_test(tc, test_s21_sprintf_g_switch_to_f);
   tcase_add_test(tc, test_s21_sprintf_g_switch);
