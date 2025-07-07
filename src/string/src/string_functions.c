@@ -99,6 +99,34 @@ s21_size_t s21_strcspn(const char *str1, const char *str2) {
   Возвращает количество символов до первого вхождения любого символа из str2.
 
   Если совпадений нет, возвращает strlen(str1).*/
+
+  if (str1 == NULL || str2 == NULL){
+    return NULL;
+  }
+
+  int i = 0;
+  int j = 0;
+  size_t result = 0;
+  int flag = 0;
+  while (str1[i] != '\0' && flag == 0){
+    while (str2[j] != '\0' && flag == 0){
+      if (str1[i] == str2[j]){
+        flag = 1;
+      }
+      j++;
+    }
+    if (flag == 0){
+      result++;
+    }
+    i++;
+    j = 0;
+  }
+
+  if (flag == 0){
+    result = s21_strlen(str1);
+  }
+
+  return result;
 }
 s21_size_t s21_strlen(const char *str) {
   /*Задача:
@@ -106,6 +134,15 @@ s21_size_t s21_strlen(const char *str) {
   Обратить внимание:
   Если строка не завершена нулевым символом, то её поведение не определено.
   Если str = NULL, поведение не определено.*/
+  
+  if (str == NULL){
+    return NULL;
+  }
+  size_t len = 0;
+  while (str[len] != '\0'){
+    len++;
+  }
+  return len;
 }
 char *s21_strpbrk(const char *str1, const char *str2) {
   /*Задача:
@@ -113,6 +150,32 @@ char *s21_strpbrk(const char *str1, const char *str2) {
   Обратить внимание:
 
   Возвращает указатель на найденный символ или NULL.*/
+
+  if (str1 == NULL || str2 == NULL){
+    return NULL;
+  }
+
+  int i = 0;
+  int j = 0;
+  char *ptr;
+  int flag = 0;
+  while (str1[i] != '\0' && flag == 0){
+    while (str2[j] != '\0' && flag == 0){
+      if (str1[i] == str2[j]){
+        ptr = &str1[i];
+        flag = 1;
+      }
+      j++;
+    }
+    i++;
+    j = 0;
+  }
+
+  if (flag == 0){
+    ptr = NULL;
+  }
+
+  return ptr;
 }
 char *s21_strrchr(const char *str, int c) {
   /*Задача:
@@ -121,6 +184,32 @@ char *s21_strrchr(const char *str, int c) {
 
   Если c = '\0', возвращает указатель на конец строки.
   Если совпадений нет, возвращает NULL*/
+
+  char *ptr;
+  int flag = 0;
+  int i = 0;
+  int len = 0;
+  unsigned char uc = (unsigned char)c;
+  if (str == NULL){
+    return NULL;
+  }
+
+  while (str[i] != '\0'){
+    if (str[i] == uc){
+    ptr = &str[i];
+    flag = 1;
+    }
+    i++;
+    len++;
+  }
+
+  if (flag == 0){
+    ptr = NULL;
+  }
+  if (uc == '\0'){
+    ptr = &str[len];
+  }
+  return ptr;
 }
 char *s21_strstr(const char *haystack, const char *needle) {
   /*Задача:
