@@ -1,4 +1,5 @@
 #include <ctype.h>
+#include <limits.h>
 #include <math.h>
 #include <stdarg.h>
 #include <stdbool.h>
@@ -65,26 +66,13 @@ enum ModifierFormat {
   LENGTH_CAP_L  // 'L' (long double)
 };
 
-enum SpecFormat {
-  FLAG_MINUS,          // '-' (left-justify)
-  FLAG_PLUS,           // '+' (show plus sign)
-  FLAG_SPACE,          // ' ' (space for positive numbers)
-  FLAG_HASH,           // '#' (alternate form)
-  FLAG_ZERO,           // '0' (zero-padding)
-  WIDTH_NUMBER,        // (number) for width
-  WIDTH_ASTERISK,      // '*' for width
-  PRECISION_NUMBER,    // (number) for precision
-  PRECISION_ASTERISK,  // '.*' for precision
-};
-
 #define MB_LEN_MAX 1024
 
 int s21_sprintf(char *str, const char *format, ...) {
   if (!str) return -1;
 
-  int modifier_format = 0;   // [h l L null]
-  int specifier_format = 0;  //
-  int spec_format[8] = {0};  // [- + ' ' # 0] [(number) *] [.number .*]
+  int modifier_format = 0;  // [h l L null]
+  int specifier_format = 0;
 
   va_list args;
   va_start(args, format);
@@ -136,8 +124,6 @@ void parsing_flags_modifier(const char *format, s21_size_t *i, int *modifier) {
     (*i) += 1;
   }
 }
-
-
 
 void parsing_flags_specifier(const char *format, s21_size_t *i,
                              const int modifier, int *specifier_format) {
@@ -285,7 +271,7 @@ void parse_format(char *str, s21_size_t *str_idx, int specifier, char spec_char,
     }
     case TYPE_WCHAR: {
       wchar_t wcval = va_arg(args, wchar_t);
-      s21_wstr_to_str(str, str_idx, wcval);
+      s21_wchar_to_str(str, str_idx, wcval);
       break;
     }
     case TYPE_STRING: {
@@ -298,11 +284,15 @@ void parse_format(char *str, s21_size_t *str_idx, int specifier, char spec_char,
       s21_wstr_to_str(str, str_idx, wsval);
       break;
     }
-    case TYPE_POINTER:
+    case TYPE_POINTER: {
       void *ptr = va_arg(args, void *);
-      if (!s21_null_to_str(ptr == NULL, str, str_idx))
+      if (ptr == NULL) {
+        s21_str_to_str(str, str_idx, "(nil)");
+      } else {
         s21_ptr_to_str(str, str_idx, ptr);
+      }
       break;
+    }
     case TYPE_PTR: {
       int *ptr = va_arg(args, int *);
       *ptr = *str_idx;
@@ -314,22 +304,18 @@ void parse_format(char *str, s21_size_t *str_idx, int specifier, char spec_char,
   }
 }
 
-////////////////////////////////////////////
-//                                        //
-//        Вспомогательные функции         //
-//                                        //
-////////////////////////////////////////////
-
 void s21_int_to_str(char *str, s21_size_t *idx, long long value, int base,
                     int uppercase) {
   if (value < 0) {
     str[(*idx)++] = '-';
-    s21_uint_to_str(str, idx, abs(value), base, uppercase);
+    unsigned long long positive = (value == LLONG_MIN)
+                                      ? (unsigned long long)LLONG_MAX + 1
+                                      : (unsigned long long)(-value);
+    s21_uint_to_str(str, idx, positive, base, uppercase);
   } else {
     s21_uint_to_str(str, idx, value, base, uppercase);
   }
 }
-
 void s21_uint_to_str(char *str, s21_size_t *idx, unsigned long long value,
                      int base, int uppercase) {
   char buffer[65];
@@ -351,16 +337,6 @@ void s21_uint_to_str(char *str, s21_size_t *idx, unsigned long long value,
   }
 }
 
-// // Функция для конвертации целого числа в строку (рекурсивная)
-// void int_to_str(int64_t num, char* buffer, int* index) {
-//     if (num == 0) {
-//         return;
-//     }
-//     int_to_str(num / 10, buffer, index); // Рекурсия для старших разрядов
-//     buffer[(*index)++] = '0' + (char)(fabs(num % 10)); // Записываем цифру
-// }
-
-
 void s21_char_to_str(char *str, s21_size_t *idx, char c) { str[(*idx)++] = c; }
 
 void s21_str_to_str(char *str, s21_size_t *idx, const char *s) {
@@ -370,65 +346,10 @@ void s21_str_to_str(char *str, s21_size_t *idx, const char *s) {
 }
 
 void s21_ptr_to_str(char *str, s21_size_t *idx, void *ptr) {
-  s21_char_to_str (str,idx,'0');
-  s21_char_to_str (str,idx,'x');
+  s21_char_to_str(str, idx, '0');
+  s21_char_to_str(str, idx, 'x');
   s21_uint_to_str(str, idx, (uintptr_t)ptr, 16, 0);
 }
-
-// void s21_double_to_str(char *str, s21_size_t *idx, double val) {
-//   s21_int_to_str(str, idx, (int)val, 10, 0);
-
-//   s21_char_to_str(str, idx, '.');
-
-//   val = fabs(val);
-
-//   val = val - (int)val;
-
-//   for (size_t i = 0; i < 6; i++) {
-//     val = val * 10;
-//     s21_int_to_str(str, idx, (int)val, 10, 0);
-//     val = val - (int)val;
-//   }
-// }
-
-void s21_double_to_str(char *str, char spec, s21_size_t *idx, double val) {
-  int max_precision = 6;
-  
-  s21_int_to_str(str, idx, (int)val, 10, 0);
-  val = fabs(val);
-
-  s21_char_to_str(str, idx, '.');
-
-  val =- (int)val;
-
-  char buffer[6];
-
-  for (size_t i = 0; i < 6; i++) {
-    val *= 10.0;
-    buffer[i] = (int)val;
-    val =- (int)val;
-  }
-
-  if (spec == 'G' || spec == 'g') {
-    while (buffer[max_precision] == 0 && max_precision > 0){
-      max_precision--;
-    }
-    for (size_t i = 0; i <= max_precision; i++) {
-    str[(*idx)++] = buffer[i];
-    }
-  }
-
-  else {
-    for (size_t i = 0; i < max_precision; i++) {
-    str[(*idx)++] = buffer[i];
-    }
-  }
-}
-
-
-
-
-
 
 void s21_wchar_to_str(char *str, s21_size_t *idx, wchar_t wc) {
   // Преобразуем широкий символ в многобайтовую последовательность
@@ -469,6 +390,12 @@ void s21_wstr_to_str(char *str, s21_size_t *idx, const wchar_t *ws) {
   }
 }
 
+////////////////////////////////////////////
+//                                        //
+//        Вспомогательные функции         //
+//                                        //
+////////////////////////////////////////////
+
 int get_base(char spec) {
   if (spec == 'o') return 8;
   if (spec == 'x' || spec == 'X' || spec == 'p') return 16;
@@ -477,12 +404,6 @@ int get_base(char spec) {
 
 int is_upper(char spec) { return (spec == 'X'); }
 
-bool s21_null_to_str(bool flag, char *str, s21_size_t *idx) {
-  if (flag) {
-    s21_str_to_str(str, idx, "(nil)");
-  }
-  return flag;
-}
 bool s21_null_double_to_str(double dval, char spec, char *str,
                             s21_size_t *idx) {
   bool flag = true;
@@ -505,3 +426,101 @@ bool s21_null_double_to_str(double dval, char spec, char *str,
     flag = false;
   return flag;
 }
+
+
+void s21_double_to_str(char *str, char spec, s21_size_t *idx, double val) {
+  int precision_e = 0;
+
+  if (spec == 'e' || spec == 'E') {
+    if (val > 10) {
+      while (val > 10) {
+        val = val / 10;
+        precision_e++;
+      }
+    } else if (val < -10) {
+      while (val < -10) {
+        val = val / -10;
+        precision_e++;
+      }
+    } else if (val > -1 && val < 0) {
+      while (val > -1) {
+        val = val * -10;
+        precision_e--;
+      }
+    } else if (val < 1 && val > 0) {
+      while (val < 1) {
+        val = val * 10;
+        precision_e--;
+      }
+    }
+  }
+
+  int precision = 6;
+  char buffer[128];
+
+  // Запись знака и Запись целой части
+  s21_int_to_str(str, idx, (long long)val, 10, 0);
+  // Извлечение целой и дробной частей
+  val = val - (long long)val;
+
+  // Для нулевой дробной части в g-формате
+  if (spec == 'g' || spec == 'G') {
+    if (fabs(val) < 1e-10) {
+      return;  // Не выводим дробную часть
+    }
+  }
+
+  fabs(val);
+  s21_char_to_str(str, idx, '.');
+
+  // Генерация дробной части с округлением
+  for (int i = 0; i <= precision; i++) {
+    val *= 10.0;
+    int digit = (int)(val + 1e-10);  // Коррекция ошибок округления
+    buffer[i] = '0' + digit;
+    val -= digit;
+  }
+
+  // Округление последней цифры
+  int last_pos = precision - 1;
+  if (buffer[last_pos + 1] >= '5') {
+    while (last_pos >= 0) {
+      if (buffer[last_pos] < '9') {
+        buffer[last_pos]++;
+        break;
+      }
+      buffer[last_pos] = '0';
+      last_pos--;
+    }
+  }
+
+  // Обработка спецификаторов g/G
+  int end_pos = precision - 1;
+  if (spec == 'g' || spec == 'G') {
+    while (end_pos >= 0 && buffer[end_pos] == '0') {
+      end_pos--;
+    }
+    if (end_pos < 0) return;  // Все нули - не выводим
+  }
+
+  // Запись дробной части
+  for (int i = 0; i <= end_pos; i++) {
+    s21_char_to_str(str, idx, buffer[i]);
+  }
+
+  if (spec == 'e' || spec == 'E') {
+    if (spec == 'e') s21_char_to_str(str, idx, 'e');
+    if (spec == 'E') s21_char_to_str(str, idx, 'E');
+    if (precision_e < 0) s21_char_to_str(str, idx, '-');
+    if (precision_e >= 0) s21_char_to_str(str, idx, '+');
+    if (precision_e < 10 || precision_e < -10) {
+      s21_char_to_str(str, idx, '0');
+      s21_int_to_str(str, idx, precision_e, 10, 0);
+    } else
+      s21_int_to_str(str, idx, precision_e, 10, 0);
+  }
+}
+
+
+
+

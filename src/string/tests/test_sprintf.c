@@ -553,7 +553,7 @@ TEST_SPRINTF_1(test_s21_sprintf_LE_neg, "long double: %LE", -123.456L,
 
 // %Lf - long double
 TEST_SPRINTF_1(test_s21_sprintf_Lf, "long double: %Lf", 123.456L, long double)
-TEST_SPRINTF_1(test_s21_sprintf_Lf_prec, "long double: %.3Lf", 123.456789L,
+TEST_SPRINTF_1(test_s21_sprintf_Lf_neg, "long double: %Lf", -123.456L,
                long double)
 
 // %Lg - long double
@@ -1076,7 +1076,7 @@ Suite *s21_sprintf_suite(void) {
   tcase_add_test(tc, test_s21_sprintf_LE);
   tcase_add_test(tc, test_s21_sprintf_LE_neg);
   tcase_add_test(tc, test_s21_sprintf_Lf);
-  tcase_add_test(tc, test_s21_sprintf_Lf_prec);
+  tcase_add_test(tc, test_s21_sprintf_Lf_neg);
   tcase_add_test(tc, test_s21_sprintf_Lg);
   tcase_add_test(tc, test_s21_sprintf_Lg_small);
   tcase_add_test(tc, test_s21_sprintf_LG);
