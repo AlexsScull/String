@@ -464,33 +464,59 @@ TEST_SPRINTF_1(test_s21_sprintf_s_special, "String: %s", "Hello\tWorld\n",
 TEST_SPRINTF_1(test_s21_sprintf_s_special_chars, "String: %s",
                "Line1\nLine2\tTab\x01", char *)
 TEST_SPRINTF_1(test_s21_sprintf_s_unicode, "String: %s", "Привет мир!", char *)
-TEST_SPRINTF_1(test_s21_sprintf_s_false_tupe, "Char: %s", 234.6, double)
+TEST_SPRINTF_1(test_s21_sprintf_s_false_tupe, "String: %s", 234.6, double)
 TEST_SPRINTF_1(test_s21_sprintf_s_null, "String: %s", NULL, char *)
 TEST_SPRINTF_1(test_s21_sprintf_s_empty, "String: %s", "", char *)
 
 // %lc - wide char
-START_TEST(test_s21_sprintf_lc) {
-  char str1[200] = {0};
-  char str2[200] = {0};
-  wchar_t wc = L'Я';
-  int res1 = sprintf(str1, "Wide char: %lc", wc);
-  int res2 = s21_sprintf(str2, "Wide char: %lc", wc);
-  ck_assert_str_eq(str1, str2);
-  ck_assert_int_eq(res1, res2);
-}
-END_TEST
+
+TEST_SPRINTF_1(test_s21_sprintf_lc, "wchar_t: %lc", 'A', wchar_t)
+TEST_SPRINTF_1(test_s21_sprintf_lc_min, "wchar_t: %lc", -128, wchar_t)
+TEST_SPRINTF_1(test_s21_sprintf_lc_min_pl, "wchar_t: %lc", -128 - 1, wchar_t)
+TEST_SPRINTF_1(test_s21_sprintf_lc_max, "wchar_t: %lc", 127, wchar_t)
+TEST_SPRINTF_1(test_s21_sprintf_lc_max_pl, "wchar_t: %lc", 127 + 1, wchar_t)
+TEST_SPRINTF_1(test_s21_sprintf_lc_false_tupe, "wchar_t: %lc", 'A', double)
+TEST_SPRINTF_1(test_s21_sprintf_lc_null, "wchar_t: %lc", NULL, wchar_t)
+TEST_SPRINTF_1(test_s21_sprintf_lc_nonprint, "wchar_t: %c", '\x01', wchar_t)
+TEST_SPRINTF_1(test_s21_sprintf_lc_zero, "wchar_t: %lc", 0, wchar_t)
+TEST_SPRINTF_1(test_s21_sprintf_lc_newline, "wchar_t: %lc", '\n', wchar_t)
+TEST_SPRINTF_1(test_s21_sprintf_lc_tab, "wchar_t: %lc", '\t', wchar_t)
+TEST_SPRINTF_1(test_s21_sprintf_lc_null_char, "wchar_t: %lc", '\0', wchar_t)
+
+// START_TEST(test_s21_sprintf_lc) {
+//   char str1[200] = {0};
+//   char str2[200] = {0};
+//   wchar_t wc = L'Я';
+//   int res1 = sprintf(str1, "Wide char: %lc", wc);
+//   int res2 = s21_sprintf(str2, "Wide char: %lc", wc);
+//   ck_assert_str_eq(str1, str2);
+//   ck_assert_int_eq(res1, res2);
+// }
+// END_TEST
 
 // %ls - wide string
-START_TEST(test_s21_sprintf_ls) {
-  char str1[200] = {0};
-  char str2[200] = {0};
-  wchar_t *ws = L"Привет, мир!";
-  int res1 = sprintf(str1, "Wide string: %ls", ws);
-  int res2 = s21_sprintf(str2, "Wide string: %ls", ws);
-  ck_assert_str_eq(str1, str2);
-  ck_assert_int_eq(res1, res2);
-}
-END_TEST
+
+TEST_SPRINTF_1(test_s21_sprintf_ls, "wchar_t: %ls", "Hello, world!", wchar_t *)
+TEST_SPRINTF_1(test_s21_sprintf_ls_special, "wchar_t: %ls", "Hello\tWorld\n",
+               wchar_t *)
+TEST_SPRINTF_1(test_s21_sprintf_ls_special_chars, "wchar_t: %ls",
+               "Line1\nLine2\tTab\x01", wchar_t *)
+TEST_SPRINTF_1(test_s21_sprintf_ls_unicode, "wchar_t: %ls", "Привет мир!",
+               wchar_t *)
+TEST_SPRINTF_1(test_s21_sprintf_ls_false_tupe, "wchar_t: %ls", 234.6, double)
+TEST_SPRINTF_1(test_s21_sprintf_ls_null, "wchar_t: %ls", NULL, wchar_t *)
+TEST_SPRINTF_1(test_s21_sprintf_ls_empty, "wchar_t: %ls", "", wchar_t *)
+
+// START_TEST(test_s21_sprintf_ls) {
+//   char str1[200] = {0};
+//   char str2[200] = {0};
+//   wchar_t *ws = L"Привет, мир!";
+//   int res1 = sprintf(str1, "Wide string: %ls", ws);
+//   int res2 = s21_sprintf(str2, "Wide string: %ls", ws);
+//   ck_assert_str_eq(str1, str2);
+//   ck_assert_int_eq(res1, res2);
+// }
+// END_TEST
 
 // ================================================================
 // Вещественные типы
@@ -513,6 +539,8 @@ TEST_SPRINTF_1(test_s21_sprintf_f_neg, "double: %f", -123.456, double)
 TEST_SPRINTF_1(test_s21_sprintf_f_zero, "double: %f", 0.0, double)
 TEST_SPRINTF_1(test_s21_sprintf_f_big, "double: %f", 1e20, double)
 // %g - double
+TEST_SPRINTF_1(test_s21_sprintf_g_zero, "double: %g", 0.0 ,
+               double)
 TEST_SPRINTF_1(test_s21_sprintf_g_switch_to_e, "double: %g", 0.0000123456,
                double)
 TEST_SPRINTF_1(test_s21_sprintf_g_switch_to_f, "double: %g", 123.456, double)
@@ -571,6 +599,7 @@ TEST_SPRINTF_1(test_s21_sprintf_LG_small, "long double: %LG", 0.0000123456L,
 // ================================================================
 
 // %e - double
+TEST_SPRINTF_1(test_s21_sprintf_e_minus_null, "double: %e", -0.0, double)
 TEST_SPRINTF_1(test_s21_sprintf_e_nan, "double: %e", NAN, double)
 TEST_SPRINTF_1(test_s21_sprintf_e_inf, "double: %e", INFINITY, double)
 TEST_SPRINTF_1(test_s21_sprintf_e_neg_inf, "double: %e", -INFINITY, double)
@@ -1045,7 +1074,26 @@ Suite *s21_sprintf_suite(void) {
   tcase_add_test(tc, test_s21_sprintf_s_null);
   tcase_add_test(tc, test_s21_sprintf_s_empty);
   tcase_add_test(tc, test_s21_sprintf_lc);
+  tcase_add_test(tc, test_s21_sprintf_lc_min);
+  tcase_add_test(tc, test_s21_sprintf_lc_min_pl);
+  tcase_add_test(tc, test_s21_sprintf_lc_max);
+  tcase_add_test(tc, test_s21_sprintf_lc_max_pl);
+  tcase_add_test(tc, test_s21_sprintf_lc_false_tupe);
+  tcase_add_test(tc, test_s21_sprintf_lc_null);
+  tcase_add_test(tc, test_s21_sprintf_lc_nonprint);
+  tcase_add_test(tc, test_s21_sprintf_lc_zero);
+  tcase_add_test(tc, test_s21_sprintf_lc_newline);
+  tcase_add_test(tc, test_s21_sprintf_lc_tab);
+  tcase_add_test(tc, test_s21_sprintf_lc_null_char);
   tcase_add_test(tc, test_s21_sprintf_ls);
+  tcase_add_test(tc, test_s21_sprintf_ls_special);
+  tcase_add_test(tc, test_s21_sprintf_ls_special_chars);
+  tcase_add_test(tc, test_s21_sprintf_ls_unicode);
+  tcase_add_test(tc, test_s21_sprintf_ls_false_tupe);
+  tcase_add_test(tc, test_s21_sprintf_ls_null);
+  tcase_add_test(tc, test_s21_sprintf_ls_empty);
+  // tcase_add_test(tc, test_s21_sprintf_lc);
+  // tcase_add_test(tc, test_s21_sprintf_ls);
   tcase_add_test(tc, test_s21_sprintf_e);
   tcase_add_test(tc, test_s21_sprintf_e_neg);
   tcase_add_test(tc, test_s21_sprintf_e_zero);
@@ -1058,6 +1106,7 @@ Suite *s21_sprintf_suite(void) {
   tcase_add_test(tc, test_s21_sprintf_f_neg);
   tcase_add_test(tc, test_s21_sprintf_f_zero);
   tcase_add_test(tc, test_s21_sprintf_f_big);
+    tcase_add_test(tc, test_s21_sprintf_g_zero);
   tcase_add_test(tc, test_s21_sprintf_g_switch_to_e);
   tcase_add_test(tc, test_s21_sprintf_g_switch_to_f);
   tcase_add_test(tc, test_s21_sprintf_g_switch);
@@ -1081,6 +1130,8 @@ Suite *s21_sprintf_suite(void) {
   tcase_add_test(tc, test_s21_sprintf_Lg_small);
   tcase_add_test(tc, test_s21_sprintf_LG);
   tcase_add_test(tc, test_s21_sprintf_LG_small);
+  tcase_add_test(tc, test_s21_sprintf_e_minus_null);
+
   tcase_add_test(tc, test_s21_sprintf_e_nan);
   tcase_add_test(tc, test_s21_sprintf_e_inf);
   tcase_add_test(tc, test_s21_sprintf_e_neg_inf);

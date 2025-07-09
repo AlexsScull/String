@@ -24,7 +24,19 @@ void s21_wchar_to_str(char *str, s21_size_t *idx, wchar_t wc);
 
 void s21_wstr_to_str(char *str, s21_size_t *idx, const wchar_t *ws);
 bool s21_null_to_str(bool flag, char *str, s21_size_t *idx);
-bool s21_null_double_to_str(double dval, char spec, char *str, s21_size_t *idx);
+bool s21_float_is_special(const long double  dval, char spec, char *str,
+                            s21_size_t *idx);
+
+
+static void FormatG(long double  dval, int *precision, char* spec,  bool  uppercase);
+static void FormatFractionalPart(char *str, s21_size_t *idx, long double  fractional, int precision);
+
+static void FormatExponent(char *str, s21_size_t *idx, int exp, bool uppercase);
+
+static void FormatFloat(char *str, s21_size_t *idx, long double  value, int precision);
+
+static void FormatScientific(char *str, s21_size_t *idx, long double  value, 
+                            int precision, bool uppercase);
 
 enum SpecifierFormat {
   // Целочисленные знаковые
@@ -253,14 +265,14 @@ void parse_format(char *str, s21_size_t *str_idx, int specifier, char spec_char,
     }
     // Обработка float (автоматически повышается до double)
     case TYPE_FLOAT: {
-      double dval = va_arg(args, double);
-      if (!s21_null_double_to_str(dval, spec_char, str, str_idx))
+      long double dval = (long double)va_arg(args, double);
+      if (!s21_float_is_special(dval, spec_char, str, str_idx))
         s21_double_to_str(str, spec_char, str_idx, dval);
       break;
     }
     case TYPE_LONGDOUBLE: {
       long double ldval = va_arg(args, long double);
-      if (!s21_null_double_to_str(ldval, spec_char, str, str_idx))
+      if (!s21_float_is_special(ldval, spec_char, str, str_idx))
         s21_double_to_str(str, spec_char, str_idx, ldval);
       break;
     }
@@ -341,7 +353,7 @@ void s21_char_to_str(char *str, s21_size_t *idx, char c) { str[(*idx)++] = c; }
 
 void s21_str_to_str(char *str, s21_size_t *idx, const char *s) {
   while (*s) {
-    str[(*idx)++] = *s++;
+    s21_char_to_str(str, idx, *s++);
   }
 }
 
@@ -404,123 +416,105 @@ int get_base(char spec) {
 
 int is_upper(char spec) { return (spec == 'X'); }
 
-bool s21_null_double_to_str(double dval, char spec, char *str,
-                            s21_size_t *idx) {
-  bool flag = true;
-  if (dval != dval) {
-    if (spec == 'G' || spec == 'E')
-      s21_str_to_str(str, idx, "NAN");
-    else
-      s21_str_to_str(str, idx, "nan");
-  } else if (dval == INFINITY) {
-    if (spec == 'G' || spec == 'E')
-      s21_str_to_str(str, idx, "INF");
-    else
-      s21_str_to_str(str, idx, "inf");
-  } else if (dval == -INFINITY) {
-    if (spec == 'G' || spec == 'E')
-      s21_str_to_str(str, idx, "-INF");
-    else
-      s21_str_to_str(str, idx, "-inf");
-  } else
-    flag = false;
-  return flag;
+bool s21_float_is_special(long double value, char spec, char *str, s21_size_t *idx) {
+    bool uppercase = (spec == 'E' || spec == 'G');
+    if (isnanl(value)) {
+        s21_str_to_str(str, idx, uppercase ? "NAN" : "nan");
+        return true;
+    } else if (isinfl(value)) {
+        if (signbit(value)) {
+            s21_str_to_str(str, idx, uppercase ? "-INF" : "-inf");
+        } else {
+            s21_str_to_str(str, idx, uppercase ? "INF" : "inf");
+        }
+        return true;
+    }
+    return false;
 }
 
+void s21_double_to_str(char *str, char spec, s21_size_t *idx, long double  dval) {
+    int precision = 6;
+    bool uppercase = false;
 
-void s21_double_to_str(char *str, char spec, s21_size_t *idx, double val) {
-  int precision_e = 0;
-
-  if (spec == 'e' || spec == 'E') {
-    if (val > 10) {
-      while (val > 10) {
-        val = val / 10;
-        precision_e++;
-      }
-    } else if (val < -10) {
-      while (val < -10) {
-        val = val / -10;
-        precision_e++;
-      }
-    } else if (val > -1 && val < 0) {
-      while (val > -1) {
-        val = val * -10;
-        precision_e--;
-      }
-    } else if (val < 1 && val > 0) {
-      while (val < 1) {
-        val = val * 10;
-        precision_e--;
-      }
+    // Определение регистра и знака
+    if (spec == 'E' || spec == 'G') uppercase = true;
+    if (signbit(dval)) {
+        s21_char_to_str(str, idx, '-');
+        dval = fabs(dval);
     }
-  }
 
-  int precision = 6;
-  char buffer[128];
-
-  // Запись знака и Запись целой части
-  s21_int_to_str(str, idx, (long long)val, 10, 0);
-  // Извлечение целой и дробной частей
-  val = val - (long long)val;
-
-  // Для нулевой дробной части в g-формате
-  if (spec == 'g' || spec == 'G') {
-    if (fabs(val) < 1e-10) {
-      return;  // Не выводим дробную часть
+    // Обработка спецификатора 'g/G'
+    if (spec == 'g' || spec == 'G') { 
+      FormatG( dval, &precision, & spec, uppercase); // g -> f || e
     }
-  }
 
-  fabs(val);
-  s21_char_to_str(str, idx, '.');
-
-  // Генерация дробной части с округлением
-  for (int i = 0; i <= precision; i++) {
-    val *= 10.0;
-    int digit = (int)(val + 1e-10);  // Коррекция ошибок округления
-    buffer[i] = '0' + digit;
-    val -= digit;
-  }
-
-  // Округление последней цифры
-  int last_pos = precision - 1;
-  if (buffer[last_pos + 1] >= '5') {
-    while (last_pos >= 0) {
-      if (buffer[last_pos] < '9') {
-        buffer[last_pos]++;
-        break;
-      }
-      buffer[last_pos] = '0';
-      last_pos--;
+    // Выбор формата вывода
+    if (spec == 'f' || spec == 'F') {
+        FormatFloat(str, idx, dval, precision);
+    } else if (spec == 'e' || spec == 'E') {
+        FormatScientific(str, idx, dval, precision, uppercase);
     }
-  }
-
-  // Обработка спецификаторов g/G
-  int end_pos = precision - 1;
-  if (spec == 'g' || spec == 'G') {
-    while (end_pos >= 0 && buffer[end_pos] == '0') {
-      end_pos--;
-    }
-    if (end_pos < 0) return;  // Все нули - не выводим
-  }
-
-  // Запись дробной части
-  for (int i = 0; i <= end_pos; i++) {
-    s21_char_to_str(str, idx, buffer[i]);
-  }
-
-  if (spec == 'e' || spec == 'E') {
-    if (spec == 'e') s21_char_to_str(str, idx, 'e');
-    if (spec == 'E') s21_char_to_str(str, idx, 'E');
-    if (precision_e < 0) s21_char_to_str(str, idx, '-');
-    if (precision_e >= 0) s21_char_to_str(str, idx, '+');
-    if (precision_e < 10 || precision_e < -10) {
-      s21_char_to_str(str, idx, '0');
-      s21_int_to_str(str, idx, precision_e, 10, 0);
-    } else
-      s21_int_to_str(str, idx, precision_e, 10, 0);
-  }
 }
 
+static void FormatG(long double  dval, int *precision, char* spec,  bool  uppercase) {
+        int exp = (dval == 0.0) ? 0 : (int)floor(log10(dval)); // Расчёт экспоненты
+        if (exp >= -4 && exp < *precision) {
+            *precision = *precision - (exp + 1); 
+            if (*precision < 0) *precision = 0;
+            if (exp == 0) *precision = 0;
+            *spec = 'f';
+        } else {
+            *precision = (*precision > 0) ? *precision - 1 : 0;
+            *spec = uppercase ? 'E' : 'e';
+        }
+}
 
+static void FormatFractionalPart(char *str, s21_size_t *idx, long double  frac, int precision) {
+    if (precision <= 0) return;
+    
+    s21_char_to_str(str, idx, '.');
+    
+    for (int i = 0; i < precision; i++) {
+        frac *= 10.0;
+        s21_char_to_str(str, idx, '0' + (int)frac);
+        frac -= (int)frac;
+    }
+}
 
+static void FormatExponent(char *str, s21_size_t *idx, int exp, bool uppercase) {
+    s21_char_to_str(str, idx, uppercase ? 'E' : 'e');
+    s21_char_to_str(str, idx, exp >= 0 ? '+' : '-');
+    
+    exp = abs(exp);
+    if (exp < 10) s21_char_to_str(str, idx, '0');
+    s21_int_to_str(str, idx, exp, 10, 0);
+}
+
+static void FormatFloat(char *str, s21_size_t *idx, long double  value, int precision) {
+    value += 0.5 * pow(10, -precision); // Округление
+    double int_part;
+    double frac_part = modf(value, &int_part); // Разбивает на целую и дробную часть
+    
+    s21_int_to_str(str, idx, int_part, 10, 0);
+    FormatFractionalPart(str, idx, frac_part, precision);
+}
+
+static void FormatScientific(char *str, s21_size_t *idx, long double  value, 
+                            int precision, bool uppercase) {
+    int exp = 0;
+    if (value != 0.0) {
+        while (value >= 10.0) { value /= 10.0; exp++; }
+        while (value < 1.0)   { value *= 10.0; exp--; }
+    }
+
+    value += 0.5 * pow(10, -precision); // Округление 
+    if (value >= 10.0) { value /= 10.0; exp++; }
+
+    double int_part;
+    double frac_part = modf(value, &int_part); // Разбивает на целую и дробную часть
+
+    s21_int_to_str(str, idx, int_part, 10, 0);
+    FormatFractionalPart(str, idx, frac_part, precision);
+    FormatExponent(str, idx, exp, uppercase);
+}
 
