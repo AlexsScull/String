@@ -90,6 +90,22 @@ char *s21_strncpy(char *dest, const char *src, s21_size_t n) {
 
   Возвращает указатель на dest.*/
 
+  if (dest == NULL || src == NULL){
+    return NULL;
+  }
+
+  size_t len_src = s21_strlen(src);
+
+  for (int i = 0; i < n; i++){
+    if (i <= len_src){
+    dest[i] = src[i];
+    }
+    else{
+      dest[i] = 0;
+    }
+  }
+
+  return dest;
 }
 s21_size_t s21_strcspn(const char *str1, const char *str2) {
   /*Задача:
