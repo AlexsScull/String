@@ -13,6 +13,24 @@ char *s21_strncat(char *dest, const char *src, s21_size_t n) {
   Если src короче n, копируется только strlen(src) символов.
 
   Возвращает указатель на dest.*/
+
+  if (dest == NULL || src == NULL){
+    return NULL;
+  }
+
+  size_t i = s21_strlen(dest);
+  size_t len_src = s21_strlen(src);
+
+  if (len_src < n){
+    n = len_src;
+  }
+
+  for (int j = 0; j < n; i++, j++){
+    dest[i] = src[j];
+  }
+
+  return dest;
+
 }
 char *s21_strchr(const char *str, int c) {
   /*Задача:
