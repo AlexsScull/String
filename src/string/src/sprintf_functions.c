@@ -440,7 +440,7 @@ void s21_double_to_str(char *str, char spec, s21_size_t *idx, long double  dval)
     if (spec == 'E' || spec == 'G') uppercase = true;
     if (signbit(dval)) {
         s21_char_to_str(str, idx, '-');
-        dval = fabs(dval);
+        dval = fabsl(dval);
     }
 
     // Обработка спецификатора 'g/G'
@@ -457,7 +457,7 @@ void s21_double_to_str(char *str, char spec, s21_size_t *idx, long double  dval)
 }
 
 static void FormatG(long double  dval, int *precision, char* spec,  bool  uppercase) {
-        int exp = (dval == 0.0) ? 0 : (int)floor(log10(dval)); // Расчёт экспоненты
+        int exp = (dval == 0.0L) ? 0 : (int)floorl(log10l(dval)); // Расчёт экспоненты
         if (exp >= -4 && exp < *precision) {
             *precision = *precision - (exp + 1); 
             if (*precision < 0) *precision = 0;
@@ -475,7 +475,7 @@ static void FormatFractionalPart(char *str, s21_size_t *idx, long double  frac, 
     s21_char_to_str(str, idx, '.');
     
     for (int i = 0; i < precision; i++) {
-        frac *= 10.0;
+        frac *= 10.0L;
         s21_char_to_str(str, idx, '0' + (int)frac);
         frac -= (int)frac;
     }
@@ -491,9 +491,9 @@ static void FormatExponent(char *str, s21_size_t *idx, int exp, bool uppercase) 
 }
 
 static void FormatFloat(char *str, s21_size_t *idx, long double  value, int precision) {
-    value += 0.5 * pow(10, -precision); // Округление
-    double int_part;
-    double frac_part = modf(value, &int_part); // Разбивает на целую и дробную часть
+    value += 0.5L * powl(10.0L, -precision); // Округление
+    long double int_part;
+    long double frac_part = modfl(value, &int_part); // Разбивает на целую и дробную часть
     
     s21_int_to_str(str, idx, int_part, 10, 0);
     FormatFractionalPart(str, idx, frac_part, precision);
@@ -502,19 +502,18 @@ static void FormatFloat(char *str, s21_size_t *idx, long double  value, int prec
 static void FormatScientific(char *str, s21_size_t *idx, long double  value, 
                             int precision, bool uppercase) {
     int exp = 0;
-    if (value != 0.0) {
-        while (value >= 10.0) { value /= 10.0; exp++; }
-        while (value < 1.0)   { value *= 10.0; exp--; }
+    if (value != 0.0L) {
+        while (value >= 10.0L) { value /= 10.0L; exp++; }
+        while (value < 1.0L)   { value *= 10.0L; exp--; }
     }
 
-    value += 0.5 * pow(10, -precision); // Округление 
-    if (value >= 10.0) { value /= 10.0; exp++; }
+    value += 0.5L * powl(10.0L, -precision); // Округление 
+    if (value >= 10.0L) { value /= 10.0L; exp++; }
 
-    double int_part;
-    double frac_part = modf(value, &int_part); // Разбивает на целую и дробную часть
+    long double int_part;
+    long double frac_part = modfl(value, &int_part); // Разбивает на целую и дробную часть
 
     s21_int_to_str(str, idx, int_part, 10, 0);
     FormatFractionalPart(str, idx, frac_part, precision);
     FormatExponent(str, idx, exp, uppercase);
 }
-
