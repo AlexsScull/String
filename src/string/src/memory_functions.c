@@ -77,6 +77,7 @@ void *s21_memcpy(void *dest, const void *src, s21_size_t n) {
     }
     
     return dest;
+
 }
 void *s21_memset(void *str, int c, s21_size_t n) {
   /* Задача:
@@ -88,4 +89,13 @@ c приводится к unsigned char.
 Возвращает указатель на str.
 
 Если n = 0, заполнения не происходит.*/
+
+  unsigned char *str_1 = (unsigned char*)str;
+    unsigned char value = (unsigned char)c;
+
+    for(int i = 0; i < n; i++){
+        str_1[i] = value; 
+    }
+
+    return str;
 }
