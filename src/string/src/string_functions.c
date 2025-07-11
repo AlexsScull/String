@@ -1,6 +1,5 @@
 #include "../include/s21_string.h"
 
-
 char *s21_strncat(char *dest, const char *src, s21_size_t n) {
   /*Задача:
   Добавить не более n символов из src в конец dest. (Т.е. добавить n символов
@@ -14,23 +13,22 @@ char *s21_strncat(char *dest, const char *src, s21_size_t n) {
 
   Возвращает указатель на dest.*/
 
-  if (dest == NULL || src == NULL){
+  if (dest == NULL || src == NULL) {
     return NULL;
   }
 
   size_t i = s21_strlen(dest);
   size_t len_src = s21_strlen(src);
 
-  if (len_src < n){
+  if (len_src < n) {
     n = len_src;
   }
 
-  for (int j = 0; j < n; i++, j++){
+  for (int j = 0; j < n; i++, j++) {
     dest[i] = src[j];
   }
 
   return dest;
-
 }
 char *s21_strchr(const char *str, int c) {
   /*Задача:
@@ -48,20 +46,20 @@ char *s21_strchr(const char *str, int c) {
   int i = 0;
   int len = 0;
   unsigned char uc = (unsigned char)c;
-  if (str != NULL){
-  while (flag == 0 && str[i] != '\0'){
-    if (str[i] == uc){
-    ptr = &str[i];
-    flag = 1;
+  if (str != NULL) {
+    while (flag == 0 && str[i] != '\0') {
+      if (str[i] == uc) {
+        ptr = &str[i];
+        flag = 1;
+      }
+      i++;
+      len++;
     }
-    i++;
-    len++;
   }
-}
-  if (flag == 0){
+  if (flag == 0) {
     ptr = NULL;
   }
-  if (uc == '\0'){
+  if (uc == '\0') {
     ptr = &str[len];
   }
   return ptr;
@@ -87,16 +85,15 @@ int s21_strncmp(const char *str1, const char *str2, s21_size_t n) {
 
   int result = 0;
   int i = 0;
-  if (str1 != NULL && str2 != NULL){
-  while (n > 0 && result == 0 && str1[i] != '\0' && str2[i] != '\0'){
+  if (str1 != NULL && str2 != NULL) {
+    while (n > 0 && result == 0 && str1[i] != '\0' && str2[i] != '\0') {
       result = (unsigned char)str1[i] - (unsigned char)str2[i];
       n--;
       i++;
+    }
+  } else {
+    result = NULL;
   }
-}
-else {
-  result = NULL;
-}
   return result;
 }
 char *s21_strncpy(char *dest, const char *src, s21_size_t n) {
@@ -108,17 +105,16 @@ char *s21_strncpy(char *dest, const char *src, s21_size_t n) {
 
   Возвращает указатель на dest.*/
 
-  if (dest == NULL || src == NULL){
+  if (dest == NULL || src == NULL) {
     return NULL;
   }
 
   size_t len_src = s21_strlen(src);
 
-  for (int i = 0; i < n; i++){
-    if (i <= len_src){
-    dest[i] = src[i];
-    }
-    else{
+  for (int i = 0; i < n; i++) {
+    if (i <= len_src) {
+      dest[i] = src[i];
+    } else {
       dest[i] = 0;
     }
   }
@@ -134,7 +130,7 @@ s21_size_t s21_strcspn(const char *str1, const char *str2) {
 
   Если совпадений нет, возвращает strlen(str1).*/
 
-  if (str1 == NULL || str2 == NULL){
+  if (str1 == NULL || str2 == NULL) {
     return NULL;
   }
 
@@ -142,21 +138,21 @@ s21_size_t s21_strcspn(const char *str1, const char *str2) {
   int j = 0;
   size_t result = 0;
   int flag = 0;
-  while (str1[i] != '\0' && flag == 0){
-    while (str2[j] != '\0' && flag == 0){
-      if (str1[i] == str2[j]){
+  while (str1[i] != '\0' && flag == 0) {
+    while (str2[j] != '\0' && flag == 0) {
+      if (str1[i] == str2[j]) {
         flag = 1;
       }
       j++;
     }
-    if (flag == 0){
+    if (flag == 0) {
       result++;
     }
     i++;
     j = 0;
   }
 
-  if (flag == 0){
+  if (flag == 0) {
     result = s21_strlen(str1);
   }
 
@@ -168,12 +164,12 @@ s21_size_t s21_strlen(const char *str) {
   Обратить внимание:
   Если строка не завершена нулевым символом, то её поведение не определено.
   Если str = NULL, поведение не определено.*/
-  
-  if (str == NULL){
+
+  if (str == NULL) {
     return NULL;
   }
   size_t len = 0;
-  while (str[len] != '\0'){
+  while (str[len] != '\0') {
     len++;
   }
   return len;
@@ -185,7 +181,7 @@ char *s21_strpbrk(const char *str1, const char *str2) {
 
   Возвращает указатель на найденный символ или NULL.*/
 
-  if (str1 == NULL || str2 == NULL){
+  if (str1 == NULL || str2 == NULL) {
     return NULL;
   }
 
@@ -193,9 +189,9 @@ char *s21_strpbrk(const char *str1, const char *str2) {
   int j = 0;
   char *ptr;
   int flag = 0;
-  while (str1[i] != '\0' && flag == 0){
-    while (str2[j] != '\0' && flag == 0){
-      if (str1[i] == str2[j]){
+  while (str1[i] != '\0' && flag == 0) {
+    while (str2[j] != '\0' && flag == 0) {
+      if (str1[i] == str2[j]) {
         ptr = &str1[i];
         flag = 1;
       }
@@ -205,7 +201,7 @@ char *s21_strpbrk(const char *str1, const char *str2) {
     j = 0;
   }
 
-  if (flag == 0){
+  if (flag == 0) {
     ptr = NULL;
   }
 
@@ -224,23 +220,23 @@ char *s21_strrchr(const char *str, int c) {
   int i = 0;
   int len = 0;
   unsigned char uc = (unsigned char)c;
-  if (str == NULL){
+  if (str == NULL) {
     return NULL;
   }
 
-  while (str[i] != '\0'){
-    if (str[i] == uc){
-    ptr = &str[i];
-    flag = 1;
+  while (str[i] != '\0') {
+    if (str[i] == uc) {
+      ptr = &str[i];
+      flag = 1;
     }
     i++;
     len++;
   }
 
-  if (flag == 0){
+  if (flag == 0) {
     ptr = NULL;
   }
-  if (uc == '\0'){
+  if (uc == '\0') {
     ptr = &str[len];
   }
   return ptr;
@@ -253,6 +249,45 @@ char *s21_strstr(const char *haystack, const char *needle) {
   Если needle = "", возвращает haystack.
 
   Чувствителен к регистру.*/
+
+  if (haystack == NULL){
+    return NULL;
+  }
+
+  char *ptr = NULL;
+  if (needle == ""){
+    ptr = &haystack;
+  }
+  else{
+    int i = 0;
+    int j = 0;
+    int flag = 0;
+    int flag2 = 0;
+    while (haystack[i] != '\0' && flag == 0) {
+      if (haystack[i] == needle[j]) {
+        ptr = &haystack[i];
+        flag = 1;
+      }
+      if (flag == 1) {
+        while (needle[j] != '\0') {
+          if (haystack[i] != needle[j]) {
+            flag2 = 1;
+          }
+          j++;
+          i++;
+        }
+        if (flag2 == 1) {
+          flag = 0;
+          j = 0;
+          ptr = NULL;
+        }
+      }
+      i++;
+    
+  }
+}
+
+  return ptr;
 }
 char *s21_strtok(char *str, const char *delim) {
   /*Задача:
