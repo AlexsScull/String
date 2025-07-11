@@ -66,6 +66,17 @@ void *s21_memcpy(void *dest, const void *src, s21_size_t n) {
 Возвращает указатель на dest.
 
 Если n = 0, копирования не происходит, но dest возвращается.*/
+
+  unsigned char *str1 = (unsigned char*)dest;
+    const unsigned char *str2 = (const unsigned char*)src;
+
+    if(n != 0){
+        for(int i = 0; i < n; i++){
+            str1[i] = str2[i];
+        }
+    }
+    
+    return dest;
 }
 void *s21_memset(void *str, int c, s21_size_t n) {
   /* Задача:
