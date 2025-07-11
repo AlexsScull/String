@@ -477,7 +477,7 @@ START_TEST(test_strstr_empty_needle) {
 
 START_TEST(test_strstr_null_ptr) {
   ck_assert_ptr_eq(s21_strstr(NULL, "abc"),
-                   strstr(NULL, "abc"));  // NULL указатель
+                   NULL);  // NULL указатель (ИЗМЕНЕНО)
 }
 
 START_TEST(test_strstr_unicode) {

@@ -255,8 +255,8 @@ char *s21_strstr(const char *haystack, const char *needle) {
   }
 
   char *ptr = NULL;
-  if (needle == ""){
-    ptr = &haystack;
+  if (*needle == '\0' | needle == NULL){
+    ptr = &haystack[0];
   }
   else{
     int i = 0;
