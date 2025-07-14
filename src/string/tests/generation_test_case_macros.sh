@@ -10,9 +10,18 @@ if [ ! -f "$1" ]; then
     exit 1
 fi
 
-# Обработка всех тестов (START_TEST и TEST_SPRINTF_1)
-grep -Eo 'START_TEST\([^,)]*\)|TEST_SPRINTF_1\([^,]*' "$1" | 
-sed -e 's/START_TEST(//' -e 's/TEST_SPRINTF_1(//' -e 's/[,)].*$//' |
+# # Обработка всех тестов (START_TEST и TEST_SPRINTF)
+# grep -Eo 'START_TEST\([^,)]*\)|TEST_SPRINTF\([^,]*' "$1" | 
+# sed -e 's/START_TEST(//' -e 's/TEST_SPRINTF(//' -e 's/[,)].*$//' |
+# while IFS= read -r test_name; do
+#     echo "    tcase_add_test(tc, $test_name);"
+# done
+
+# Обработка всех тестов (START_TEST и TEST_SPRINTF(_2, _3)
+grep -Eo 'START_TEST\([^,)]*\)|TEST_SPRINTF(_[23])?\([^,]*' "$1" | 
+sed -e 's/START_TEST(//' \
+    -e 's/TEST_SPRINTF\(_[23]\)\?(//' \
+    -e 's/[,)].*$//' |
 while IFS= read -r test_name; do
     echo "    tcase_add_test(tc, $test_name);"
 done

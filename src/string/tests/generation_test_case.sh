@@ -1,19 +1,19 @@
 #!/bin/bash
 
+# Скрипт заменяет все вхождения TEST_SPRINTF_FORMAT на TEST_SPRINTF в коде
+# и выводит результат в консоль
+
+# Проверяем, передан ли файл как аргумент
 if [ $# -eq 0 ]; then
-    echo "Usage: $0 <test_file.c>" >&2
+    echo "Usage: $0 filename"
     exit 1
 fi
 
+# Проверяем существование файла
 if [ ! -f "$1" ]; then
-    echo "Error: File '$1' not found" >&2
+    echo "Error: File $1 not found"
     exit 1
 fi
 
-# Обработка каждой строки с START_TEST
-grep 'START_TEST(' "$1" | while IFS= read -r line; do
-    # Извлекаем имя теста с помощью параметрического расширения
-    temp="${line#*START_TEST(}"
-    test_name="${temp%%)*}"
-    echo "    tcase_add_test(tc, $test_name);"
-done
+# Выполняем замену и выводим результат
+sed 's/TEST_SPRINTF_FORMAT/TEST_SPRINTF/g' "$1"
