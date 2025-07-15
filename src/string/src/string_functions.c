@@ -17,8 +17,8 @@ char *s21_strncat(char *dest, const char *src, s21_size_t n) {
     return NULL;
   }
 
-  size_t i = s21_strlen(dest);
-  size_t len_src = s21_strlen(src);
+  s21_size_t i = s21_strlen(dest);
+  s21_size_t len_src = s21_strlen(src);
 
   if (len_src < n) {
     n = len_src;
@@ -40,7 +40,7 @@ char *s21_strchr(const char *str, int c) {
   Возвращает указатель на найденный символ или NULL.
 
   Если c = '\0', возвращает указатель на конец строки.*/
-
+  
   char *ptr;
   int flag = 0;
   int i = 0;
@@ -109,7 +109,7 @@ char *s21_strncpy(char *dest, const char *src, s21_size_t n) {
     return NULL;
   }
 
-  size_t len_src = s21_strlen(src);
+  s21_size_t len_src = s21_strlen(src);
 
   for (int i = 0; i < n; i++) {
     if (i <= len_src) {
@@ -136,7 +136,7 @@ s21_size_t s21_strcspn(const char *str1, const char *str2) {
 
   int i = 0;
   int j = 0;
-  size_t result = 0;
+  s21_size_t result = 0;
   int flag = 0;
   while (str1[i] != '\0' && flag == 0) {
     while (str2[j] != '\0' && flag == 0) {
@@ -168,7 +168,7 @@ s21_size_t s21_strlen(const char *str) {
   if (str == NULL) {
     return NULL;
   }
-  size_t len = 0;
+  s21_size_t len = 0;
   while (str[len] != '\0') {
     len++;
   }
@@ -296,7 +296,30 @@ char *s21_strtok(char *str, const char *delim) {
 
   При первом вызове str указывает на строку, при последующих — NULL.
 
-  Сохраняет состояние между вызовами (статическая переменная).
+  Сохраняет состояние между вызовами (статическая переменная). (хвост)
 
   Модифицирует исходную строку (заменяет разделители на \0).*/
+
+  static char* last_pos = NULL;
+  
+  if (str == NULL){
+    str = last_pos;
+    if (str == NULL){
+      return NULL;
+    }
+  }
+
+  // s21_size_t len_token = s21_strcspn(str, delim);
+  char *token = str;
+  char *token_end = s21_strpbrk(str, delim);
+
+  if (token_end != NULL){
+    *token_end = '\0';
+    last_pos = token_end + 1;
+  }
+  else{
+    last_pos = NULL;
+  }
+
+  return token;
 }

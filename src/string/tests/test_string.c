@@ -535,7 +535,7 @@ START_TEST(test_strtok_empty_delim) {
 
 START_TEST(test_strtok_null_ptr) {
   ck_assert_ptr_eq(s21_strtok(NULL, NULL),
-                   strtok(NULL, NULL));  // NULL параметры
+                   NULL);  // NULL параметры (ИЗМЕНЕНО)
 }
 
 START_TEST(test_strtok_unicode) {
