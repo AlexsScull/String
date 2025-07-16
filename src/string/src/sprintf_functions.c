@@ -15,11 +15,11 @@ void parsing_flags_modifier(const char *format, int *i, int *modifier);
 
 void parsing_flags_specifier(const char *format, int *i, const int modifier,
                              int *specifier_format);
-int parse_format(char *str, int *str_idx, int specifier, char spec_char,
+int parse_format(char *str, int *str_idx, int flag, int specifier, char spec_char,
                  va_list args);
 
 void s21_int_to_str(char *str, int *idx, long long value, int base,
-                    int uppercase);
+                    int uppercase, int flag);
 void s21_uint_to_str(char *str, int *idx, unsigned long long value, int base,
                      int uppercase);
 void s21_char_to_str(char *str, int *idx, char c);
@@ -47,8 +47,8 @@ static void FormatFloat(char *str, int *idx, long double value, int precision);
 static void FormatScientific(char *str, int *idx, long double value,
                              int precision, bool uppercase);
 
-//Сигнальное значение NaN	nan(snan)
-// Неопределенное значение NaN	nan(ind)
+// Сигнальное значение NaN	nan(snan)
+//  Неопределенное значение NaN	nan(ind)
 
 enum SpecifierFormat {
   // Целочисленные знаковые
@@ -109,21 +109,28 @@ int s21_sprintf(char *str, const char *format, ...) {
   va_list args;
   va_start(args, format);
   int idx = 0;
-  
 
   for (size_t i = 0; format[i]; i++) {
     if (format[i] == '%') {
-      int flag = 0;
-      parsing_flags(flag, &i, &format);
+      i++; // Пропускаем '%'
+
+      // Если после '%' сразу конец строки
+      if (format[i] == '\0') {
+        str[idx++] = '%'; // Выводим '%' и выходим
+        break;
+      }
+
+      int flag = -1;
+      parsing_flags(format, &i, &flag);
 
       int modifier = LENGTH_NULL;
       parsing_flags_modifier(format, &i, &modifier);
 
       int specifier = -1;
-      char spec_char = format[i + 1];
+      char spec_char = format[i];
       parsing_flags_specifier(format, &i, modifier, &specifier);
 
-      if (parse_format(str, &idx, specifier, spec_char, args) == -1) {
+      if (parse_format(str, &idx, flag, specifier, spec_char, args) == -1) {
         str[idx] = '\0';
         va_end(args);
         return -1;
@@ -139,41 +146,44 @@ int s21_sprintf(char *str, const char *format, ...) {
 }
 
 void parsing_flags(const char *format, int *i, int *modifier) {
-  *modifier = LENGTH_NULL;
+  if (format[*i] == '-') {
+    *modifier = FLAG_MINUS;
+    (*i) += 1;
+  }
+  if (format[*i] == '+') {
+    *modifier = FLAG_PLUS;
+    (*i) += 1;
+  }
+  if (format[*i] == ' ') {
+    *modifier = FLAG_SPACE;
+    (*i) += 1;
+  }
+  if (format[*i] == '#') {
+    *modifier = FLAG_HASH;
+    (*i) += 1;
+  }
+  if (format[*i] == '0') {
+    *modifier = FLAG_ZERO;
+    (*i) += 1;
+  }
 
-  if (format[*i + 1] == '-' || format[*i + 1] == '+' || format[*i + 1] == ' ' ||
-      format[*i + 1] == '#' || format[*i + 1] == '0') {
-    if (format[*i + 1] == '-') {
-      *modifier = FLAG_MINUS;
+  if (format[*i] == '.') {
+    (*i) += 1;
+
+    if (format[*i] == '*') {
+      *modifier = PRECISION_ASTERISK;
       (*i) += 1;
-    } else if (format[*i + 1] == '+') {
-      *modifier = FLAG_PLUS;
-      (*i) += 1;
-    } else if (format[*i + 1] == ' ') {
-      *modifier = FLAG_SPACE;
-      (*i) += 1;
-    } else if (format[*i + 1] == '#') {
-      *modifier = FLAG_HASH;
-      (*i) += 1;
-    } else if (format[*i + 1] == '0') {
-      *modifier = FLAG_ZERO;
+    } else if (format[*i] >= '0' && format[*i] <= '9') {
+      *modifier = PRECISION_NUMBER;
       (*i) += 1;
     }
   }
 
-  if (format[*i + 1] == '*') {
+  if (format[*i] == '*') {
     *modifier = WIDTH_ASTERISK;
     (*i) += 1;
-  } else if (format[*i + 1] >= '0' && format[*i + 1] <= '9') {
+  } else if (format[*i] >= '0' && format[*i] <= '9') {
     *modifier = WIDTH_NUMBER;
-    (*i) += 1;
-  }
-
-  if (format[*i + 1] == '.' && format[*i + 2] == '*') {
-    *modifier = PRECISION_ASTERISK;
-    (*i) += 2;
-  } else if (format[*i + 1] >= '0' && format[*i + 1] <= '9') {
-    *modifier = PRECISION_NUMBER;
     (*i) += 1;
   }
 }
@@ -181,23 +191,23 @@ void parsing_flags(const char *format, int *i, int *modifier) {
 void parsing_flags_modifier(const char *format, int *i, int *modifier) {
   *modifier = LENGTH_NULL;
 
-  if (format[*i + 1] == 'h') {
-    if (format[*i + 2] == 'h') {
+  if (format[*i] == 'h') {
+    if (format[*i + 1] == 'h') {
       *modifier = LENGTH_HH;
       (*i) += 2;
     } else {
       *modifier = LENGTH_H;
       (*i) += 1;
     }
-  } else if (format[*i + 1] == 'l') {
-    if (format[*i + 2] == 'l') {
+  } else if (format[*i] == 'l') {
+    if (format[*i + 1] == 'l') {
       *modifier = LENGTH_LL;
       (*i) += 2;
     } else {
       *modifier = LENGTH_L;
       (*i) += 1;
     }
-  } else if (format[*i + 1] == 'L') {
+  } else if (format[*i] == 'L') {
     *modifier = LENGTH_CAP_L;
     (*i) += 1;
   }
@@ -207,7 +217,7 @@ void parsing_flags_specifier(const char *format, int *i, const int modifier,
                              int *specifier_format) {
   *specifier_format = -1;  // Значение по умолчанию (ошибка)
 
-  switch (format[*i + 1]) {
+  switch (format[*i]) {
     case 'd':
     case 'i':
       if (modifier == LENGTH_LL)
@@ -263,10 +273,10 @@ void parsing_flags_specifier(const char *format, int *i, const int modifier,
       *specifier_format = TYPE_PTR;
       break;
   }
-  (*i)++;  // Переходим к следующему символу после %
+  // Не нужно Переходим к следующему символу после %
 }
 
-int parse_format(char *str, int *str_idx, int specifier, char spec_char,
+int parse_format(char *str, int *str_idx, int flag, int specifier, char spec_char,
                  va_list args) {
   switch (specifier) {
       // Обработка всех знаковых целых
@@ -349,7 +359,7 @@ int parse_format(char *str, int *str_idx, int specifier, char spec_char,
 }
 
 void s21_int_to_str(char *str, int *idx, long long value, int base,
-                    int uppercase) {
+                    int uppercase, int flag) {
   if (value < 0) {
     str[(*idx)++] = '-';
     unsigned long long positive = (value == LLONG_MIN)
@@ -357,9 +367,13 @@ void s21_int_to_str(char *str, int *idx, long long value, int base,
                                       : (unsigned long long)(-value);
     s21_uint_to_str(str, idx, positive, base, uppercase);
   } else {
+      if (flag == FLAG_PLUS)
+    str[(*idx)++] = '+';
+
     s21_uint_to_str(str, idx, value, base, uppercase);
   }
 }
+
 void s21_uint_to_str(char *str, int *idx, unsigned long long value, int base,
                      int uppercase) {
   char buffer[65];
@@ -381,7 +395,7 @@ void s21_uint_to_str(char *str, int *idx, unsigned long long value, int base,
   }
 }
 
-void s21_char_to_str(char *str, int *idx, char c) { str[(*idx)++] = c; }
+void s21_char_to_str(char *str, int *idx, const char c) { str[(*idx)++] = c; }
 
 void s21_str_to_str(char *str, int *idx, const char *s) {
   if (s == NULL) {
@@ -532,7 +546,7 @@ bool s21_float_is_special(long double value, char spec, char *str, int *idx) {
 
 void s21_double_to_str(char *str, char spec, int *idx, long double dval) {
   int precision = 6;
-  bool uppercase = false; 
+  bool uppercase = false;
 
   // Определение регистра и знака
   if (spec == 'E' || spec == 'G') uppercase = true;
