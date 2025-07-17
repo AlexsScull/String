@@ -1,3 +1,4 @@
+
 #include <ctype.h>
 #include <limits.h>
 #include <locale.h>
@@ -110,7 +111,7 @@ int s21_sprintf(char *str, const char *format, ...) {
   va_start(args, format);
   int idx = 0;
 
-  for (size_t i = 0; format[i]; i++) {
+  for (int i = 0; format[i]; i++) {
     if (format[i] == '%') {
       i++; // Пропускаем '%'
 
@@ -253,12 +254,10 @@ void parsing_flags_specifier(const char *format, int *i, const int modifier,
 
     case 'c':
       *specifier_format = (modifier == LENGTH_L) ? TYPE_WCHAR : TYPE_CHAR;
-      // *specifier_format = (modifier == LENGTH_L) ? TYPE_CHAR : TYPE_CHAR;
       break;
 
     case 's':
       *specifier_format = (modifier == LENGTH_L) ? TYPE_WSTRING : TYPE_STRING;
-      // *specifier_format = (modifier == LENGTH_L) ? TYPE_STRING : TYPE_STRING;
       break;
 
     case 'p':
@@ -273,7 +272,6 @@ void parsing_flags_specifier(const char *format, int *i, const int modifier,
       *specifier_format = TYPE_PTR;
       break;
   }
-  // Не нужно Переходим к следующему символу после %
 }
 
 int parse_format(char *str, int *str_idx, int flag, int specifier, char spec_char,
@@ -290,7 +288,7 @@ int parse_format(char *str, int *str_idx, int flag, int specifier, char spec_cha
         val = (long long)va_arg(args, long);
       else
         val = va_arg(args, long long);
-      s21_int_to_str(str, str_idx, val, 10, 0);
+      s21_int_to_str(str, str_idx, val, 10, 0, flag);
       break;
     }
       // Обработка всех беззнаковых целых
@@ -356,6 +354,7 @@ int parse_format(char *str, int *str_idx, int flag, int specifier, char spec_cha
       s21_char_to_str(str, str_idx, '%');
       break;
   }
+  return 0;
 }
 
 void s21_int_to_str(char *str, int *idx, long long value, int base,
@@ -367,9 +366,11 @@ void s21_int_to_str(char *str, int *idx, long long value, int base,
                                       : (unsigned long long)(-value);
     s21_uint_to_str(str, idx, positive, base, uppercase);
   } else {
-      if (flag == FLAG_PLUS)
-    str[(*idx)++] = '+';
-
+    if (flag == FLAG_PLUS) {
+      str[(*idx)++] = '+';
+    } else if (flag == FLAG_SPACE) {
+      str[(*idx)++] = ' ';
+    }
     s21_uint_to_str(str, idx, value, base, uppercase);
   }
 }
@@ -603,7 +604,7 @@ static void FormatExponent(char *str, int *idx, int exp, bool uppercase) {
 
   exp = abs(exp);
   if (exp < 10) s21_char_to_str(str, idx, '0');
-  s21_int_to_str(str, idx, exp, 10, 0);
+  s21_int_to_str(str, idx, exp, 10, 0, 0);
 }
 
 static void FormatFloat(char *str, int *idx, long double value, int precision) {
@@ -613,7 +614,7 @@ static void FormatFloat(char *str, int *idx, long double value, int precision) {
   long double frac_part =
       modfl(value, &int_part);  // Разбивает на целую и дробную часть
 
-  s21_int_to_str(str, idx, (long long)int_part, 10, 0);
+  s21_int_to_str(str, idx, (long long)int_part, 10, 0, 0);
   FormatFractionalPart(str, idx, frac_part, precision);
 }
 
@@ -642,7 +643,7 @@ static void FormatScientific(char *str, int *idx, long double value,
   long double frac_part =
       modfl(value, &int_part);  // Разбивает на целую и дробную часть
 
-  s21_int_to_str(str, idx, (long long)int_part, 10, 0);
+  s21_int_to_str(str, idx, (long long)int_part, 10, 0, 0);
   FormatFractionalPart(str, idx, frac_part, precision);
   FormatExponent(str, idx, exp, uppercase);
 }
