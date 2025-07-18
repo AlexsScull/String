@@ -11,45 +11,28 @@
 
 #include "../include/s21_string.h"
 
-void parsing_flags(const char *format, int *i, int *modifier);
+void parse_flags(const char *format, int *i, int *modifier);
+void parse_width(const char *format, int *i, int params[], va_list args);
+void parse_precision(const char *format, int *i, int params[], va_list args);
 void parsing_flags_modifier(const char *format, int *i, int *modifier);
-
-void parsing_flags_specifier(const char *format, int *i, const int modifier,
-                             int *specifier_format);
-int parse_format(char *str, int *str_idx, int flag, int specifier, char spec_char,
-                 va_list args);
-
-void s21_int_to_str(char *str, int *idx, long long value, int base,
-                    int uppercase, int flag);
-void s21_uint_to_str(char *str, int *idx, unsigned long long value, int base,
-                     int uppercase);
-void s21_char_to_str(char *str, int *idx, char c);
+void parse_specifier(const char *format, int *i, int params[]);
+int parse_format(char *str, int *str_idx, int params[], va_list args);
+void s21_int_to_str(char *str, int *idx, long long value, int params[]);
+void s21_uint_to_str(char *str, int *idx, unsigned long long value, int params[]);
+void s21_char_to_str(char *str, int *idx, const char c);
 void s21_str_to_str(char *str, int *idx, const char *s);
-void s21_ptr_to_str(char *str, int *idx, void *ptr);
-
+void s21_ptr_to_str(char *str, int *idx);
 bool s21_wchar_to_str(char *str, int *idx, wchar_t wc);
 bool s21_wstr_to_str(char *str, int *idx, const wchar_t *ws);
-int get_base(char spec);
-int is_upper(char spec);
-
-bool s21_float_is_special(long double value, char spec, char *str, int *idx);
-
-void s21_double_to_str(char *str, char spec, int *idx, long double dval);
-
-static void FormatG(long double dval, int *precision, char *spec,
-                    bool uppercase);
-
+bool s21_float_is_special(char *str, int *idx, long double value, int params[]);
+void s21_double_to_str(char *str, int *idx, long double dval, int params[]);
+static void FormatG(long double dval, int *precision, int params[]);
 static void FormatFractionalPart(char *str, int *idx, long double frac,
                                  int precision);
-
-static void FormatExponent(char *str, int *idx, int exp, bool uppercase);
-
-static void FormatFloat(char *str, int *idx, long double value, int precision);
+static void FormatExponent(char *str, int *idx, int exp, int params[]);
+static void FormatFloat(char *str, int *idx, long double value, int precision, int params[]);
 static void FormatScientific(char *str, int *idx, long double value,
-                             int precision, bool uppercase);
-
-// Сигнальное значение NaN	nan(snan)
-//  Неопределенное значение NaN	nan(ind)
+                             int precision, int params[]);
 
 enum SpecifierFormat {
   // Целочисленные знаковые
@@ -99,6 +82,19 @@ enum ModifierFormat {
   LENGTH_CAP_L  // 'L' (long double)
 };
 
+enum ParamsFormat {
+    flag, // -1;   FLAG_MINUS; FLAG_PLUS; FLAG_SPACE; FLAG_HASH; FLAG_ZERO
+    width, // -1; WIDTH_NUMBER; WIDTH_ASTERISK
+    precision, // -1; PRECISION_NUMBER; PRECISION_ASTERISK
+    width_asterisk, // -1; numder
+    precision_asterisk, // -1; numder
+    modifier, // -1; LENGTH_...
+    specifier, // -1; TYPE_...
+    uppercase, // 0 - doun; 1 - up
+    base, // 10; 8; 16;
+    spec_char // g,e,f
+};
+
 #define MB_LEN_MAX 1024
 
 int s21_sprintf(char *str, const char *format, ...) {
@@ -113,25 +109,18 @@ int s21_sprintf(char *str, const char *format, ...) {
 
   for (int i = 0; format[i]; i++) {
     if (format[i] == '%') {
-      i++; // Пропускаем '%'
+      i++;
 
-      // Если после '%' сразу конец строки
-      if (format[i] == '\0') {
-        str[idx++] = '%'; // Выводим '%' и выходим
-        break;
-      }
+      int params[10] = {-1,-1,-1,-1,-1,-1,-1,0,10,0};
+      if (format[i] == '\0') break;
+            
+      parse_flags(format, &i, &params[flag]);
+      parse_width(format, &i, params, args);
+      parse_precision(format, &i, params, args);
+      parsing_flags_modifier(format, &i, &params[modifier]);
+      parse_specifier(format, &i, params);
 
-      int flag = -1;
-      parsing_flags(format, &i, &flag);
-
-      int modifier = LENGTH_NULL;
-      parsing_flags_modifier(format, &i, &modifier);
-
-      int specifier = -1;
-      char spec_char = format[i];
-      parsing_flags_specifier(format, &i, modifier, &specifier);
-
-      if (parse_format(str, &idx, flag, specifier, spec_char, args) == -1) {
+      if (parse_format(str, &idx, params, args) == -1) {
         str[idx] = '\0';
         va_end(args);
         return -1;
@@ -146,46 +135,49 @@ int s21_sprintf(char *str, const char *format, ...) {
   return idx;
 }
 
-void parsing_flags(const char *format, int *i, int *modifier) {
-  if (format[*i] == '-') {
-    *modifier = FLAG_MINUS;
-    (*i) += 1;
-  }
-  if (format[*i] == '+') {
-    *modifier = FLAG_PLUS;
-    (*i) += 1;
-  }
-  if (format[*i] == ' ') {
-    *modifier = FLAG_SPACE;
-    (*i) += 1;
-  }
-  if (format[*i] == '#') {
-    *modifier = FLAG_HASH;
-    (*i) += 1;
-  }
-  if (format[*i] == '0') {
-    *modifier = FLAG_ZERO;
-    (*i) += 1;
-  }
-
-  if (format[*i] == '.') {
-    (*i) += 1;
-
-    if (format[*i] == '*') {
-      *modifier = PRECISION_ASTERISK;
-      (*i) += 1;
-    } else if (format[*i] >= '0' && format[*i] <= '9') {
-      *modifier = PRECISION_NUMBER;
-      (*i) += 1;
-    }
-  }
-
+void parse_flags(const char *format, int *i, int *modifier){
+    if (format[*i] == '-') *modifier = FLAG_MINUS;
+    else if (format[*i] == '+') *modifier = FLAG_PLUS;
+    else if (format[*i] == ' ') *modifier = FLAG_SPACE;
+    else if (format[*i] == '#') *modifier = FLAG_HASH;
+    else if (format[*i] == '0') *modifier = FLAG_ZERO;
+    else return;
+    (*i)++;
+}
+void parse_width(const char *format, int *i, int params[], va_list args) {
   if (format[*i] == '*') {
-    *modifier = WIDTH_ASTERISK;
-    (*i) += 1;
-  } else if (format[*i] >= '0' && format[*i] <= '9') {
-    *modifier = WIDTH_NUMBER;
-    (*i) += 1;
+    params[width] = WIDTH_ASTERISK;
+    params[width_asterisk] = va_arg(args, int);
+    (*i)++;
+  } else if (isdigit(format[*i])) {
+    params[width] = WIDTH_NUMBER;
+    int num = 0;
+    while (isdigit(format[*i])) {
+      num = num * 10 + (format[*i] - '0');
+      (*i)++;
+    }
+    params[width_asterisk] = num;
+  }
+}
+void parse_precision(const char *format, int *i, int params[], va_list args) {
+  if (format[*i] == '.') {
+    (*i)++;
+    if (format[*i] == '*') {
+      params[precision] = PRECISION_ASTERISK;
+      params[precision_asterisk] = va_arg(args, int);
+      (*i)++;
+    } else if (isdigit(format[*i])) {
+      params[precision] = PRECISION_NUMBER;
+      int num = 0;
+      while (isdigit(format[*i])) {
+        num = num * 10 + (format[*i] - '0');
+        (*i)++;
+      }
+      params[precision_asterisk] = num;
+    } else {
+      params[precision] = PRECISION_NUMBER;
+      params[precision_asterisk] = 0;
+    }
   }
 }
 
@@ -214,106 +206,86 @@ void parsing_flags_modifier(const char *format, int *i, int *modifier) {
   }
 }
 
-void parsing_flags_specifier(const char *format, int *i, const int modifier,
-                             int *specifier_format) {
-  *specifier_format = -1;  // Значение по умолчанию (ошибка)
-
+void parse_specifier(const char *format, int *i, int params[]) {
   switch (format[*i]) {
-    case 'd':
-    case 'i':
-      if (modifier == LENGTH_LL)
-        *specifier_format = TYPE_LONGLONG;
-      else if (modifier == LENGTH_L)
-        *specifier_format = TYPE_LONG;
-      else
-        *specifier_format = TYPE_INT;
+    case 'd': case 'i':
+      if (params[modifier] == LENGTH_LL) params[specifier] = TYPE_LONGLONG;
+      else if (params[modifier] == LENGTH_L) params[specifier] = TYPE_LONG;
+      else params[specifier] = TYPE_INT;
       break;
 
-    case 'u':
-    case 'o':
-    case 'x':
-    case 'X':
-      if (modifier == LENGTH_LL)
-        *specifier_format = TYPE_ULONGLONG;
-      else if (modifier == LENGTH_L)
-        *specifier_format = TYPE_ULONG;
-      else
-        *specifier_format = TYPE_UINT;
+    case 'u': case 'o': case 'x': case 'X':
+      if (params[modifier] == LENGTH_LL) params[specifier] = TYPE_ULONGLONG;
+      else if (params[modifier] == LENGTH_L) params[specifier] = TYPE_ULONG;
+      else params[specifier] = TYPE_UINT;
       break;
 
-    case 'f':
-    case 'e':
-    case 'E':
-    case 'g':
-    case 'G':
-      if (modifier == LENGTH_CAP_L)
-        *specifier_format = TYPE_LONGDOUBLE;
-      else
-        *specifier_format = TYPE_FLOAT;
+    case 'f': case 'e': case 'E': case 'g': case 'G':
+      if (params[modifier] == LENGTH_CAP_L) params[specifier] = TYPE_LONGDOUBLE;
+      else params[specifier] = TYPE_FLOAT;
       break;
 
     case 'c':
-      *specifier_format = (modifier == LENGTH_L) ? TYPE_WCHAR : TYPE_CHAR;
+      params[specifier] = (params[modifier] == LENGTH_L) ? TYPE_WCHAR : TYPE_CHAR;
       break;
 
     case 's':
-      *specifier_format = (modifier == LENGTH_L) ? TYPE_WSTRING : TYPE_STRING;
+      params[specifier] = (params[modifier] == LENGTH_L) ? TYPE_WSTRING : TYPE_STRING;
       break;
 
     case 'p':
-      *specifier_format = TYPE_POINTER;
+      params[specifier] = TYPE_POINTER;
       break;
 
     case '%':
-      *specifier_format = TYPE_PERCENT;
+      params[specifier] = TYPE_PERCENT;
       break;
 
     case 'n':
-      *specifier_format = TYPE_PTR;
+      params[specifier] = TYPE_PTR;
       break;
   }
+  
+  if (format[*i] == 'X' || format[*i] == 'G' || format[*i] == 'E') {
+    params[uppercase] = 1; // up
+  }
+  
+  if (format[*i] == 'o') params[base] = 8;
+  else if (format[*i] == 'x' || format[*i] == 'X' || format[*i] == 'p') params[base] = 16;
+  else params[base] = 10;
+
+  if (format[*i] == 'E' || format[*i] == 'e') params[spec_char] = 'e';
+  else if (format[*i] == 'G' || format[*i] == 'g') params[spec_char] = 'g';
+  else if (format[*i] == 'f') params[spec_char] = 'f';
+
+  // (*i)++;
 }
 
-int parse_format(char *str, int *str_idx, int flag, int specifier, char spec_char,
-                 va_list args) {
-  switch (specifier) {
-      // Обработка всех знаковых целых
-    case TYPE_INT:
-    case TYPE_LONG:
-    case TYPE_LONGLONG: {
+
+int parse_format(char *str, int *str_idx, int params[], va_list args) {
+  switch (params[specifier]) {
+    case TYPE_INT: case TYPE_LONG: case TYPE_LONGLONG: {
       long long val;
-      if (specifier == TYPE_INT)
-        val = (long long)va_arg(args, int);
-      else if (specifier == TYPE_LONG)
-        val = (long long)va_arg(args, long);
-      else
-        val = va_arg(args, long long);
-      s21_int_to_str(str, str_idx, val, 10, 0, flag);
+      if (params[specifier] == TYPE_INT) val = (long long)va_arg(args, int);
+      else if (params[specifier] == TYPE_LONG) val = (long long)va_arg(args, long);
+      else val = va_arg(args, long long);
+      s21_int_to_str(str, str_idx, val, params);
       break;
     }
-      // Обработка всех беззнаковых целых
-    case TYPE_UINT:
-    case TYPE_ULONG:
-    case TYPE_ULONGLONG: {
+    case TYPE_UINT: case TYPE_ULONG: case TYPE_ULONGLONG: {
       unsigned long long val;
-      if (specifier == TYPE_UINT)
-        val = (unsigned long long)va_arg(args, unsigned int);
-      else if (specifier == TYPE_ULONG)
-        val = (unsigned long long)va_arg(args, unsigned long);
-      else
-        val = va_arg(args, unsigned long long);
-      s21_uint_to_str(str, str_idx, val, get_base(spec_char),
-                      isupper(spec_char));
+      if (params[specifier] == TYPE_UINT) val = (unsigned long long)va_arg(args, unsigned int);
+      else if (params[specifier] == TYPE_ULONG) val = (unsigned long long)va_arg(args, unsigned long);
+      else val = va_arg(args, unsigned long long);
+      s21_uint_to_str(str, str_idx, val, params);
       break;
     }
-    // Обработка вещественных чисел
-    case TYPE_FLOAT:
-    case TYPE_LONGDOUBLE: {
-      long double val = (specifier == TYPE_FLOAT)
-                            ? (long double)va_arg(args, double)
-                            : va_arg(args, long double);
-      if (!s21_float_is_special(val, spec_char, str, str_idx))
-        s21_double_to_str(str, spec_char, str_idx, val);
+    case TYPE_FLOAT: case TYPE_LONGDOUBLE: {
+      long double val = (params[specifier] == TYPE_FLOAT) ? 
+                       (long double)va_arg(args, double) : 
+                       va_arg(args, long double);
+      if (!s21_float_is_special(str, str_idx, val, params))
+        s21_double_to_str(str, str_idx, val, params);
       break;
     }
     case TYPE_CHAR: {
@@ -341,7 +313,8 @@ int parse_format(char *str, int *str_idx, int flag, int specifier, char spec_cha
       if (ptr == NULL) {
         s21_str_to_str(str, str_idx, "(nil)");
       } else {
-        s21_ptr_to_str(str, str_idx, ptr);
+        s21_ptr_to_str(str, str_idx);
+        s21_uint_to_str(str, str_idx, (uintptr_t)ptr, params);
       }
       break;
     }
@@ -357,63 +330,61 @@ int parse_format(char *str, int *str_idx, int flag, int specifier, char spec_cha
   return 0;
 }
 
-void s21_int_to_str(char *str, int *idx, long long value, int base,
-                    int uppercase, int flag) {
+void s21_int_to_str(char *str, int *idx, long long value, int params[]) {
   if (value < 0) {
     str[(*idx)++] = '-';
-    unsigned long long positive = (value == LLONG_MIN)
-                                      ? (unsigned long long)LLONG_MAX + 1
-                                      : (unsigned long long)(-value);
-    s21_uint_to_str(str, idx, positive, base, uppercase);
+    unsigned long long positive = (value == LLONG_MIN) ? 
+                                 (unsigned long long)LLONG_MAX + 1 : 
+                                 (unsigned long long)(-value);
+    s21_uint_to_str(str, idx, positive, params);
   } else {
-    if (flag == FLAG_PLUS) {
+    if (params[flag] == FLAG_PLUS) {
       str[(*idx)++] = '+';
-    } else if (flag == FLAG_SPACE) {
+    } else if (params[flag] == FLAG_SPACE) {
       str[(*idx)++] = ' ';
     }
-    s21_uint_to_str(str, idx, value, base, uppercase);
+    s21_uint_to_str(str, idx, value, params);
   }
 }
 
-void s21_uint_to_str(char *str, int *idx, unsigned long long value, int base,
-                     int uppercase) {
+void s21_uint_to_str(char *str, int *idx, unsigned long long value, int params[]) {
   char buffer[65];
-  const char *digits = uppercase ? "0123456789ABCDEF" : "0123456789abcdef";
+  const char *digits = params[uppercase] ? "0123456789ABCDEF" : "0123456789abcdef";
   int i = 0;
 
   if (value == 0) {
     buffer[i++] = '0';
   } else {
     while (value) {
-      buffer[i++] = digits[value % base];
-      value /= base;
+      buffer[i++] = digits[value % params[base]];
+      value /= params[base];
     }
   }
 
-  // Запись в обратном порядке
   while (--i >= 0) {
     str[(*idx)++] = buffer[i];
   }
 }
 
-void s21_char_to_str(char *str, int *idx, const char c) { str[(*idx)++] = c; }
+
+void s21_char_to_str(char *str, int *idx, const char c) { 
+  str[(*idx)++] = c; 
+}
 
 void s21_str_to_str(char *str, int *idx, const char *s) {
   if (s == NULL) {
     s21_str_to_str(str, idx, "(null)");
   } else {
     while (*s) {
-      s21_char_to_str(str, idx, *s++);
+      str[(*idx)++] = *s++;
     }
   }
 }
 
-void s21_ptr_to_str(char *str, int *idx, void *ptr) {
+void s21_ptr_to_str(char *str, int *idx) {
   s21_char_to_str(str, idx, '0');
   s21_char_to_str(str, idx, 'x');
-  s21_uint_to_str(str, idx, (uintptr_t)ptr, 16, 0);
 }
-
 bool s21_wchar_to_str(char *str, int *idx, wchar_t wc) {
   uint32_t code = (uint32_t)wc;
 
@@ -521,66 +492,59 @@ bool s21_wstr_to_str(char *str, int *idx, const wchar_t *ws) {
 //                                        //
 ////////////////////////////////////////////
 
-int get_base(char spec) {
-  if (spec == 'o') return 8;
-  if (spec == 'x' || spec == 'X' || spec == 'p') return 16;
-  return 10;
-}
 
-int is_upper(char spec) { return (spec == 'X'); }
-
-bool s21_float_is_special(long double value, char spec, char *str, int *idx) {
-  bool uppercase = (spec == 'E' || spec == 'G');
+bool s21_float_is_special(char *str, int *idx, long double value, int params[]) {
   if (isnanl(value)) {
-    s21_str_to_str(str, idx, uppercase ? "NAN" : "nan");
+    s21_str_to_str(str, idx, params[uppercase] ? "NAN" : "nan");
     return true;
   } else if (isinfl(value)) {
     if (signbit(value)) {
-      s21_str_to_str(str, idx, uppercase ? "-INF" : "-inf");
+      s21_str_to_str(str, idx, params[uppercase] ? "-INF" : "-inf");
     } else {
-      s21_str_to_str(str, idx, uppercase ? "INF" : "inf");
+      s21_str_to_str(str, idx, params[uppercase] ? "INF" : "inf");
     }
     return true;
   }
   return false;
 }
 
-void s21_double_to_str(char *str, char spec, int *idx, long double dval) {
+
+void s21_double_to_str(char *str, int *idx, long double dval, int params[]) {
   int precision = 6;
-  bool uppercase = false;
 
-  // Определение регистра и знака
-  if (spec == 'E' || spec == 'G') uppercase = true;
-  if (signbit(dval)) {
-    s21_char_to_str(str, idx, '-');
+ bool is_negative = signbit(dval);
+  if (is_negative) {
+    str[(*idx)++] = '-';
     dval = fabsl(dval);
+  } else if (params[flag] == FLAG_PLUS) {
+    str[(*idx)++] = '+';
+  } else if (params[flag] == FLAG_SPACE) {
+    str[(*idx)++] = ' ';
   }
-
   // Обработка спецификатора 'g/G'
-  if (spec == 'g' || spec == 'G') {
-    FormatG(dval, &precision, &spec, uppercase);  // g -> f || e
+  if (params[spec_char] == 'g') {
+    FormatG(dval, &precision, params);  // g -> f || e
   }
 
   // Выбор формата вывода
-  if (spec == 'f' || spec == 'F') {
-    FormatFloat(str, idx, dval, precision);
-  } else if (spec == 'e' || spec == 'E') {
-    FormatScientific(str, idx, dval, precision, uppercase);
+  if (params[spec_char] =='f' ) {
+    FormatFloat(str, idx, dval, precision, params);
+  } else if (params[spec_char] == 'e' ) {
+    FormatScientific(str, idx, dval, precision, params);
   }
 }
 
-static void FormatG(long double dval, int *precision, char *spec,
-                    bool uppercase) {
+static void FormatG(long double dval, int *precision, int params[]) {
   int exp =
       (dval == 0.0L) ? 0 : (int)floorl(log10l(dval));  // Расчёт экспоненты
   if (exp >= -4 && exp < *precision) {
     *precision = *precision - (exp + 1);
     if (*precision < 0) *precision = 0;
     if (exp == 0) *precision = 0;
-    *spec = 'f';
+    params[spec_char] = 'f';
   } else {
     *precision = (*precision > 0) ? *precision - 1 : 0;
-    *spec = uppercase ? 'E' : 'e';
+    params[spec_char] = 'e';
   }
 }
 
@@ -598,28 +562,28 @@ static void FormatFractionalPart(char *str, int *idx, long double frac,
   }
 }
 
-static void FormatExponent(char *str, int *idx, int exp, bool uppercase) {
-  s21_char_to_str(str, idx, uppercase ? 'E' : 'e');
+static void FormatExponent(char *str, int *idx, int exp, int params[]) {
+  s21_char_to_str(str, idx, params[uppercase] ? 'E' : 'e');
   s21_char_to_str(str, idx, exp >= 0 ? '+' : '-');
 
   exp = abs(exp);
   if (exp < 10) s21_char_to_str(str, idx, '0');
-  s21_int_to_str(str, idx, exp, 10, 0, 0);
+  s21_int_to_str(str, idx, exp, params);
 }
 
-static void FormatFloat(char *str, int *idx, long double value, int precision) {
+static void FormatFloat(char *str, int *idx, long double value, int precision, int params[]) {
   long double rounding = 0.5L * powl(10.0L, -precision);
   value += rounding;  // Округление
   long double int_part;
   long double frac_part =
       modfl(value, &int_part);  // Разбивает на целую и дробную часть
 
-  s21_int_to_str(str, idx, (long long)int_part, 10, 0, 0);
+  s21_int_to_str(str, idx, (long long)int_part, params);
   FormatFractionalPart(str, idx, frac_part, precision);
 }
 
 static void FormatScientific(char *str, int *idx, long double value,
-                             int precision, bool uppercase) {
+                             int precision, int params[]) {
   int exp = 0;
   if (value != 0.0L) {
     while (value >= 10.0L) {
@@ -643,7 +607,7 @@ static void FormatScientific(char *str, int *idx, long double value,
   long double frac_part =
       modfl(value, &int_part);  // Разбивает на целую и дробную часть
 
-  s21_int_to_str(str, idx, (long long)int_part, 10, 0, 0);
+  s21_int_to_str(str, idx, (long long)int_part, params);
   FormatFractionalPart(str, idx, frac_part, precision);
-  FormatExponent(str, idx, exp, uppercase);
+  FormatExponent(str, idx, exp, params);
 }
