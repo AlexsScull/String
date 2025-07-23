@@ -180,6 +180,14 @@ static void handle_count(char *str, int *idx, int params[], va_list args);
 static void handle_percent(char *str, int *idx);
 
 /**
+ * @brief Добавляет знак числа в строку
+ * @param str Результирующая строка
+ * @param idx Указатель на текущий индекс
+ * @param negative Флаг отрицательного числа
+ * @param params Массив параметров
+ */
+static void add_sign(char *str, int *idx, bool negative, int params[]);
+/**
  * @brief Конвертирует целое число в строку
  * @param str Результирующая строка
  * @param idx Указатель на текущий индекс
@@ -301,6 +309,14 @@ static void format_exponent(char *str, int *idx, int exp, int params[]);
 static void format_float_value(char *str, int *idx, long double value,
                                int precision, int params[]);
 
+/**
+ * @brief Парсит число из строки формата
+ * @param format Строка формата
+ * @param i Указатель на текущий индекс
+ * @return Распарсенное число
+ */
+static int parse_number(const char *format, int *i);
+
 ////////////////////////////////////////////////////////////
 //                Основная функция sprintf                //
 ////////////////////////////////////////////////////////////
@@ -356,27 +372,41 @@ int s21_sprintf(char *str, const char *format, ...) {
 //             Функции парсинга формата                   //
 ////////////////////////////////////////////////////////////
 
+static int parse_number(const char *format, int *i) {
+  int num = 0;
+  while (isdigit(format[*i])) {
+    num = num * kBaseDecimal + (format[*i] - '0');
+    (*i)++;
+  }
+  return num;
+}
+
 static void parse_flag(const char *format, int *i, int *flag) {
   switch (format[*i]) {
     case '-':
       *flag = FLAG_MINUS;
+      (*i)++;
       break;
     case '+':
       *flag = FLAG_PLUS;
+      (*i)++;
       break;
     case ' ':
       *flag = FLAG_SPACE;
+      (*i)++;
       break;
     case '#':
       *flag = FLAG_HASH;
+      (*i)++;
       break;
     case '0':
       *flag = FLAG_ZERO;
+      (*i)++;
       break;
     default:
-      return;
+      *flag = -1;  // если не нашли флаг, оставляем -1
+      break;
   }
-  (*i)++;
 }
 
 static void parse_width(const char *format, int *i, int params[],
@@ -387,12 +417,7 @@ static void parse_width(const char *format, int *i, int params[],
     (*i)++;
   } else if (isdigit(format[*i])) {
     params[PARAM_WIDTH] = WIDTH_NUMBER;
-    int num = 0;
-    while (isdigit(format[*i])) {
-      num = num * kBaseDecimal + (format[*i] - '0');
-      (*i)++;
-    }
-    params[PARAM_WIDTH_ASTERISK_VALUE] = num;
+    params[PARAM_WIDTH_ASTERISK_VALUE] = parse_number(format, i);
   }
 }
 
@@ -404,43 +429,28 @@ static void parse_precision(const char *format, int *i, int params[],
       params[PARAM_PRECISION] = PRECISION_ASTERISK;
       params[PARAM_PRECISION_ASTERISK_VALUE] = va_arg(args, int);
       (*i)++;
-    } else if (isdigit(format[*i])) {
-      params[PARAM_PRECISION] = PRECISION_NUMBER;
-      int num = 0;
-      while (isdigit(format[*i])) {
-        num = num * kBaseDecimal + (format[*i] - '0');
-        (*i)++;
-      }
-      params[PARAM_PRECISION_ASTERISK_VALUE] = num;
     } else {
       params[PARAM_PRECISION] = PRECISION_NUMBER;
-      params[PARAM_PRECISION_ASTERISK_VALUE] = 0;
+      if (isdigit(format[*i])) {
+        params[PARAM_PRECISION_ASTERISK_VALUE] = parse_number(format, i);
+      } else {
+        params[PARAM_PRECISION_ASTERISK_VALUE] = 0;
+      }
     }
   }
 }
 
 static void parse_modifier(const char *format, int *i, int *modifier) {
   *modifier = LENGTH_NULL;
-
   if (format[*i] == 'h') {
-    if (format[*i + 1] == 'h') {
-      *modifier = LENGTH_HH;
-      (*i) += 2;
-    } else {
-      *modifier = LENGTH_H;
-      (*i) += 1;
-    }
+    *modifier = (format[*i + 1] == 'h') ? LENGTH_HH : LENGTH_H;
+    *i += (*modifier == LENGTH_HH) ? 2 : 1;
   } else if (format[*i] == 'l') {
-    if (format[*i + 1] == 'l') {
-      *modifier = LENGTH_LL;
-      (*i) += 2;
-    } else {
-      *modifier = LENGTH_L;
-      (*i) += 1;
-    }
+    *modifier = (format[*i + 1] == 'l') ? LENGTH_LL : LENGTH_L;
+    *i += (*modifier == LENGTH_LL) ? 2 : 1;
   } else if (format[*i] == 'L') {
     *modifier = LENGTH_CAP_L;
-    (*i) += 1;
+    (*i)++;
   }
 }
 
@@ -448,7 +458,7 @@ static void parse_specifier(const char *format, int *i, int params[]) {
   switch (format[*i]) {
     case 'd':
     case 'i':
-      parse_signed_specifier(params);
+      parse_integer_specifier(params);
       break;
     case 'u':
     case 'o':
@@ -484,7 +494,7 @@ static void parse_specifier(const char *format, int *i, int params[]) {
   }
 }
 
-static void parse_signed_specifier(int params[]) {
+static void parse_integer_specifier(int params[]) {
   if (params[PARAM_MODIFIER] == LENGTH_LL)
     params[PARAM_SPECIFIER] = TYPE_LONGLONG;
   else if (params[PARAM_MODIFIER] == LENGTH_L)
@@ -662,20 +672,27 @@ static void handle_percent(char *str, int *idx) {
 //             Функции конвертации данных                 //
 ////////////////////////////////////////////////////////////
 
-static void convert_int_to_str(char *str, int *idx, long long value,
-                               int params[]) {
-  if (value < 0) {
+static void add_sign(char *str, int *idx, bool negative, int params[]) {
+  if (negative) {
     str[(*idx)++] = '-';
-    unsigned long long positive = (value == LLONG_MIN)
-                                      ? (unsigned long long)LLONG_MAX + 1
-                                      : (unsigned long long)(-value);
-    convert_uint_to_str(str, idx, positive, params);
   } else {
     if (params[PARAM_FLAG] == FLAG_PLUS) {
       str[(*idx)++] = '+';
     } else if (params[PARAM_FLAG] == FLAG_SPACE) {
       str[(*idx)++] = ' ';
     }
+  }
+}
+
+static void convert_int_to_str(char *str, int *idx, long long value,
+                               int params[]) {
+  add_sign(str, idx, value < 0, params);
+  if (value < 0) {
+    unsigned long long positive = (value == LLONG_MIN)
+                                      ? (unsigned long long)LLONG_MAX + 1
+                                      : (unsigned long long)(-value);
+    convert_uint_to_str(str, idx, positive, params);
+  } else {
     convert_uint_to_str(str, idx, value, params);
   }
 }
@@ -720,6 +737,7 @@ static void convert_pointer_prefix(char *str, int *idx) {
   convert_char_to_str(str, idx, 'x');
 }
 
+
 static bool convert_wchar_to_str(char *str, int *idx, wchar_t wc) {
   uint32_t code = (uint32_t)wc;
 
@@ -754,72 +772,17 @@ static bool convert_wstring_to_str(char *str, int *idx, const wchar_t *ws) {
   }
 
   int start_index = *idx;
-  int total_bytes = 0;
-  const wchar_t *tmp = ws;
+  bool success = true;
 
-  // Подсчет общей длины
-  while (*tmp) {
-    uint32_t code = (uint32_t)(*tmp);
-    if (code > kUnicodeMax ||
-        (code >= kSurrogateStart && code <= kSurrogateEnd)) {
-      return false;
+  for (const wchar_t *tmp = ws; *tmp; tmp++) {
+    if (!convert_wchar_to_str(str, idx, (*tmp))) {
+      *idx = start_index;
+      success = false;
+      break;
     }
-
-    if (code < kUtf8OneByteBound) {
-      total_bytes++;
-    } else if (code < kUtf8TwoByteBound) {
-      total_bytes += 2;
-    } else if (code < kUtf8ThreeByteBound) {
-      total_bytes += 3;
-    } else {
-      total_bytes += 4;
-    }
-    tmp++;
   }
 
-  if (total_bytes == 0) {
-    return true;
-  }
-
-  // Выделение временного буфера
-  char *buffer = (char *)malloc(total_bytes);
-  if (buffer == NULL) {
-    *idx = -1;
-    return false;
-  }
-
-  int buf_index = 0;
-  tmp = ws;
-
-  // Конвертация во временный буфер
-  while (*tmp) {
-    uint32_t code = (uint32_t)(*tmp);
-    if (code < kUtf8OneByteBound) {
-      buffer[buf_index++] = (char)code;
-    } else if (code < kUtf8TwoByteBound) {
-      buffer[buf_index++] = 0xC0 | (code >> 6);
-      buffer[buf_index++] = 0x80 | (code & 0x3F);
-    } else if (code < kUtf8ThreeByteBound) {
-      buffer[buf_index++] = 0xE0 | (code >> 12);
-      buffer[buf_index++] = 0x80 | ((code >> 6) & 0x3F);
-      buffer[buf_index++] = 0x80 | (code & 0x3F);
-    } else {
-      buffer[buf_index++] = 0xF0 | (code >> 18);
-      buffer[buf_index++] = 0x80 | ((code >> 12) & 0x3F);
-      buffer[buf_index++] = 0x80 | ((code >> 6) & 0x3F);
-      buffer[buf_index++] = 0x80 | (code & 0x3F);
-    }
-    tmp++;
-  }
-
-  // Копирование в выходную строку
-  for (int i = 0; i < total_bytes; i++) {
-    str[start_index + i] = buffer[i];
-  }
-  *idx = start_index + total_bytes;
-
-  free(buffer);
-  return true;
+  return success;
 }
 
 ////////////////////////////////////////////////////////////
@@ -848,23 +811,12 @@ static void convert_float_to_str(char *str, int *idx, long double dval,
   int precision = (params[PARAM_PRECISION] >= 0)
                       ? params[PARAM_PRECISION_ASTERISK_VALUE]
                       : kDefaultPrecision;
-  bool is_negative = signbit(dval);
-
-  if (is_negative) {
-    str[(*idx)++] = '-';
-    dval = fabsl(dval);
-  } else if (params[PARAM_FLAG] == FLAG_PLUS) {
-    str[(*idx)++] = '+';
-  } else if (params[PARAM_FLAG] == FLAG_SPACE) {
-    str[(*idx)++] = ' ';
-  }
-
-  // Обработка спецификатора 'g/G'
+  add_sign(str, idx, signbit(dval), params);
+  dval = fabsl(dval);
   if (params[PARAM_SPEC_CHAR] == CHAR_G) {
     format_g(dval, &precision, params);
   }
 
-  // Выбор формата вывода
   if (params[PARAM_SPEC_CHAR] == CHAR_F) {
     format_f(str, idx, dval, precision, params);
   } else if (params[PARAM_SPEC_CHAR] == CHAR_E) {
