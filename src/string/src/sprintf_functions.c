@@ -737,7 +737,6 @@ static void convert_pointer_prefix(char *str, int *idx) {
   convert_char_to_str(str, idx, 'x');
 }
 
-
 static bool convert_wchar_to_str(char *str, int *idx, wchar_t wc) {
   uint32_t code = (uint32_t)wc;
 
