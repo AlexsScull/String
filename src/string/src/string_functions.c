@@ -40,7 +40,7 @@ char *s21_strchr(const char *str, int c) {
   Возвращает указатель на найденный символ или NULL.
 
   Если c = '\0', возвращает указатель на конец строки.*/
-  
+
   char *ptr;
   int flag = 0;
   int i = 0;
@@ -250,15 +250,14 @@ char *s21_strstr(const char *haystack, const char *needle) {
 
   Чувствителен к регистру.*/
 
-  if (haystack == NULL){
+  if (haystack == NULL) {
     return NULL;
   }
 
   char *ptr = NULL;
-  if (*needle == '\0' | needle == NULL){
+  if (*needle == '\0' | needle == NULL) {
     ptr = &haystack[0];
-  }
-  else{
+  } else {
     int i = 0;
     int j = 0;
     int flag = 0;
@@ -283,9 +282,8 @@ char *s21_strstr(const char *haystack, const char *needle) {
         }
       }
       i++;
-    
+    }
   }
-}
 
   return ptr;
 }
@@ -300,11 +298,11 @@ char *s21_strtok(char *str, const char *delim) {
 
   Модифицирует исходную строку (заменяет разделители на \0).*/
 
-  static char* last_pos = NULL;
-  
-  if (str == NULL){
+  static char *last_pos = NULL;
+
+  if (str == NULL) {
     str = last_pos;
-    if (str == NULL){
+    if (str == NULL) {
       return NULL;
     }
   }
@@ -313,11 +311,10 @@ char *s21_strtok(char *str, const char *delim) {
   char *token = str;
   char *token_end = s21_strpbrk(str, delim);
 
-  if (token_end != NULL){
+  if (token_end != NULL) {
     *token_end = '\0';
     last_pos = token_end + 1;
-  }
-  else{
+  } else {
     last_pos = NULL;
   }
 

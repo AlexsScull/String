@@ -154,12 +154,9 @@ static void parse_modifier(const char *format, int *i, int *modifier);
  * @param params Массив параметров
  */
 static void parse_specifier(const char *format, int *i, int params[]);
-static void parse_float_specifier(int params[]);
 static void parse_integer_specifier(int params[]);
-static void parse_char_specifier(int params[]);
-static void parse_float_specifier(int params[]);
-static void parse_integer_specifier(int params[]);
-static void parse_unsigned_specifier(int params[]);
+static void parse_unsigned_specifier(int params[], char specifier);
+static void parse_float_specifier(int params[], char specifier);
 
 /**
  * @brief Конвертирует форматированное значение
@@ -451,45 +448,20 @@ static void parse_specifier(const char *format, int *i, int params[]) {
   switch (format[*i]) {
     case 'd':
     case 'i':
-      parse_integer_specifier(params);
+      parse_signed_specifier(params);
       break;
     case 'u':
-      parse_unsigned_specifier(params);
-      break;
     case 'o':
-      parse_unsigned_specifier(params);
-      params[PARAM_BASE] = kBaseOctal;
-      break;
     case 'x':
-      parse_unsigned_specifier(params);
-      params[PARAM_BASE] = kBaseHexadecimal;
-      break;
     case 'X':
-      parse_unsigned_specifier(params);
-      params[PARAM_BASE] = kBaseHexadecimal;
-      params[PARAM_UPPERCASE] = true;
+      parse_unsigned_specifier(params, format[*i]);
       break;
     case 'f':
-      parse_float_specifier(params);
-      params[PARAM_SPEC_CHAR] = CHAR_F;
-      break;
     case 'e':
-      parse_float_specifier(params);
-      params[PARAM_SPEC_CHAR] = CHAR_E;
-      break;
-    case 'g':
-      parse_float_specifier(params);
-      params[PARAM_SPEC_CHAR] = CHAR_G;
-      break;
     case 'E':
-      parse_float_specifier(params);
-      params[PARAM_UPPERCASE] = true;
-      params[PARAM_SPEC_CHAR] = CHAR_E;
-      break;
+    case 'g':
     case 'G':
-      parse_float_specifier(params);
-      params[PARAM_UPPERCASE] = true;
-      params[PARAM_SPEC_CHAR] = CHAR_G;
+      parse_float_specifier(params, format[*i]);
       break;
     case 'c':
       params[PARAM_SPECIFIER] =
@@ -512,14 +484,7 @@ static void parse_specifier(const char *format, int *i, int params[]) {
   }
 }
 
-static void parse_float_specifier(int params[]) {
-  if (params[PARAM_MODIFIER] == LENGTH_CAP_L)
-    params[PARAM_SPECIFIER] = TYPE_LONGDOUBLE;
-  else
-    params[PARAM_SPECIFIER] = TYPE_FLOAT;
-}
-
-static void parse_integer_specifier(int params[]) {
+static void parse_signed_specifier(int params[]) {
   if (params[PARAM_MODIFIER] == LENGTH_LL)
     params[PARAM_SPECIFIER] = TYPE_LONGLONG;
   else if (params[PARAM_MODIFIER] == LENGTH_L)
@@ -528,13 +493,42 @@ static void parse_integer_specifier(int params[]) {
     params[PARAM_SPECIFIER] = TYPE_INT;
 }
 
-static void parse_unsigned_specifier(int params[]) {
+static void parse_unsigned_specifier(int params[], char specifier) {
   if (params[PARAM_MODIFIER] == LENGTH_LL)
     params[PARAM_SPECIFIER] = TYPE_ULONGLONG;
   else if (params[PARAM_MODIFIER] == LENGTH_L)
     params[PARAM_SPECIFIER] = TYPE_ULONG;
   else
     params[PARAM_SPECIFIER] = TYPE_UINT;
+
+  if (specifier == 'o') {
+    params[PARAM_BASE] = kBaseOctal;
+  } else if (specifier == 'x' || specifier == 'X') {
+    params[PARAM_BASE] = kBaseHexadecimal;
+    if (specifier == 'X') {
+      params[PARAM_UPPERCASE] = true;
+    }
+  }
+}
+
+static void parse_float_specifier(int params[], char specifier) {
+  if (params[PARAM_MODIFIER] == LENGTH_CAP_L)
+    params[PARAM_SPECIFIER] = TYPE_LONGDOUBLE;
+  else
+    params[PARAM_SPECIFIER] = TYPE_FLOAT;
+
+  char base_char = tolower(specifier);
+  if (base_char == 'e') {
+    params[PARAM_SPEC_CHAR] = CHAR_E;
+  } else if (base_char == 'g') {
+    params[PARAM_SPEC_CHAR] = CHAR_G;
+  } else {
+    params[PARAM_SPEC_CHAR] = CHAR_F;
+  }
+
+  if (isupper(specifier)) {
+    params[PARAM_UPPERCASE] = true;
+  }
 }
 
 static int convert_format(char *str, int *str_idx, int params[], va_list args) {
