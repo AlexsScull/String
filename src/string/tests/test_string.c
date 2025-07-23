@@ -571,7 +571,7 @@ START_TEST(test_strtok_long_string) {
 //                                        //
 ////////////////////////////////////////////
 
-Suite *sscanf_suite(void) {
+Suite *string_suite(void) {
   Suite *s = suite_create("s21_string");
   TCase *tc = tcase_create("Core");
 
@@ -677,7 +677,7 @@ Suite *sscanf_suite(void) {
  */
 int main(int argc, char **argv) {
   int failed = 0;
-  Suite *s = sscanf_suite();
+  Suite *s = string_suite();
   SRunner *runner = srunner_create(s);
 
   // Устанавливаем режим вывода в зависимости от аргументов

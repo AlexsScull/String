@@ -265,7 +265,7 @@ START_TEST(test_trim_null_chars) {  // NULL символы для обрезки
 ////////////////////////////////////////////
 
 Suite *extended_suite(void) {
-  Suite *s = suite_create("s21_string");
+  Suite *s = suite_create("test_extended");
   TCase *tc = tcase_create("Core");
 
   // s21_to_upper

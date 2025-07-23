@@ -1050,8 +1050,8 @@ END_TEST
 // Test suite
 // ================================================================
 
-Suite *s21_sprintf_suite(void) {
-  Suite *s = suite_create("s21_sprintf");
+Suite *sprintf_suite(void) {
+  Suite *s = suite_create("test_sprintf");
   TCase *tc = tcase_create("Core");
 
   tcase_add_test(tc, test_s21_sprintf_d);
@@ -1531,7 +1531,7 @@ Suite *s21_sprintf_suite(void) {
 
 int main(int argc, char **argv) {
   int failed = 0;
-  Suite *s = s21_sprintf_suite();
+  Suite *s = sprintf_suite();
   SRunner *runner = srunner_create(s);
 
   if (argc > 1 && strcmp(argv[1], "+") == 0) {

@@ -477,7 +477,7 @@ START_TEST(test_memset_binary_data) {
 ////////////////////////////////////////////
 
 Suite *memory_suite(void) {
-  Suite *s = suite_create("s21_sscanf");
+  Suite *s = suite_create("test_memory");
   TCase *tc = tcase_create("Core");
 
   //// s21_memchr ////
