@@ -266,6 +266,8 @@ static void parse_width(const char *format, int *i, int params[],
   } else if (isdigit(format[*i])) {
     params[PARAM_WIDTH] = WIDTH_NUMBER;
     params[PARAM_WIDTH_ASTERISK_VALUE] = parse_number(format, i);
+    if (params[PARAM_WIDTH_ASTERISK_VALUE] < 0)
+      params[PARAM_WIDTH_ASTERISK_VALUE] = 0;
   }
 }
 
@@ -277,13 +279,11 @@ static void parse_precision(const char *format, int *i, int params[],
       params[PARAM_PRECISION] = PRECISION_ASTERISK;
       params[PARAM_PRECISION_ASTERISK_VALUE] = va_arg(args, int);
       (*i)++;
-    } else {
+    } else if (isdigit(format[*i])) {
       params[PARAM_PRECISION] = PRECISION_NUMBER;
-      if (isdigit(format[*i])) {
-        params[PARAM_PRECISION_ASTERISK_VALUE] = parse_number(format, i);
-      } else {
+      params[PARAM_PRECISION_ASTERISK_VALUE] = parse_number(format, i);
+      if (params[PARAM_PRECISION_ASTERISK_VALUE] < 0)
         params[PARAM_PRECISION_ASTERISK_VALUE] = 0;
-      }
     }
   }
 }
@@ -548,8 +548,8 @@ static void convert_int_to_str(char *str, int *idx, long long value,
   }
 }
 
-static void convert_uint_to_str(char *str, int *idx, unsigned long long value,
-                                int params[]) {
+static int convert_uint_to_buffer(char *buf, unsigned long long value,
+                                  int params[]) {
   char buffer[kMaxBufferSize];
   const char *digits =
       params[PARAM_UPPERCASE] ? "0123456789ABCDEF" : "0123456789abcdef";
@@ -564,9 +564,28 @@ static void convert_uint_to_str(char *str, int *idx, unsigned long long value,
     }
   }
 
-  while (--i >= 0) {
-    str[(*idx)++] = buffer[i];
+  for (int j = 0; j < i; j++) {
+    buf[j] = buffer[i - j - 1];
   }
+  buf[i] = '\0';
+  return i;
+}
+
+static void convert_PARAM_WIDTH_to_str(char *str, int *idx, int num_len, int params[]) {
+    if ((params[PARAM_WIDTH_ASTERISK_VALUE] -= num_len) > 0) {
+    char pad_char = (params[PARAM_FLAG] == FLAG_ZERO) ? '0' : ' ';
+    for (int i = 0; i < params[PARAM_WIDTH_ASTERISK_VALUE]; i++) {
+      convert_char_to_str(str, idx, pad_char);
+    }
+  }
+}
+
+static void convert_uint_to_str(char *str, int *idx, unsigned long long value,
+                                int params[]) {
+  char buffer[kMaxBufferSize];
+  int num_len = convert_uint_to_buffer(buffer, value, params);
+  convert_PARAM_WIDTH_to_str(str, idx, num_len, params);
+  convert_string_to_str(str, idx, buffer);
 }
 
 static void convert_char_to_str(char *str, int *idx, char c) {
