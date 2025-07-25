@@ -116,56 +116,16 @@ const uint8_t kUtf8ThreeByteBound = 0x10000;  ///< Граница 3-байтов
 //                   Обявление функций                    //
 ////////////////////////////////////////////////////////////
 
-/**
- * @brief Парсит флаги форматирования
- * @param format Строка формата
- * @param i Текущий индекс в строке формата
- * @param flag Указатель для сохранения флага
- */
 static void parse_flag(const char *format, int *i, int *flag);
-/**
- * @brief Парсит ширину форматирования
- * @param format Строка формата
- * @param i Текущий индекс в строке формата
- * @param params Массив параметров
- * @param args Список аргументов
- */
 static void parse_width(const char *format, int *i, int params[], va_list args);
-/**
- * @brief Парсит точность форматирования
- * @param format Строка формата
- * @param i Текущий индекс в строке формата
- * @param params Массив параметров
- * @param args Список аргументов
- */
 static void parse_precision(const char *format, int *i, int params[],
                             va_list args);
-/**
- * @brief Парсит модификатор длины
- * @param format Строка формата
- * @param i Текущий индекс в строке формата
- * @param modifier Указатель для сохранения модификатора
- */
 static void parse_modifier(const char *format, int *i, int *modifier);
-/**
- * @brief Парсит спецификатор формата
- * @param format Строка формата
- * @param i Текущий индекс в строке формата
- * @param params Массив параметров
- */
 static void parse_specifier(const char *format, int *i, int params[]);
 static void parse_integer_specifier(int params[]);
 static void parse_unsigned_specifier(int params[], char specifier);
 static void parse_float_specifier(int params[], char specifier);
 
-/**
- * @brief Конвертирует форматированное значение
- * @param str Результирующая строка
- * @param str_idx Указатель на текущий индекс в строке
- * @param params Массив параметров
- * @param args Список аргументов
- * @return 0 при успехе, -1 при ошибке
- */
 static int convert_format(char *str, int *str_idx, int params[], va_list args);
 // Обработчики специфичных типов данных
 static void handle_integer(char *str, int *idx, int params[], va_list args);
@@ -179,142 +139,30 @@ static void handle_pointer(char *str, int *idx, int params[], va_list args);
 static void handle_count(char *str, int *idx, int params[], va_list args);
 static void handle_percent(char *str, int *idx);
 
-/**
- * @brief Добавляет знак числа в строку
- * @param str Результирующая строка
- * @param idx Указатель на текущий индекс
- * @param negative Флаг отрицательного числа
- * @param params Массив параметров
- */
 static void add_sign(char *str, int *idx, bool negative, int params[]);
-/**
- * @brief Конвертирует целое число в строку
- * @param str Результирующая строка
- * @param idx Указатель на текущий индекс
- * @param value Значение числа
- * @param params Массив параметров
- */
 static void convert_int_to_str(char *str, int *idx, long long value,
                                int params[]);
-/**
- * @brief Конвертирует беззнаковое целое в строку
- * @param str Результирующая строка
- * @param idx Указатель на текущий индекс
- * @param value Значение числа
- * @param params Массив параметров
- */
 static void convert_uint_to_str(char *str, int *idx, unsigned long long value,
                                 int params[]);
-/**
- * @brief Конвертирует символ в строку
- * @param str Результирующая строка
- * @param idx Указатель на текущий индекс
- * @param c Символ для добавления
- */
 static void convert_char_to_str(char *str, int *idx, char c);
-/**
- * @brief Конвертирует строку в результирующую строку
- * @param str Результирующая строка
- * @param idx Указатель на текущий индекс
- * @param s Строка для добавления
- */
 static void convert_string_to_str(char *str, int *idx, const char *s);
-/**
- * @brief Добавляет префикс указателя (0x)
- * @param str Результирующая строка
- * @param idx Указатель на текущий индекс
- */
 static void convert_pointer_prefix(char *str, int *idx);
-/**
- * @brief Конвертирует широкий символ в UTF-8
- * @param str Результирующая строка
- * @param idx Указатель на текущий индекс
- * @param wc Широкий символ
- * @return true при успехе, false при ошибке
- */
 static bool convert_wchar_to_str(char *str, int *idx, wchar_t wc);
-/**
- * @brief Конвертирует строку широких символов в UTF-8
- * @param str Результирующая строка
- * @param idx Указатель на текущий индекс
- * @param ws Строка широких символов
- * @return true при успехе, false при ошибке
- */
 static bool convert_wstring_to_str(char *str, int *idx, const wchar_t *ws);
-/**
- * @brief Конвертирует специальные значения float
- * @param str Результирующая строка
- * @param idx Указатель на текущий индекс
- * @param value Значение
- * @param params Массив параметров
- * @return true если значение специальное, иначе false
- */
 static bool convert_special_float(char *str, int *idx, long double value,
                                   int params[]);
-/**
- * @brief Конвертирует число с плавающей точкой
- * @param str Результирующая строка
- * @param idx Указатель на текущий индекс
- * @param dval Значение
- * @param params Массив параметров
- */
 static void convert_float_to_str(char *str, int *idx, long double dval,
                                  int params[]);
-/**
- * @brief Форматирует число в стиле 'g'
- * @param dval Значение
- * @param precision Точность
- * @param params Массив параметров
- */
 static void format_g(long double dval, int *precision, int params[]);
-/**
- * @brief Форматирует число в стиле 'f'
- * @param str Результирующая строка
- * @param idx Указатель на текущий индекс
- * @param value Значение
- * @param precision Точность
- * @param params Массив параметров
- */
 static void format_f(char *str, int *idx, long double value, int precision,
                      int params[]);
-/**
- * @brief Форматирует число в стиле 'e'
- * @param str Результирующая строка
- * @param idx Указатель на текущий индекс
- * @param value Значение
- * @param precision Точность
- * @param params Массив параметров
- */
 static void format_e(char *str, int *idx, long double value, int precision,
                      int params[]);
-
-/**
- * @brief Форматирует дробную часть числа
- * @param str Результирующая строка
- * @param idx Указатель на текущий индекс
- * @param frac Дробная часть
- * @param precision Точность
- */
 static void format_fractional_part(char *str, int *idx, long double frac,
                                    int precision);
-/**
- * @brief Форматирует экспоненту
- * @param str Результирующая строка
- * @param idx Указатель на текущий индекс
- * @param exp Значение экспоненты
- * @param params Массив параметров
- */
 static void format_exponent(char *str, int *idx, int exp, int params[]);
-
 static void format_float_value(char *str, int *idx, long double value,
                                int precision, int params[]);
-
-/**
- * @brief Парсит число из строки формата
- * @param format Строка формата
- * @param i Указатель на текущий индекс
- * @return Распарсенное число
- */
 static int parse_number(const char *format, int *i);
 
 ////////////////////////////////////////////////////////////
@@ -339,8 +187,8 @@ int s21_sprintf(char *str, const char *format, ...) {
       int params[PARAM_COUNT] = {[PARAM_FLAG] = -1,
                                  [PARAM_WIDTH] = -1,
                                  [PARAM_PRECISION] = -1,
-                                 [PARAM_WIDTH_ASTERISK_VALUE] = -1,
-                                 [PARAM_PRECISION_ASTERISK_VALUE] = -1,
+                                 [PARAM_WIDTH_ASTERISK_VALUE] = 0,
+                                 [PARAM_PRECISION_ASTERISK_VALUE] = 0,
                                  [PARAM_MODIFIER] = LENGTH_NULL,
                                  [PARAM_SPECIFIER] = -1,
                                  [PARAM_UPPERCASE] = false,
@@ -582,7 +430,10 @@ static int convert_format(char *str, int *str_idx, int params[], va_list args) {
   return 0;
 }
 
-// Обработчики для каждого типа данных
+////////////////////////////////////////////////////////////
+//             Обработчики типов данных                   //
+////////////////////////////////////////////////////////////
+
 static void handle_integer(char *str, int *idx, int params[], va_list args) {
   long long val;
   switch (params[PARAM_SPECIFIER]) {
