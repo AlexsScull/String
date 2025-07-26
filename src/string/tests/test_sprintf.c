@@ -793,8 +793,8 @@ START_TEST(test_s21_sprintf_lc_wide_chars) {
     char str1[100];
     char str2[100];
 
-    int res1 = sprintf(str1, "wchar_t: %lc", wc);
-    int res2 = s21_sprintf(str2, "wchar_t: %lc", wc);
+    int res1 = sprintf(str1, "wchar_t: %d: %lc", test_chars[i], wc);
+    int res2 = s21_sprintf(str2, "wchar_t: %d: %lc", test_chars[i], wc);
 
     // Обработка ошибок преобразования
     if (res1 < 0) {
@@ -811,8 +811,8 @@ START_TEST(test_s21_sprintf_lc_wide_chars) {
     char str1[100];
     char str2[100];
 
-    int res1 = sprintf(str1, "wchar_t: %lc", wc);
-    int res2 = s21_sprintf(str2, "wchar_t: %lc", wc);
+    int res1 = sprintf(str1, "wchar_t: %d: %lc", i, wc);
+    int res2 = s21_sprintf(str2, "wchar_t: %d: %lc", i, wc);
 
     if (res1 < 0) {
       ck_assert_int_lt(res2, 0);
@@ -824,6 +824,7 @@ START_TEST(test_s21_sprintf_lc_wide_chars) {
 
   // Восстанавливаем исходную локаль
   setlocale(LC_ALL, old_locale);
+  free(old_locale);
 }
 END_TEST
 
@@ -1001,6 +1002,27 @@ TEST_SPRINTF(test_s21_sprintf_G_width_precision, "%15.2G", 123.456, double)
 TEST_SPRINTF_2(test_s21_sprintf_G_star_width, "%*G", 15, 123.456, double)
 TEST_SPRINTF_2(test_s21_sprintf_G_star_precision, "%.*G", 2, 123.456, double)
 TEST_SPRINTF_3(test_s21_sprintf_G_star_both, "%*.*G", 15, 2, 123.456, double)
+
+// ================================================================
+// Тесты для строковых спецификаторов (hs, hc)
+// =============
+// Тесты для %ls
+TEST_SPRINTF(test_s21_sprintf_ls_minus, "%-20ls", "Hello", wchar_t*)
+TEST_SPRINTF(test_s21_sprintf_ls_width, "%20ls", "Hello", wchar_t *)
+TEST_SPRINTF(test_s21_sprintf_ls_precision, "%.5ls", "Hello, world!", wchar_t *)
+TEST_SPRINTF(test_s21_sprintf_ls_width_precision, "%20.5ls", "Hello, world!",
+             wchar_t *)
+TEST_SPRINTF_2(test_s21_sprintf_ls_star_width, "%*ls", 20, "Hello", wchar_t *)
+TEST_SPRINTF_2(test_s21_sprintf_ls_star_precision, "%.*ls", 5, "Hello, world!",
+               wchar_t *)
+TEST_SPRINTF_3(test_s21_sprintf_ls_star_both, "%*.*ls", 20, 5, "Hello, world!",
+               wchar_t *)
+TEST_SPRINTF(test_s21_sprintf_ls_null_wish_form, "%.5ls", NULL, wchar_t *)
+
+// Тесты для %lc
+TEST_SPRINTF(test_s21_sprintf_lc_minus, "%-5lc", 'A', wchar_t)
+TEST_SPRINTF(test_s21_sprintf_lc_width, "%5lc", 'A', wchar_t)
+TEST_SPRINTF_2(test_s21_sprintf_lc_star_width, "%*lc", 5, 'A', wchar_t)
 
 // ================================================================
 // Тесты для строковых спецификаторов (s, c)
@@ -1523,6 +1545,17 @@ Suite *sprintf_suite(void) {
   tcase_add_test(tc, test_s21_sprintf_c_minus);
   tcase_add_test(tc, test_s21_sprintf_c_width);
   tcase_add_test(tc, test_s21_sprintf_c_star_width);
+  tcase_add_test(tc, test_s21_sprintf_ls_minus);
+  tcase_add_test(tc, test_s21_sprintf_ls_width);
+  tcase_add_test(tc, test_s21_sprintf_ls_precision);
+  tcase_add_test(tc, test_s21_sprintf_ls_width_precision);
+  tcase_add_test(tc, test_s21_sprintf_ls_star_width);
+  tcase_add_test(tc, test_s21_sprintf_ls_star_precision);
+  tcase_add_test(tc, test_s21_sprintf_ls_star_both);
+  tcase_add_test(tc, test_s21_sprintf_ls_null_wish_form);
+  tcase_add_test(tc, test_s21_sprintf_lc_minus);
+  tcase_add_test(tc, test_s21_sprintf_lc_width);
+  tcase_add_test(tc, test_s21_sprintf_lc_star_width);
   tcase_add_test(tc, test_s21_sprintf_p_format);
 
   suite_add_tcase(s, tc);
