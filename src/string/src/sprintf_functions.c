@@ -140,6 +140,9 @@ static void handle_count(char *str, int *idx, int params[], va_list args);
 static void handle_percent(char *str, int *idx);
 
 static void add_sign(char *ch, bool b, int params[]);
+static void convert_buffer_to_str(int buffer[], int num_len, char *str,
+                                  int *idx, unsigned long long value,
+                                  int params[]);
 static void convert_int_to_str(char *str, int *idx, long long value,
                                int params[]);
 static void convert_uint_to_str(char *str, int *idx, unsigned long long value,
@@ -588,17 +591,27 @@ static void convert_PARAM_WIDTH_to_str_and(char *str, int *idx, int params[]) {
 
 static void convert_int_to_str(char *str, int *idx, long long value,
                                int params[]) {
-  char ch = LENGTH_NULL;
-
+  char ch = '\0';
   add_sign(&ch, value < 0, params);
+
+  unsigned long long positive;
   if (value < 0) {
-    unsigned long long positive = (value == LLONG_MIN)
-                                      ? (unsigned long long)LLONG_MAX + 1
-                                      : (unsigned long long)(-value);
-    convert_uint_to_str(str, idx, positive, ch, params);
+    positive = (value == LLONG_MIN) ? (unsigned long long)LLONG_MAX + 1
+                                    : (unsigned long long)(-value);
   } else {
-    convert_uint_to_str(str, idx, value, ch, params);
+    positive = value;
   }
+  char buffer[kMaxBufferSize];
+  int num_len = convert_uint_to_buffer(buffer, positive, params);
+
+  if (ch != '\0') num_len++;
+
+  char buffer2[kMaxBufferSize];
+  buffer2[0] = ch;
+  buffer2[1] = '\0';
+
+  strcat(buffer2, buffer);
+  convert_buffer_to_str(buffer2, num_len, str, idx, positive, params);
 }
 
 static void convert_uint_to_str(char *str, int *idx, unsigned long long value,
@@ -606,8 +619,12 @@ static void convert_uint_to_str(char *str, int *idx, unsigned long long value,
   char buffer[kMaxBufferSize];
 
   int num_len = convert_uint_to_buffer(buffer, value, params);
-  if (ch != LENGTH_NULL) num_len++;
+  convert_buffer_to_str(buffer, num_len, str, idx, value, params);
+}
 
+static void convert_buffer_to_str(int buffer[], int num_len, char *str,
+                                  int *idx, unsigned long long value,
+                                  int params[]) {
   bool x = params[PARAM_WIDTH_ASTERISK_VALUE] > 0 ? true : false;
 
   if ((params[PARAM_PRECISION_ASTERISK_VALUE] -= num_len) < 0)
@@ -622,9 +639,6 @@ static void convert_uint_to_str(char *str, int *idx, unsigned long long value,
   if (value == 0 && params[PARAM_PRECISION_ASTERISK_VALUE] == 0 &&
       params[PARAM_PRECISION] != -1) {
   } else {
-    if (ch != LENGTH_NULL) {
-      convert_char_to_str(str, idx, ch);
-    }
     convert_string_to_str(str, idx, buffer);
   }
 
