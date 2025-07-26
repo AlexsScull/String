@@ -140,9 +140,13 @@ static void handle_count(char *str, int *idx, int params[], va_list args);
 static void handle_percent(char *str, int *idx);
 
 static void add_sign(char *ch, bool b, int params[]);
+static int convert_uint_to_buffer(char *buf, unsigned long long value,
+                                  int params[]);
 static void convert_buffer_to_str(int buffer[], int num_len, char *str,
                                   int *idx, unsigned long long value,
                                   int params[]);
+static void convert_string_buffer_to_str(char *str, int *idx,
+                                         const char *buffer, int params[]);
 static void convert_int_to_str(char *str, int *idx, long long value,
                                int params[]);
 static void convert_uint_to_str(char *str, int *idx, unsigned long long value,
@@ -485,7 +489,8 @@ static void handle_float(char *str, int *idx, int params[], va_list args) {
 
 static void handle_char(char *str, int *idx, int params[], va_list args) {
   char c = (char)va_arg(args, int);
-  convert_char_to_str(str, idx, c);
+  char buffer[2] = {c, '\0'};
+  convert_string_buffer_to_str(str, idx, buffer, params);
 }
 
 static void handle_wchar(char *str, int *idx, int params[], va_list args) {
@@ -497,7 +502,9 @@ static void handle_wchar(char *str, int *idx, int params[], va_list args) {
 
 static void handle_string(char *str, int *idx, int params[], va_list args) {
   char *s = va_arg(args, char *);
-  convert_string_to_str(str, idx, s);
+  if (!s && params[PARAM_PRECISION] != -1){}
+  else
+  convert_string_buffer_to_str(str, idx, s ? s : "(null)", params);
 }
 
 static void handle_wstring(char *str, int *idx, int params[], va_list args) {
@@ -512,8 +519,17 @@ static void handle_pointer(char *str, int *idx, int params[], va_list args) {
   if (ptr == NULL) {
     convert_string_to_str(str, idx, "(nil)");
   } else {
-    convert_pointer_prefix(str, idx);
-    convert_uint_to_str(str, idx, (uintptr_t)ptr, LENGTH_NULL, params);
+    char buffer[kMaxBufferSize];
+    unsigned long long positive = (unsigned long long)ptr;
+    int num_len = convert_uint_to_buffer(buffer, positive, params);
+    char buffer2[kMaxBufferSize];
+    buffer2[0] = '0';
+    buffer2[1] = 'x';
+    buffer2[2] = '\0';
+    num_len += 2;
+    strcat(buffer2, buffer);
+
+    convert_buffer_to_str(buffer2, num_len, str, idx, positive, params);
   }
 }
 
@@ -622,6 +638,61 @@ static void convert_uint_to_str(char *str, int *idx, unsigned long long value,
   convert_buffer_to_str(buffer, num_len, str, idx, value, params);
 }
 
+static void convert_string_buffer_to_str(char *str, int *idx,
+                                         const char *buffer, int params[]) {
+    int width = params[PARAM_WIDTH_ASTERISK_VALUE];
+    int precision = params[PARAM_PRECISION_ASTERISK_VALUE];
+    
+    // Обработка отрицательной ширины (флаг '-')
+    bool left_align = false;
+    if (width < 0) {
+        left_align = true;
+        width = -width;
+    }
+    
+    // Определение длины вывода
+    int output_len;
+    if (params[PARAM_SPECIFIER] == TYPE_CHAR) {
+        output_len = 1;  // Для символа всегда длина 1
+    } else {
+      // Для строки: длина либо до \0, либо ограничена точностью
+        output_len = s21_strlen(buffer); 
+        if (params[PARAM_PRECISION] != -1 && precision < output_len) {
+            output_len = precision;
+        }
+    }
+    
+    // Вычисление заполнения
+    int padding = width - output_len;
+    if (padding < 0) padding = 0;
+    
+    // Вывод (с учетом флага '-')
+    if (!left_align) {
+        convert_num_len_pad_char_to_str(str, idx, padding,' ');
+        // for (int i = 0; i < padding; i++) {
+        //     convert_char_to_str(str, idx, ' ');
+        // }
+    }
+    
+    // Вывод самих данных
+    if (params[PARAM_SPECIFIER] == TYPE_CHAR) {
+        convert_char_to_str(str, idx, buffer[0]);
+    } else {
+        // Выводим только часть строки (с учетом точности)
+        for (int i = 0; i < output_len; i++) {
+            convert_char_to_str(str, idx, buffer[i]);
+        }
+    }
+    if (left_align) {
+        convert_num_len_pad_char_to_str(str, idx, padding,' ');
+        // for (int i = 0; i < padding; i++) {
+        //     convert_char_to_str(str, idx, ' ');
+        // }
+    }
+}
+
+
+
 static void convert_buffer_to_str(int buffer[], int num_len, char *str,
                                   int *idx, unsigned long long value,
                                   int params[]) {
@@ -657,11 +728,6 @@ static void convert_string_to_str(char *str, int *idx, const char *s) {
       str[(*idx)++] = *s++;
     }
   }
-}
-
-static void convert_pointer_prefix(char *str, int *idx) {
-  convert_char_to_str(str, idx, '0');
-  convert_char_to_str(str, idx, 'x');
 }
 
 static bool convert_wchar_to_str(char *str, int *idx, wchar_t wc) {
