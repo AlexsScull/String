@@ -765,7 +765,8 @@ static void convert_string_buffer_to_str(char *str, int *idx,
     output_len = 1;  // Для символа всегда длина 1
   } else {
     // Для строки: длина либо до \0, либо ограничена точностью
-    output_len = s21_strlen(buffer);
+    output_len = strlen(buffer);
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     if (params[PARAM_PRECISION] != -1 && precision < output_len) {
       output_len = precision;
     }
