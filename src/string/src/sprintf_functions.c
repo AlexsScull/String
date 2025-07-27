@@ -111,8 +111,10 @@ enum FormatChar {
 //                   Обявление функций                    //
 ////////////////////////////////////////////////////////////
 
-static void parse_flag(const char *format, int *i, int *flag);
-static void parse_width(const char *format, int *i, int params[], va_list args);
+static int parse_number(const char *format, int *i);
+static void parse_flag(const char *format, int *i, int params[]);
+static void parse_width(const char *format, int *i, int params[],
+                        va_list args);
 static void parse_precision(const char *format, int *i, int params[],
                             va_list args);
 static void parse_modifier(const char *format, int *i, int *modifier);
@@ -120,57 +122,52 @@ static void parse_specifier(const char *format, int *i, int params[]);
 static void parse_integer_specifier(int params[]);
 static void parse_unsigned_specifier(int params[], char specifier);
 static void parse_float_specifier(int params[], char specifier);
-
 static int convert_format(char *str, int *str_idx, int params[], va_list args);
-// Обработчики специфичных типов данных
 static void handle_integer(char *str, int *idx, int params[], va_list args);
 static void handle_unsigned(char *str, int *idx, int params[], va_list args);
 static void handle_float(char *str, int *idx, int params[], va_list args);
 static void handle_char(char *str, int *idx, int params[], va_list args);
-static int handle_wchar(char *str, int *idx, int params[], va_list args);
 static void handle_string(char *str, int *idx, int params[], va_list args);
+static int handle_wchar(char *str, int *idx, int params[], va_list args);
 static int handle_wstring(char *str, int *idx, int params[], va_list args);
 static void handle_pointer(char *str, int *idx, int params[], va_list args);
 static void handle_count(char *str, int *idx, int params[], va_list args);
 static void handle_percent(char *str, int *idx);
-
 static void add_sign(char *buf, int *idx_buf, bool negative, int params[]);
 static void convert_uint_to_buffer(char *buf, int *idx_buf,
                                    unsigned long long value, int params[]);
-static void convert_buffer_to_str(char *buffer, int num_len, char *str,
-                                  int *idx, int params[]);
-static void convert_string_buffer_to_str(char *str, int *idx,
-                                         const char *buffer, int params[]);
+static void convert_num_len_pad_char_to_str(char *str, int *idx, int num_len,
+                                            char pad_char);
 static void convert_int_to_str(char *str, int *idx, long long value,
                                int params[]);
 static void convert_uint_to_str(char *str, int *idx, unsigned long long value,
                                 int params[]);
-static void convert_char_to_buffer(char *str, int *idx, char c);
-static void convert_string_to_buffer(char *str, int *idx, const char *s);
-static void convert_pointer_prefix(char *str, int *idx);
-static bool convert_wchar_to_str(char *str, int *idx, wchar_t wc);
-static bool convert_wstring_to_str(char *str, int *idx, const wchar_t *ws);
-static int utf8_char_length(wchar_t wc);
-static int utf8_string_length(const wchar_t *ws, int char_limit);
-
+static void convert_string_buffer_to_str(char *str, int *idx,
+                                         const char *buffer, int params[]);
+static void convert_buffer_to_str(char *buffer, int num_len, char *str,
+                                  int *idx, int params[]);
+static void convert_float_buffer_to_str(char *buffer, int num_len, char *str,
+                                        int *idx, int params[]);
+static void convert_char_to_buffer(char *buffer, int *idx_buffer, char c);
+static void convert_string_to_buffer(char *buffer, int *idx_buffer,
+                                     const char *s);
+static int wchar_to_utf8(char *dest, wchar_t wc);
 static bool convert_special_float(char *str, int *idx, long double value,
                                   int params[]);
 static void convert_float_to_str(char *str, int *idx, long double dval,
                                  int params[]);
 static void format_g(long double dval, int *precision, int params[]);
-static void format_f(char *str, int *idx, long double value, int precision,
+static void format_f(char *buf, int *idx_buf, long double value, int precision,
                      int params[]);
-static void format_e(char *str, int *idx, long double value, int precision,
+static void format_e(char *buf, int *idx_buf, long double value, int precision,
                      int params[]);
-static void format_fractional_part(char *str, int *idx, long double frac,
+static void format_fractional_part(char *buf, int *idx_buf, long double frac,
                                    int precision);
-static void format_exponent(char *str, int *idx, int exp, int params[]);
-static void format_float_value(char *str, int *idx, long double value,
+static void format_exponent(char *buf, int *idx_buf, int exp, int params[]);
+static void format_float_value(char *buf, int *idx_buf, long double value,
                                int precision, int params[]);
-static int parse_number(const char *format, int *i);
-static void convert_num_len_pad_char_to_str(char *str, int *idx, int num_len,
-                                            char pad_char);
-static int wchar_to_utf8(char *dest, wchar_t wc);
+
+
 ////////////////////////////////////////////////////////////
 //                Основная функция sprintf                //
 ////////////////////////////////////////////////////////////
@@ -588,7 +585,7 @@ static int handle_wstring(char *str, int *idx, int params[], va_list args) {
                 str[(*idx)++] = ' ';
             }
         }
-        return;
+        return 0;
     }
 
     int total_bytes = 0;
@@ -953,7 +950,7 @@ static void convert_float_to_str(char *str, int *idx, long double dval,
 }
 
 static void format_g(long double dval, int *precision, int params[]) {
-  if (dval == 0.0L) return 0;
+  if (dval == 0.0L) return;
 
   int exp =
       (dval == 0.0L) ? 0 : (int)floorl(log10l(dval));  // Расчёт экспоненты
