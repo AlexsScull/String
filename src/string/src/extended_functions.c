@@ -1,5 +1,7 @@
 #include "../include/s21_string.h"
 
+//! Надо память освободить и сделать проверку пустой строки !
+
 void *s21_to_upper(const char *str) {
   /*Задача:
   Преобразовать строку в верхний регистр.
@@ -8,6 +10,25 @@ void *s21_to_upper(const char *str) {
   Возвращает новую строку (выделяет память).
 
   Если str = NULL, возвращает NULL.*/
+
+  size_t len = strlen(str);
+  char *res = (char *)malloc(strlen(str) + 1);
+
+  if(res != NULL){
+    for(int i = 0; i < len; i++){
+    if(str[i] >= 'a' && str[i] <= 'z'){
+      res[i] = str[i] - 32;
+    } else {
+      res[i] = str[i];
+    }
+    }
+  } else {
+    return NULL;
+  }
+  
+  res[len] = '\0';
+  
+  return res;
 }
 void *s21_to_lower(const char *str) {
   /*Задача:
@@ -17,6 +38,24 @@ void *s21_to_lower(const char *str) {
   Возвращает новую строку (выделяет память).
 
   Если str = NULL, возвращает NULL.*/
+  size_t len = strlen(str);
+  char *res = (char *)malloc(strlen(str) + 1);
+
+  if(res != NULL){
+    for(int i = 0; i < len; i++){
+    if(str[i] >= 'A' && str[i] <= 'Z'){
+      res[i] = str[i] + 32;
+    } else {
+      res[i] = str[i];
+    }
+    }
+  } else {
+    return NULL;
+  }
+  
+  res[len] = '\0';
+  
+  return res;
 }
 void *s21_insert(const char *src, const char *str, s21_size_t start_index) {
   /*Задача:
@@ -26,6 +65,7 @@ void *s21_insert(const char *src, const char *str, s21_size_t start_index) {
   Если start_index > strlen(src), вернуть NULL.
 
   Возвращает новую строку (выделяет память).*/
+  
 }
 void *s21_trim(const char *src, const char *trim_chars) {
   /*Задача:
