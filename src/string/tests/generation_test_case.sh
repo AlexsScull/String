@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Скрипт заменяет все вхождения TEST_SPRINTF_FORMAT на TEST_SPRINTF в коде
-# и выводит результат в консоль
-
 # Проверяем, передан ли файл как аргумент
 if [ $# -eq 0 ]; then
     echo "Usage: $0 filename"

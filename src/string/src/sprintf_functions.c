@@ -14,15 +14,6 @@
 //                 Перечисления и константы               //
 ////////////////////////////////////////////////////////////
 
-/** Типы флагов форматирования */
-enum FlagType {
-  FLAG_MINUS,  ///< '-' (left-justify)
-  FLAG_PLUS,   ///< '+' (show plus sign)
-  FLAG_SPACE,  ///< ' ' (space for positive numbers)
-  FLAG_HASH,   ///< '#' (alternate form)
-  FLAG_ZERO    ///< '0' (zero-padding)
-};
-
 /** Типы ширины форматирования */
 enum WidthType {
   WIDTH_NUMBER,   ///< (number) for width
@@ -75,7 +66,11 @@ enum SpecifierType {
 
 /** Индексы параметров форматирования */
 enum ParamIndex {
-  PARAM_FLAG,                  ///< Флаг форматирования
+  FLAG_MINUS,                  ///< '-' (left-justify)
+  FLAG_PLUS,                   ///< '+' (show plus sign)
+  FLAG_SPACE,                  ///< ' ' (space for positive numbers)
+  FLAG_HASH,                   ///< '#' (alternate form)
+  FLAG_ZERO,                   ///< '0' (zero-padding)
   PARAM_WIDTH,                 ///< Тип ширины
   PARAM_PRECISION,             ///< Тип точности
   PARAM_WIDTH_ASTERISK_VALUE,  ///< Значение ширины для '*'
@@ -98,16 +93,16 @@ enum FormatChar {
 // Константы форматирования
 #define DefaultPrecision 6  ///< Точность по умолчанию
 #define MaxBufferSize 65  ///< Максимальный размер буфера
-#define MaxUtf8Bytes 4 ///< Макс. байт на UTF-8 символ
+#define MaxUtf8Bytes 4    ///< Макс. байт на UTF-8 символ
 #define MaxMbLen 1024  ///< Макс. длина многобайтовой строки
 #define BaseDecimal 10  ///< Десятичное основание
-#define BaseOctal 8    ///< Восьмеричное основание
+#define BaseOctal 8     ///< Восьмеричное основание
 #define BaseHexadecimal 16  ///< Шестнадцатеричное основание
 
 // Константы Unicode
-#define UnicodeMax 0x10FFFF  ///< Макс. код Unicode
+#define UnicodeMax 0x10FFFF    ///< Макс. код Unicode
 #define SurrogateStart 0xD800  ///< Начало суррогатных пар
-#define SurrogateEnd 0xDFFF  ///< Конец суррогатных пар
+#define SurrogateEnd 0xDFFF    ///< Конец суррогатных пар
 #define Utf8OneByteBound 0x80  ///< Граница 1-байтовых символов
 #define Utf8TwoByteBound 0x800  ///< Граница 2-байтовых символов
 #define Utf8ThreeByteBound 0x1000  ///< Граница 3-байтовых символов
@@ -132,22 +127,24 @@ static void handle_integer(char *str, int *idx, int params[], va_list args);
 static void handle_unsigned(char *str, int *idx, int params[], va_list args);
 static void handle_float(char *str, int *idx, int params[], va_list args);
 static void handle_char(char *str, int *idx, int params[], va_list args);
-static void handle_wchar(char *str, int *idx, int params[], va_list args);
+static int handle_wchar(char *str, int *idx, int params[], va_list args);
 static void handle_string(char *str, int *idx, int params[], va_list args);
-static void handle_wstring(char *str, int *idx, int params[], va_list args);
+static int handle_wstring(char *str, int *idx, int params[], va_list args);
 static void handle_pointer(char *str, int *idx, int params[], va_list args);
 static void handle_count(char *str, int *idx, int params[], va_list args);
 static void handle_percent(char *str, int *idx);
 
 static void add_sign(char *buf, int *idx_buf, bool negative, int params[]);
-static void convert_uint_to_buffer(char *buf, int *idx_buf, unsigned long long value, int params[]);
+static void convert_uint_to_buffer(char *buf, int *idx_buf,
+                                   unsigned long long value, int params[]);
 static void convert_buffer_to_str(char *buffer, int num_len, char *str,
                                   int *idx, int params[]);
 static void convert_string_buffer_to_str(char *str, int *idx,
                                          const char *buffer, int params[]);
 static void convert_int_to_str(char *str, int *idx, long long value,
                                int params[]);
-static void convert_uint_to_str(char *str, int *idx, unsigned long long value, int params[]);
+static void convert_uint_to_str(char *str, int *idx, unsigned long long value,
+                                int params[]);
 static void convert_char_to_buffer(char *str, int *idx, char c);
 static void convert_string_to_buffer(char *str, int *idx, const char *s);
 static void convert_pointer_prefix(char *str, int *idx);
@@ -171,7 +168,9 @@ static void format_exponent(char *str, int *idx, int exp, int params[]);
 static void format_float_value(char *str, int *idx, long double value,
                                int precision, int params[]);
 static int parse_number(const char *format, int *i);
-
+static void convert_num_len_pad_char_to_str(char *str, int *idx, int num_len,
+                                            char pad_char);
+static int wchar_to_utf8(char *dest, wchar_t wc);
 ////////////////////////////////////////////////////////////
 //                Основная функция sprintf                //
 ////////////////////////////////////////////////////////////
@@ -191,7 +190,11 @@ int s21_sprintf(char *str, const char *format, ...) {
       i++;
       if (format[i] == '\0') break;
 
-      int params[PARAM_COUNT] = {[PARAM_FLAG] = -1,
+      int params[PARAM_COUNT] = {[FLAG_MINUS] = false,
+                                 [FLAG_PLUS] = false,
+                                 [FLAG_SPACE] = false,
+                                 [FLAG_HASH] = false,
+                                 [FLAG_ZERO] = false,
                                  [PARAM_WIDTH] = -1,
                                  [PARAM_PRECISION] = -1,
                                  [PARAM_WIDTH_ASTERISK_VALUE] = 0,
@@ -202,7 +205,7 @@ int s21_sprintf(char *str, const char *format, ...) {
                                  [PARAM_BASE] = BaseDecimal,
                                  [PARAM_SPEC_CHAR] = -1};
 
-      parse_flag(format, &i, &params[PARAM_FLAG]);
+      parse_flag(format, &i, params);
       parse_width(format, &i, params, args);
       parse_precision(format, &i, params, args);
       parse_modifier(format, &i, &params[PARAM_MODIFIER]);
@@ -236,31 +239,26 @@ static int parse_number(const char *format, int *i) {
   return num;
 }
 
-static void parse_flag(const char *format, int *i, int *flag) {
-  switch (format[*i]) {
-    case '-':
-      *flag = FLAG_MINUS;
+static void parse_flag(const char *format, int *i, int params[]) {
+  bool b = true;
+  while (b) {
+    if (format[*i] == '-' && !params[FLAG_MINUS]) {
+      params[FLAG_MINUS] = true;
       (*i)++;
-      break;
-    case '+':
-      *flag = FLAG_PLUS;
+    } else if (format[*i] == '+' && !params[FLAG_PLUS]) {
+      params[FLAG_PLUS] = true;
       (*i)++;
-      break;
-    case ' ':
-      *flag = FLAG_SPACE;
+    } else if (format[*i] == ' ' && !params[FLAG_SPACE]) {
+      params[FLAG_SPACE] = true;
       (*i)++;
-      break;
-    case '#':
-      *flag = FLAG_HASH;
+    } else if (format[*i] == '#' && !params[FLAG_HASH]) {
+      params[FLAG_HASH] = true;
       (*i)++;
-      break;
-    case '0':
-      *flag = FLAG_ZERO;
+    } else if (format[*i] == '0' && !params[FLAG_ZERO]) {
+      params[FLAG_ZERO] = true;
       (*i)++;
-      break;
-    default:
-      *flag = -1;  // если не нашли флаг, оставляем -1
-      break;
+    } else
+      b = false;
   }
 }
 
@@ -273,7 +271,7 @@ static void parse_width(const char *format, int *i, int params[],
   } else if (isdigit(format[*i])) {
     bool b = false;
     if (format[*i - 1] == '-') {
-      params[PARAM_FLAG] = -1;
+      params[FLAG_MINUS] = false;
       b = true;
     }
     params[PARAM_WIDTH] = WIDTH_NUMBER;
@@ -420,13 +418,15 @@ static int convert_format(char *str, int *str_idx, int params[], va_list args) {
       handle_char(str, str_idx, params, args);
       break;
     case TYPE_WCHAR:
-      handle_wchar(str, str_idx, params, args);
+      if (handle_wchar(str, str_idx, params, args) == -1)
+      return -1;
       break;
     case TYPE_STRING:
       handle_string(str, str_idx, params, args);
       break;
     case TYPE_WSTRING:
-      handle_wstring(str, str_idx, params, args);
+      if (handle_wstring(str, str_idx, params, args) == -1)
+      return -1;
       break;
     case TYPE_POINTER:
       handle_pointer(str, str_idx, params, args);
@@ -458,7 +458,7 @@ static void handle_integer(char *str, int *idx, int params[], va_list args) {
       val = va_arg(args, long long);
       break;
   }
-    if (val == 0 && params[PARAM_PRECISION_ASTERISK_VALUE] == 0 &&
+  if (val == 0 && params[PARAM_PRECISION_ASTERISK_VALUE] == 0 &&
       params[PARAM_PRECISION] != -1) {
   } else {
     convert_int_to_str(str, idx, val, params);
@@ -502,32 +502,6 @@ static void handle_char(char *str, int *idx, int params[], va_list args) {
   convert_string_buffer_to_str(str, idx, buffer, params);
 }
 
-static void handle_wchar(char *str, int *idx, int params[], va_list args) {
-    wchar_t wcval = va_arg(args, wchar_t);
-    
-    // Конвертация в UTF-8
-    char utf8_buffer[MaxUtf8Bytes + 1] = {0};
-    int temp_idx = 0;
-    if (!convert_wchar_to_str(utf8_buffer, &temp_idx, wcval)) {
-        *idx = -1;
-        return;
-    }
-    
-    // Сохранение оригинальных параметров точности
-    int saved_precision = params[PARAM_PRECISION];
-    int saved_precision_value = params[PARAM_PRECISION_ASTERISK_VALUE];
-    
-    // Отключение точности для символа
-    params[PARAM_PRECISION] = -1;
-    
-    // Форматирование как строки
-    convert_string_buffer_to_str(str, idx, utf8_buffer, params);
-    
-    // Восстановление параметров
-    params[PARAM_PRECISION] = saved_precision;
-    params[PARAM_PRECISION_ASTERISK_VALUE] = saved_precision_value;
-}
-
 static void handle_string(char *str, int *idx, int params[], va_list args) {
   char *s = va_arg(args, char *);
   if (!s && params[PARAM_PRECISION] != -1) {
@@ -535,60 +509,149 @@ static void handle_string(char *str, int *idx, int params[], va_list args) {
     convert_string_buffer_to_str(str, idx, s ? s : "(null)", params);
 }
 
-static void handle_wstring(char *str, int *idx, int params[], va_list args) {
-    wchar_t *wsval = va_arg(args, wchar_t *);
+static int handle_wchar(char *str, int *idx, int params[], va_list args) {
+    wchar_t wcval = va_arg(args, wchar_t);
+    char utf8_buffer[MaxUtf8Bytes + 1] = {0};
+    int utf8_len = wchar_to_utf8(utf8_buffer, wcval);
     
-    if (!wsval) {
-      if (params[PARAM_PRECISION] == -1)
-        convert_string_buffer_to_str(str, idx, "(null)", params);
-        return;
+    if (utf8_len == -1) {
+        return -1;
     }
 
-    int char_limit = -1;
-    if (params[PARAM_PRECISION] != -1) {
-        char_limit = params[PARAM_PRECISION_ASTERISK_VALUE];
+    if (utf8_len == 0) {
+        return 0;
     }
 
-    // Расчет длины UTF-8 строки
-    int byte_count = utf8_string_length(wsval, char_limit);
-    if (byte_count < 0) {
-        *idx = -1;
-        return;
+    int width_value = 0;
+    if (params[PARAM_WIDTH] != -1) {
+        width_value = params[PARAM_WIDTH_ASTERISK_VALUE];
+    }
+    bool left_align = (params[FLAG_MINUS]);
+    if (width_value < 0) {
+        left_align = true;
+        width_value = -width_value;
     }
 
-    // Выделение буфера под UTF-8 строку
-    char *utf8_buffer = (char *)malloc(byte_count + 1);
-    if (!utf8_buffer) {
-        *idx = -1;
-        return;
-    }
-    
-    // Конвертация в UTF-8
-    int temp_idx = 0;
-    for (int i = 0; (char_limit < 0 || i < char_limit) && wsval[i]; i++) {
-        if (!convert_wchar_to_str(utf8_buffer, &temp_idx, wsval[i])) {
-            free(utf8_buffer);
-            *idx = -1;
-            return;
+    int padding = width_value - utf8_len;
+    if (padding < 0) padding = 0;
+
+    if (!left_align) {
+        char pad_char =  ' ';
+        for (int i = 0; i < padding; i++) {
+            str[(*idx)++] = pad_char;
         }
     }
-    utf8_buffer[temp_idx] = '\0';
 
-    // Сохранение оригинальных параметров точности
-    int saved_precision = params[PARAM_PRECISION];
-    int saved_precision_value = params[PARAM_PRECISION_ASTERISK_VALUE];
-    
-    // Отключение точности (уже обработана)
-    params[PARAM_PRECISION] = -1;
-    
-    // Форматирование как обычной строки
-    convert_string_buffer_to_str(str, idx, utf8_buffer, params);
-    
-    // Восстановление параметров
-    params[PARAM_PRECISION] = saved_precision;
-    params[PARAM_PRECISION_ASTERISK_VALUE] = saved_precision_value;
-    
-    free(utf8_buffer);
+    for (int i = 0; i < utf8_len; i++) {
+        str[(*idx)++] = utf8_buffer[i];
+    }
+
+    if (left_align) {
+        for (int i = 0; i < padding; i++) {
+            str[(*idx)++] = ' ';
+        }
+    }
+}
+
+static int handle_wstring(char *str, int *idx, int params[], va_list args) {
+    wchar_t *wsval = va_arg(args, wchar_t *);
+    int precision = (params[PARAM_PRECISION] != -1) ? params[PARAM_PRECISION_ASTERISK_VALUE] : -1;
+    int width_value = 0;
+    if (params[PARAM_WIDTH] != -1) {
+        width_value = params[PARAM_WIDTH_ASTERISK_VALUE];
+    }
+    bool left_align = (params[FLAG_MINUS]);
+    if (width_value < 0) {
+        left_align = true;
+        width_value = -width_value;
+    }
+
+    if (wsval == NULL) {
+        const char *null_str = (params[PARAM_PRECISION] != -1)? "" : "(null)";
+        int null_len = s21_strlen(null_str);
+        if (precision >= 0 && precision < null_len) {
+            null_len = precision;
+        }
+        int padding = width_value - null_len;
+        if (padding < 0) padding = 0;
+
+        if (!left_align) {
+            for (int i = 0; i < padding; i++) {
+                str[(*idx)++] = ' ';
+            }
+        }
+        for (int i = 0; i < null_len; i++) {
+            str[(*idx)++] = null_str[i];
+        }
+        if (left_align) {
+            for (int i = 0; i < padding; i++) {
+                str[(*idx)++] = ' ';
+            }
+        }
+        return;
+    }
+
+    int total_bytes = 0;
+    const wchar_t *p = wsval;
+    while (*p) {
+        char utf8_buf[MaxUtf8Bytes];
+        int len = wchar_to_utf8(utf8_buf, *p);
+
+        if (len == -1) {
+            return -1;
+        }
+
+        if (len == 0) {
+            p++;
+            continue;
+        }
+        
+        if (precision != -1 && total_bytes + len > precision) {
+            break;
+        }
+        
+        total_bytes += len;
+        p++;
+    }
+
+    int padding = width_value - total_bytes;
+    if (padding < 0) padding = 0;
+
+    if (!left_align) {
+        char pad_char = ' ';
+        for (int i = 0; i < padding; i++) {
+            str[(*idx)++] = pad_char;
+        }
+    }
+
+    int bytes_written = 0;
+    p = wsval;
+    while (*p) {
+        char utf8_buf[MaxUtf8Bytes];
+        int len = wchar_to_utf8(utf8_buf, *p);
+        if (len == 0) {
+            p++;
+            continue;
+        }
+        
+        if (precision != -1 && bytes_written + len > precision) {
+            break;
+        }
+        
+        for (int j = 0; j < len; j++) {
+            str[(*idx)++] = utf8_buf[j];
+        }
+        bytes_written += len;
+        p++;
+    }
+
+    if (left_align) {
+        for (int i = 0; i < padding; i++) {
+            str[(*idx)++] = ' ';
+        }
+    }
+
+    return 0;
 }
 
 static void handle_pointer(char *str, int *idx, int params[], va_list args) {
@@ -600,14 +663,13 @@ static void handle_pointer(char *str, int *idx, int params[], va_list args) {
     int num_len = 0;
     buffer[num_len++] = '0';
     buffer[num_len++] = 'x';
-    
+
     unsigned long long positive = (unsigned long long)ptr;
-    
+
     convert_uint_to_buffer(buffer, &num_len, positive, params);
     convert_buffer_to_str(buffer, num_len, str, idx, params);
   }
 }
-
 
 static void handle_count(char *str, int *idx, int params[], va_list args) {
   int *ptr = va_arg(args, int *);
@@ -626,18 +688,19 @@ static void add_sign(char *buf, int *idx_buf, bool negative, int params[]) {
   if (negative) {
     buf[(*idx_buf)++] = '-';
   } else {
-    if (params[PARAM_FLAG] == FLAG_PLUS) {
+    if (params[FLAG_PLUS]) {
       buf[(*idx_buf)++] = '+';
-    } else if (params[PARAM_FLAG] == FLAG_SPACE) {
+    } else if (params[FLAG_SPACE]) {
       buf[(*idx_buf)++] = ' ';
     }
   }
 }
 
-// Исправлено: передача индекса по указателю в convert_uint_to_buffer
-static void convert_uint_to_buffer(char *buf, int *idx_buf, unsigned long long value, int params[]) {
+static void convert_uint_to_buffer(char *buf, int *idx_buf,
+                                   unsigned long long value, int params[]) {
   char buffer[MaxBufferSize];
-  const char *digits = params[PARAM_UPPERCASE] ? "0123456789ABCDEF" : "0123456789abcdef";
+  const char *digits =
+      params[PARAM_UPPERCASE] ? "0123456789ABCDEF" : "0123456789abcdef";
   int i = 0;
 
   if (value == 0) {
@@ -664,31 +727,13 @@ static void convert_num_len_pad_char_to_str(char *str, int *idx, int num_len,
   }
 }
 
-static void convert_PARAM_WIDTH_to_str(char *str, int *idx, int params[]) {
-  if (params[PARAM_FLAG] == FLAG_ZERO)
-    convert_num_len_pad_char_to_str(str, idx,
-                                    params[PARAM_WIDTH_ASTERISK_VALUE], '0');
-  else
-    convert_num_len_pad_char_to_str(str, idx,
-                                    params[PARAM_WIDTH_ASTERISK_VALUE], ' ');
-}
-static void convert_PARAM_PRECISION_to_str(char *str, int *idx, int params[]) {
-  convert_num_len_pad_char_to_str(str, idx,
-                                  params[PARAM_PRECISION_ASTERISK_VALUE], '0');
-}
-static void convert_PARAM_WIDTH_to_str_and(char *str, int *idx, int params[]) {
-  convert_num_len_pad_char_to_str(str, idx, params[PARAM_WIDTH_ASTERISK_VALUE],
-                                  ' ');
-}
-
 static void convert_int_to_str(char *str, int *idx, long long value,
                                int params[]) {
   char buffer[MaxBufferSize];
-  int num_len = 0;  // Теперь локальная переменная
+  int num_len = 0;  
 
-  // Передача указателя на длину
   add_sign(buffer, &num_len, value < 0, params);
-  
+
   unsigned long long positive;
   if (value < 0) {
     positive = (value == LLONG_MIN) ? (unsigned long long)LLONG_MAX + 1
@@ -697,21 +742,16 @@ static void convert_int_to_str(char *str, int *idx, long long value,
     positive = value;
   }
 
-  // Передача указателя на длину
   convert_uint_to_buffer(buffer, &num_len, positive, params);
-  
-  // Использование локальной num_len
   convert_buffer_to_str(buffer, num_len, str, idx, params);
 }
 
-static void convert_uint_to_str(char *str, int *idx, unsigned long long value, int params[]) {
+static void convert_uint_to_str(char *str, int *idx, unsigned long long value,
+                                int params[]) {
   char buffer[MaxBufferSize];
-  int num_len = 0;  // Теперь локальная переменная
+  int num_len = 0; 
 
-  // Передача указателя на длину
   convert_uint_to_buffer(buffer, &num_len, value, params);
-  
-  // Использование локальной num_len
   convert_buffer_to_str(buffer, num_len, str, idx, params);
 }
 
@@ -720,11 +760,9 @@ static void convert_string_buffer_to_str(char *str, int *idx,
   int width = params[PARAM_WIDTH_ASTERISK_VALUE];
   int precision = params[PARAM_PRECISION_ASTERISK_VALUE];
 
-  // Обработка отрицательной ширины (флаг '-')
   bool left_align = (width < 0);
   if (width < 0) width = -width;
-  
-  // Определение длины вывода
+
   int output_len;
   if (params[PARAM_SPECIFIER] == TYPE_CHAR) {
     output_len = 1;  // Для символа всегда длина 1
@@ -736,21 +774,16 @@ static void convert_string_buffer_to_str(char *str, int *idx,
     }
   }
 
-  // Вычисление заполнения
   int padding = width - output_len;
   if (padding < 0) padding = 0;
 
-  // Вывод (с учетом флага '-')
   if (!left_align) {
     convert_num_len_pad_char_to_str(str, idx, padding, ' ');
-
   }
 
-  // Вывод самих данных
   if (params[PARAM_SPECIFIER] == TYPE_CHAR) {
     convert_char_to_buffer(str, idx, buffer[0]);
   } else {
-    // Выводим только часть строки (с учетом точности)
     for (int i = 0; i < output_len; i++) {
       convert_char_to_buffer(str, idx, buffer[i]);
     }
@@ -764,29 +797,26 @@ static void convert_buffer_to_str(char *buffer, int num_len, char *str,
                                   int *idx, int params[]) {
   int width = params[PARAM_WIDTH_ASTERISK_VALUE];
   int precision = params[PARAM_PRECISION_ASTERISK_VALUE];
-  
-  // Обработка отрицательной ширины
+
   bool left_align = (width < 0);
   if (width < 0) width = -width;
 
-  // Вычисление требуемой точности
+  if (params[FLAG_MINUS]) left_align = true;
   int required_precision = (precision > num_len) ? precision - num_len : 0;
   int total_len = num_len + required_precision;
-  
-  // Вычисление отступов
+
   int padding = width - total_len;
   if (padding < 0) padding = 0;
 
-  // Вывод без выравнивания влево
   if (!left_align) {
-      if (params[PARAM_FLAG] == FLAG_ZERO)
-    convert_num_len_pad_char_to_str(str, idx,padding, '0');
-  else
-    convert_num_len_pad_char_to_str(str, idx,padding, ' ');
+    if (params[FLAG_ZERO])
+      convert_num_len_pad_char_to_str(str, idx, padding, '0');
+    else
+      convert_num_len_pad_char_to_str(str, idx, padding, ' ');
   }
 
   convert_num_len_pad_char_to_str(str, idx, required_precision, '0');
-  
+
   convert_string_to_buffer(str, idx, buffer);
 
   if (left_align) {
@@ -795,10 +825,10 @@ static void convert_buffer_to_str(char *buffer, int num_len, char *str,
 }
 
 static void convert_float_buffer_to_str(char *buffer, int num_len, char *str,
-                                  int *idx, int params[]) {
+                                        int *idx, int params[]) {
   int width = params[PARAM_WIDTH_ASTERISK_VALUE];
   int precision = params[PARAM_PRECISION_ASTERISK_VALUE];
-  
+
   bool left_align = (width < 0);
   if (width < 0) width = -width;
 
@@ -806,10 +836,10 @@ static void convert_float_buffer_to_str(char *buffer, int num_len, char *str,
   if (padding < 0) padding = 0;
 
   if (!left_align) {
-          if (params[PARAM_FLAG] == FLAG_ZERO)
-    convert_num_len_pad_char_to_str(str, idx,padding, '0');
-  else
-    convert_num_len_pad_char_to_str(str, idx,padding, ' ');
+    if (params[FLAG_ZERO])
+      convert_num_len_pad_char_to_str(str, idx, padding, '0');
+    else
+      convert_num_len_pad_char_to_str(str, idx, padding, ' ');
   }
 
   convert_string_to_buffer(str, idx, buffer);
@@ -834,74 +864,36 @@ static void convert_string_to_buffer(char *buffer, int *idx_buffer,
   }
 }
 
-static bool convert_wchar_to_str(char *str, int *idx, wchar_t wc) {
-    uint32_t code = (uint32_t)wc;
-
-    // Добавляем проверку суррогатного диапазона
-    if (code > UnicodeMax || 
-        (code >= SurrogateStart && code <= SurrogateEnd) || 
-        wc < 0) {
-        return false;
-    }
-
-    // Кодирование в UTF-8
-    if (code < Utf8OneByteBound) {
-        str[(*idx)++] = (char)code;
-    } else if (code < Utf8TwoByteBound) {
-        str[(*idx)++] = 0xC0 | (code >> 6);
-        str[(*idx)++] = 0x80 | (code & 0x3F);
-    } else if (code < Utf8ThreeByteBound) {
-        str[(*idx)++] = 0xE0 | (code >> 12);
-        str[(*idx)++] = 0x80 | ((code >> 6) & 0x3F);
-        str[(*idx)++] = 0x80 | (code & 0x3F);
-    } else if (code < Utf8FourByteBound) {
-        str[(*idx)++] = 0xF0 | (code >> 18);
-        str[(*idx)++] = 0x80 | ((code >> 12) & 0x3F);
-        str[(*idx)++] = 0x80 | ((code >> 6) & 0x3F);
-        str[(*idx)++] = 0x80 | (code & 0x3F);
-    } else {
-        return false;
-    }
-    return true;
-}
-
-static bool convert_wstring_to_str(char *str, int *idx, const wchar_t *ws) {
-  if (ws == NULL) {
-    convert_string_to_buffer(str, idx, "(null)");
-    return true;
+static int wchar_to_utf8(char *dest, wchar_t wc) {
+  uint32_t code = (uint32_t)wc;
+  if (code > UnicodeMax ||
+      (code >= SurrogateStart && code <= SurrogateEnd) || wc < 0) {
+    return -1;
   }
 
-  int start_index = *idx;
-  bool success = true;
-
-  for (const wchar_t *tmp = ws; *tmp; tmp++) {
-    if (!convert_wchar_to_str(str, idx, (*tmp))) {
-      *idx = start_index;
-      success = false;
-      break;
-    }
-  }
-
-  return success;
-}
-
-static int utf8_char_length(wchar_t wc) {
-    uint32_t code = (uint32_t)wc;
-    if (code < Utf8OneByteBound) return 1;
-    if (code < Utf8TwoByteBound) return 2;
-    if (code < Utf8ThreeByteBound) return 3;
-    if (code < Utf8FourByteBound) return 4;
+  if ((wc >= 0xD800 && wc <= 0xDFFF) || wc > 0x10FFFF) {
     return 0;
-}
+  }
 
-static int utf8_string_length(const wchar_t *ws, int char_limit) {
-    int byte_count = 0;
-    for (int i = 0; (char_limit < 0 || i < char_limit) && ws[i]; i++) {
-        int len = utf8_char_length(ws[i]);
-        if (len == 0) return -1;
-        byte_count += len;
-    }
-    return byte_count;
+  if (wc < 0x80) {
+    dest[0] = (char)wc;
+    return 1;
+  } else if (wc < 0x800) {
+    dest[0] = 0xC0 | (wc >> 6);
+    dest[1] = 0x80 | (wc & 0x3F);
+    return 2;
+  } else if (wc < 0x10000) {
+    dest[0] = 0xE0 | (wc >> 12);
+    dest[1] = 0x80 | ((wc >> 6) & 0x3F);
+    dest[2] = 0x80 | (wc & 0x3F);
+    return 3;
+  } else {
+    dest[0] = 0xF0 | (wc >> 18);
+    dest[1] = 0x80 | ((wc >> 12) & 0x3F);
+    dest[2] = 0x80 | ((wc >> 6) & 0x3F);
+    dest[3] = 0x80 | (wc & 0x3F);
+    return 4;
+  }
 }
 
 ////////////////////////////////////////////////////////////
@@ -937,10 +929,10 @@ static void convert_float_to_str(char *str, int *idx, long double dval,
 
   add_sign(buffer, &idx_buffer, signbit(dval), params);
   dval = fabsl(dval);
-  
+
   if (params[PARAM_SPEC_CHAR] == CHAR_G) {
     format_g(dval, &precision, params);
-    if (dval == 0.0L){
+    if (dval == 0.0L) {
       convert_char_to_buffer(buffer, &idx_buffer, '0');
     }
   }
@@ -951,7 +943,6 @@ static void convert_float_to_str(char *str, int *idx, long double dval,
     format_e(buffer, &idx_buffer, dval, precision, params);
   }
 
-  // Добавляем нуль-терминатор
   if (idx_buffer < MaxBufferSize) {
     buffer[idx_buffer] = '\0';
   } else {
@@ -1020,7 +1011,6 @@ static void format_exponent(char *buf, int *idx_buf, int exp, int params[]) {
   if (exp < 10) {
     buf[(*idx_buf)++] = '0';
   }
-  // Используем функцию конвертации для экспоненты
   convert_uint_to_buffer(buf, idx_buf, (unsigned long long)exp, params);
 }
 
@@ -1029,11 +1019,9 @@ static void format_float_value(char *buf, int *idx_buf, long double value,
   long double int_part;
   long double frac_part = modfl(value, &int_part);
 
-  // Конвертируем целую часть
   convert_uint_to_buffer(buf, idx_buf, (long long)int_part, params);
-  
+
   buf[(*idx_buf)++] = '.';
 
-  if (precision > 0)
-  format_fractional_part(buf, idx_buf, frac_part, precision);
+  if (precision > 0) format_fractional_part(buf, idx_buf, frac_part, precision);
 }
