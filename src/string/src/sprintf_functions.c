@@ -8,6 +8,8 @@
 #include <stdlib.h>
 #include <wchar.h>
 
+#include <string.h>
+
 #include "../include/s21_string.h"
 
 ////////////////////////////////////////////////////////////
@@ -565,7 +567,8 @@ static int handle_wstring(char *str, int *idx, int params[], va_list args) {
 
     if (wsval == NULL) {
         const char *null_str = (params[PARAM_PRECISION] != -1)? "" : "(null)";
-        int null_len = s21_strlen(null_str);
+        int null_len = strlen(null_str);
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if (precision >= 0 && precision < null_len) {
             null_len = precision;
         }
