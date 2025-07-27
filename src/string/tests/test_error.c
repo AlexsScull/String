@@ -420,7 +420,7 @@ START_TEST(test_s21_strerror_66666) {
 }
 
 Suite *error_suite(void) {
-  Suite *s = suite_create("s21_sscanf");
+  Suite *s = suite_create("test_error");
   TCase *tc_strerror = tcase_create("Core");
   tcase_add_test(tc_strerror, test_s21_strerror_negative);
   tcase_add_test(tc_strerror, test_s21_strerror_0);

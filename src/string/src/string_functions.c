@@ -12,6 +12,23 @@ char *s21_strncat(char *dest, const char *src, s21_size_t n) {
   Если src короче n, копируется только strlen(src) символов.
 
   Возвращает указатель на dest.*/
+
+  if (dest == NULL || src == NULL) {
+    return NULL;
+  }
+
+  s21_size_t i = s21_strlen(dest);
+  s21_size_t len_src = s21_strlen(src);
+
+  if (len_src < n) {
+    n = len_src;
+  }
+
+  for (int j = 0; j < n; i++, j++) {
+    dest[i] = src[j];
+  }
+
+  return dest;
 }
 char *s21_strchr(const char *str, int c) {
   /*Задача:
@@ -23,6 +40,31 @@ char *s21_strchr(const char *str, int c) {
   Возвращает указатель на найденный символ или NULL.
 
   Если c = '\0', возвращает указатель на конец строки.*/
+
+  char *ptr;
+  int flag = 0;
+  int i = 0;
+  int len = 0;
+  unsigned char uc = (unsigned char)c;
+  if (str != NULL) {
+    while (flag == 0 && str[i] != '\0') {
+      if (str[i] == uc) {
+        ptr = &str[i];
+        flag = 1;
+      }
+      i++;
+      len++;
+    }
+  }
+  if (flag == 0) {
+    ptr = NULL;
+  }
+  if (uc == '\0') {
+    ptr = &str[len];
+  }
+  return ptr;
+
+  /* Unicode!! */
 }
 int s21_strncmp(const char *str1, const char *str2, s21_size_t n) {
   /*Задача:
@@ -40,6 +82,19 @@ int s21_strncmp(const char *str1, const char *str2, s21_size_t n) {
   > 0, если str1 > str2.
 
   Если n = 0, возвращает 0.*/
+
+  int result = 0;
+  int i = 0;
+  if (str1 != NULL && str2 != NULL) {
+    while (n > 0 && result == 0 && str1[i] != '\0' && str2[i] != '\0') {
+      result = (unsigned char)str1[i] - (unsigned char)str2[i];
+      n--;
+      i++;
+    }
+  } else {
+    result = NULL;
+  }
+  return result;
 }
 char *s21_strncpy(char *dest, const char *src, s21_size_t n) {
   /*Задача:
@@ -49,6 +104,22 @@ char *s21_strncpy(char *dest, const char *src, s21_size_t n) {
   Если src короче n, оставшиеся символы заполняются нулями.
 
   Возвращает указатель на dest.*/
+
+  if (dest == NULL || src == NULL) {
+    return NULL;
+  }
+
+  s21_size_t len_src = s21_strlen(src);
+
+  for (int i = 0; i < n; i++) {
+    if (i <= len_src) {
+      dest[i] = src[i];
+    } else {
+      dest[i] = 0;
+    }
+  }
+
+  return dest;
 }
 s21_size_t s21_strcspn(const char *str1, const char *str2) {
   /*Задача:
@@ -58,6 +129,34 @@ s21_size_t s21_strcspn(const char *str1, const char *str2) {
   Возвращает количество символов до первого вхождения любого символа из str2.
 
   Если совпадений нет, возвращает strlen(str1).*/
+
+  if (str1 == NULL || str2 == NULL) {
+    return NULL;
+  }
+
+  int i = 0;
+  int j = 0;
+  s21_size_t result = 0;
+  int flag = 0;
+  while (str1[i] != '\0' && flag == 0) {
+    while (str2[j] != '\0' && flag == 0) {
+      if (str1[i] == str2[j]) {
+        flag = 1;
+      }
+      j++;
+    }
+    if (flag == 0) {
+      result++;
+    }
+    i++;
+    j = 0;
+  }
+
+  if (flag == 0) {
+    result = s21_strlen(str1);
+  }
+
+  return result;
 }
 s21_size_t s21_strlen(const char *str) {
   /*Задача:
@@ -65,6 +164,15 @@ s21_size_t s21_strlen(const char *str) {
   Обратить внимание:
   Если строка не завершена нулевым символом, то её поведение не определено.
   Если str = NULL, поведение не определено.*/
+
+  if (str == NULL) {
+    return NULL;
+  }
+  s21_size_t len = 0;
+  while (str[len] != '\0') {
+    len++;
+  }
+  return len;
 }
 char *s21_strpbrk(const char *str1, const char *str2) {
   /*Задача:
@@ -72,6 +180,32 @@ char *s21_strpbrk(const char *str1, const char *str2) {
   Обратить внимание:
 
   Возвращает указатель на найденный символ или NULL.*/
+
+  if (str1 == NULL || str2 == NULL) {
+    return NULL;
+  }
+
+  int i = 0;
+  int j = 0;
+  char *ptr;
+  int flag = 0;
+  while (str1[i] != '\0' && flag == 0) {
+    while (str2[j] != '\0' && flag == 0) {
+      if (str1[i] == str2[j]) {
+        ptr = &str1[i];
+        flag = 1;
+      }
+      j++;
+    }
+    i++;
+    j = 0;
+  }
+
+  if (flag == 0) {
+    ptr = NULL;
+  }
+
+  return ptr;
 }
 char *s21_strrchr(const char *str, int c) {
   /*Задача:
@@ -80,6 +214,32 @@ char *s21_strrchr(const char *str, int c) {
 
   Если c = '\0', возвращает указатель на конец строки.
   Если совпадений нет, возвращает NULL*/
+
+  char *ptr;
+  int flag = 0;
+  int i = 0;
+  int len = 0;
+  unsigned char uc = (unsigned char)c;
+  if (str == NULL) {
+    return NULL;
+  }
+
+  while (str[i] != '\0') {
+    if (str[i] == uc) {
+      ptr = &str[i];
+      flag = 1;
+    }
+    i++;
+    len++;
+  }
+
+  if (flag == 0) {
+    ptr = NULL;
+  }
+  if (uc == '\0') {
+    ptr = &str[len];
+  }
+  return ptr;
 }
 char *s21_strstr(const char *haystack, const char *needle) {
   /*Задача:
@@ -89,6 +249,43 @@ char *s21_strstr(const char *haystack, const char *needle) {
   Если needle = "", возвращает haystack.
 
   Чувствителен к регистру.*/
+
+  if (haystack == NULL) {
+    return NULL;
+  }
+
+  char *ptr = NULL;
+  if (*needle == '\0' | needle == NULL) {
+    ptr = &haystack[0];
+  } else {
+    int i = 0;
+    int j = 0;
+    int flag = 0;
+    int flag2 = 0;
+    while (haystack[i] != '\0' && flag == 0) {
+      if (haystack[i] == needle[j]) {
+        ptr = &haystack[i];
+        flag = 1;
+      }
+      if (flag == 1) {
+        while (needle[j] != '\0') {
+          if (haystack[i] != needle[j]) {
+            flag2 = 1;
+          }
+          j++;
+          i++;
+        }
+        if (flag2 == 1) {
+          flag = 0;
+          j = 0;
+          ptr = NULL;
+        }
+      }
+      i++;
+    }
+  }
+
+  return ptr;
 }
 char *s21_strtok(char *str, const char *delim) {
   /*Задача:
@@ -97,7 +294,29 @@ char *s21_strtok(char *str, const char *delim) {
 
   При первом вызове str указывает на строку, при последующих — NULL.
 
-  Сохраняет состояние между вызовами (статическая переменная).
+  Сохраняет состояние между вызовами (статическая переменная). (хвост)
 
   Модифицирует исходную строку (заменяет разделители на \0).*/
+
+  static char *last_pos = NULL;
+
+  if (str == NULL) {
+    str = last_pos;
+    if (str == NULL) {
+      return NULL;
+    }
+  }
+
+  // s21_size_t len_token = s21_strcspn(str, delim);
+  char *token = str;
+  char *token_end = s21_strpbrk(str, delim);
+
+  if (token_end != NULL) {
+    *token_end = '\0';
+    last_pos = token_end + 1;
+  } else {
+    last_pos = NULL;
+  }
+
+  return token;
 }

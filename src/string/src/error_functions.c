@@ -1,11 +1,13 @@
 #include "../include/s21_string.h"
 
 char *s21_strerror(int errnum) {
-  /*Задача:
-Вернуть строку с описанием ошибки для кода errnum.
-Обратить внимание:
+  static char res[64];
 
-Должна поддерживать стандартные коды ошибок (например, EINVAL, ENOMEM).
+  if (errnum >= 0 && errnum <= MAX_ERRNO - 1) {
+    snprintf(res, sizeof(res), "%s", error_messages[errnum]);
+  } else {
+    snprintf(res, sizeof(res), "Unknown error %d", errnum);
+  }
 
-Если errnum неизвестен, возвращать строку вида "Unknown error: <код>".*/
+  return res;
 }
