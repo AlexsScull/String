@@ -6,9 +6,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include <wchar.h>
-
 #include <string.h>
+#include <wchar.h>
 
 #include "../include/s21_string.h"
 
@@ -79,6 +78,7 @@ enum ParamIndex {
   PARAM_PRECISION_ASTERISK_VALUE,  ///< Значение точности для '.*'
   PARAM_MODIFIER,                  ///< Модификатор длины
   PARAM_SPECIFIER,                 ///< Спецификатор типа
+  TYPE,                            ///< Тип данных
   PARAM_UPPERCASE,  ///< Флаг верхнего регистра
   PARAM_BASE,       ///< Основание системы счисления
   PARAM_SPEC_CHAR,  ///< Специальный символ формата
@@ -115,8 +115,7 @@ enum FormatChar {
 
 static int parse_number(const char *format, int *i);
 static void parse_flag(const char *format, int *i, int params[]);
-static void parse_width(const char *format, int *i, int params[],
-                        va_list args);
+static void parse_width(const char *format, int *i, int params[], va_list args);
 static void parse_precision(const char *format, int *i, int params[],
                             va_list args);
 static void parse_modifier(const char *format, int *i, int *modifier);
@@ -169,7 +168,6 @@ static void format_exponent(char *buf, int *idx_buf, int exp, int params[]);
 static void format_float_value(char *buf, int *idx_buf, long double frac_part,
                                int precision, int params[]);
 
-
 ////////////////////////////////////////////////////////////
 //                Основная функция sprintf                //
 ////////////////////////////////////////////////////////////
@@ -200,6 +198,7 @@ int s21_sprintf(char *str, const char *format, ...) {
                                  [PARAM_PRECISION_ASTERISK_VALUE] = 0,
                                  [PARAM_MODIFIER] = LENGTH_NULL,
                                  [PARAM_SPECIFIER] = -1,
+                                 [TYPE] = -1,
                                  [PARAM_UPPERCASE] = false,
                                  [PARAM_BASE] = BaseDecimal,
                                  [PARAM_SPEC_CHAR] = -1};
@@ -311,7 +310,8 @@ static void parse_modifier(const char *format, int *i, int *modifier) {
 }
 
 static void parse_specifier(const char *format, int *i, int params[]) {
-  switch (format[*i]) {
+  params[PARAM_SPECIFIER] = format[*i];
+  switch (params[PARAM_SPECIFIER]) {
     case 'd':
     case 'i':
       parse_integer_specifier(params);
@@ -320,52 +320,52 @@ static void parse_specifier(const char *format, int *i, int params[]) {
     case 'o':
     case 'x':
     case 'X':
-      parse_unsigned_specifier(params, format[*i]);
+      parse_unsigned_specifier(params, params[PARAM_SPECIFIER]);
       break;
     case 'f':
     case 'e':
     case 'E':
     case 'g':
     case 'G':
-      parse_float_specifier(params, format[*i]);
+      parse_float_specifier(params, params[PARAM_SPECIFIER]);
       break;
     case 'c':
-      params[PARAM_SPECIFIER] =
+      params[TYPE] =
           (params[PARAM_MODIFIER] == LENGTH_L) ? TYPE_WCHAR : TYPE_CHAR;
       break;
     case 's':
-      params[PARAM_SPECIFIER] =
+      params[TYPE] =
           (params[PARAM_MODIFIER] == LENGTH_L) ? TYPE_WSTRING : TYPE_STRING;
       break;
     case 'p':
-      params[PARAM_SPECIFIER] = TYPE_POINTER;
+      params[TYPE] = TYPE_POINTER;
       params[PARAM_BASE] = BaseHexadecimal;
       break;
     case '%':
-      params[PARAM_SPECIFIER] = TYPE_PERCENT;
+      params[TYPE] = TYPE_PERCENT;
       break;
     case 'n':
-      params[PARAM_SPECIFIER] = TYPE_PTR;
+      params[TYPE] = TYPE_PTR;
       break;
   }
 }
 
 static void parse_integer_specifier(int params[]) {
   if (params[PARAM_MODIFIER] == LENGTH_LL)
-    params[PARAM_SPECIFIER] = TYPE_LONGLONG;
+    params[TYPE] = TYPE_LONGLONG;
   else if (params[PARAM_MODIFIER] == LENGTH_L)
-    params[PARAM_SPECIFIER] = TYPE_LONG;
+    params[TYPE] = TYPE_LONG;
   else
-    params[PARAM_SPECIFIER] = TYPE_INT;
+    params[TYPE] = TYPE_INT;
 }
 
 static void parse_unsigned_specifier(int params[], char specifier) {
   if (params[PARAM_MODIFIER] == LENGTH_LL)
-    params[PARAM_SPECIFIER] = TYPE_ULONGLONG;
+    params[TYPE] = TYPE_ULONGLONG;
   else if (params[PARAM_MODIFIER] == LENGTH_L)
-    params[PARAM_SPECIFIER] = TYPE_ULONG;
+    params[TYPE] = TYPE_ULONG;
   else
-    params[PARAM_SPECIFIER] = TYPE_UINT;
+    params[TYPE] = TYPE_UINT;
 
   if (specifier == 'o') {
     params[PARAM_BASE] = BaseOctal;
@@ -379,9 +379,9 @@ static void parse_unsigned_specifier(int params[], char specifier) {
 
 static void parse_float_specifier(int params[], char specifier) {
   if (params[PARAM_MODIFIER] == LENGTH_CAP_L)
-    params[PARAM_SPECIFIER] = TYPE_LONGDOUBLE;
+    params[TYPE] = TYPE_LONGDOUBLE;
   else
-    params[PARAM_SPECIFIER] = TYPE_FLOAT;
+    params[TYPE] = TYPE_FLOAT;
 
   char base_char = tolower(specifier);
   if (base_char == 'e') {
@@ -398,7 +398,7 @@ static void parse_float_specifier(int params[], char specifier) {
 }
 
 static int convert_format(char *str, int *str_idx, int params[], va_list args) {
-  switch (params[PARAM_SPECIFIER]) {
+  switch (params[TYPE]) {
     case TYPE_INT:
     case TYPE_LONG:
     case TYPE_LONGLONG:
@@ -417,15 +417,13 @@ static int convert_format(char *str, int *str_idx, int params[], va_list args) {
       handle_char(str, str_idx, params, args);
       break;
     case TYPE_WCHAR:
-      if (handle_wchar(str, str_idx, params, args) == -1)
-      return -1;
+      if (handle_wchar(str, str_idx, params, args) == -1) return -1;
       break;
     case TYPE_STRING:
       handle_string(str, str_idx, params, args);
       break;
     case TYPE_WSTRING:
-      if (handle_wstring(str, str_idx, params, args) == -1)
-      return -1;
+      if (handle_wstring(str, str_idx, params, args) == -1) return -1;
       break;
     case TYPE_POINTER:
       handle_pointer(str, str_idx, params, args);
@@ -446,7 +444,7 @@ static int convert_format(char *str, int *str_idx, int params[], va_list args) {
 
 static void handle_integer(char *str, int *idx, int params[], va_list args) {
   long long val;
-  switch (params[PARAM_SPECIFIER]) {
+  switch (params[TYPE]) {
     case TYPE_INT:
       val = (long long)va_arg(args, int);
       break;
@@ -458,13 +456,12 @@ static void handle_integer(char *str, int *idx, int params[], va_list args) {
       break;
   }
 
-    convert_int_to_str(str, idx, val, params);
-  
+  convert_int_to_str(str, idx, val, params);
 }
 
 static void handle_unsigned(char *str, int *idx, int params[], va_list args) {
   unsigned long long val;
-  switch (params[PARAM_SPECIFIER]) {
+  switch (params[TYPE]) {
     case TYPE_UINT:
       val = (unsigned long long)va_arg(args, unsigned int);
       break;
@@ -476,15 +473,11 @@ static void handle_unsigned(char *str, int *idx, int params[], va_list args) {
       break;
   }
 
-  if (val == 0 && params[PARAM_PRECISION_ASTERISK_VALUE] == 0 &&
-      params[PARAM_PRECISION] != -1) {
-  } else {
-    convert_uint_to_str(str, idx, val, params);
-  }
+  convert_uint_to_str(str, idx, val, params);
 }
 
 static void handle_float(char *str, int *idx, int params[], va_list args) {
-  long double val = (params[PARAM_SPECIFIER] == TYPE_FLOAT)
+  long double val = (params[TYPE] == TYPE_FLOAT)
                         ? (long double)va_arg(args, double)
                         : va_arg(args, long double);
 
@@ -507,149 +500,151 @@ static void handle_string(char *str, int *idx, int params[], va_list args) {
 }
 
 static int handle_wchar(char *str, int *idx, int params[], va_list args) {
-    wchar_t wcval = va_arg(args, wchar_t);
-    char utf8_buffer[MaxUtf8Bytes + 1] = {0};
-    int utf8_len = wchar_to_utf8(utf8_buffer, wcval);
-    
-    if (utf8_len == -1) {
-        return -1;
-    }
+  wchar_t wcval = va_arg(args, wchar_t);
+  char utf8_buffer[MaxUtf8Bytes + 1] = {0};
+  int utf8_len = wchar_to_utf8(utf8_buffer, wcval);
 
-    if (utf8_len == 0) {
-        return 0;
-    }
+  if (utf8_len == -1) {
+    return -1;
+  }
 
-    int width_value = 0;
-    if (params[PARAM_WIDTH] != -1) {
-        width_value = params[PARAM_WIDTH_ASTERISK_VALUE];
-    }
-    bool left_align = (params[FLAG_MINUS]);
-    if (width_value < 0) {
-        left_align = true;
-        width_value = -width_value;
-    }
+  if (utf8_len == 0) {
+    return 0;
+  }
 
-    int padding = width_value - utf8_len;
-    if (padding < 0) padding = 0;
+  int width_value = 0;
+  if (params[PARAM_WIDTH] != -1) {
+    width_value = params[PARAM_WIDTH_ASTERISK_VALUE];
+  }
+  bool left_align = (params[FLAG_MINUS]);
+  if (width_value < 0) {
+    left_align = true;
+    width_value = -width_value;
+  }
 
-    if (!left_align) {
-        char pad_char =  ' ';
-        for (int i = 0; i < padding; i++) {
-            str[(*idx)++] = pad_char;
-        }
-    }
+  int padding = width_value - utf8_len;
+  if (padding < 0) padding = 0;
 
-    for (int i = 0; i < utf8_len; i++) {
-        str[(*idx)++] = utf8_buffer[i];
+  if (!left_align) {
+    char pad_char = ' ';
+    for (int i = 0; i < padding; i++) {
+      str[(*idx)++] = pad_char;
     }
+  }
 
-    if (left_align) {
-        for (int i = 0; i < padding; i++) {
-            str[(*idx)++] = ' ';
-        }
+  for (int i = 0; i < utf8_len; i++) {
+    str[(*idx)++] = utf8_buffer[i];
+  }
+
+  if (left_align) {
+    for (int i = 0; i < padding; i++) {
+      str[(*idx)++] = ' ';
     }
+  }
 }
 
 static int handle_wstring(char *str, int *idx, int params[], va_list args) {
-    wchar_t *wsval = va_arg(args, wchar_t *);
-    int precision = (params[PARAM_PRECISION] != -1) ? params[PARAM_PRECISION_ASTERISK_VALUE] : -1;
-    int width_value = 0;
-    if (params[PARAM_WIDTH] != -1) {
-        width_value = params[PARAM_WIDTH_ASTERISK_VALUE];
+  wchar_t *wsval = va_arg(args, wchar_t *);
+  int precision = (params[PARAM_PRECISION] != -1)
+                      ? params[PARAM_PRECISION_ASTERISK_VALUE]
+                      : -1;
+  int width_value = 0;
+  if (params[PARAM_WIDTH] != -1) {
+    width_value = params[PARAM_WIDTH_ASTERISK_VALUE];
+  }
+  bool left_align = (params[FLAG_MINUS]);
+  if (width_value < 0) {
+    left_align = true;
+    width_value = -width_value;
+  }
+
+  if (wsval == NULL) {
+    const char *null_str = (params[PARAM_PRECISION] != -1) ? "" : "(null)";
+    int null_len = strlen(null_str);
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    if (precision >= 0 && precision < null_len) {
+      null_len = precision;
     }
-    bool left_align = (params[FLAG_MINUS]);
-    if (width_value < 0) {
-        left_align = true;
-        width_value = -width_value;
-    }
-
-    if (wsval == NULL) {
-        const char *null_str = (params[PARAM_PRECISION] != -1)? "" : "(null)";
-        int null_len = strlen(null_str);
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        if (precision >= 0 && precision < null_len) {
-            null_len = precision;
-        }
-        int padding = width_value - null_len;
-        if (padding < 0) padding = 0;
-
-        if (!left_align) {
-            for (int i = 0; i < padding; i++) {
-                str[(*idx)++] = ' ';
-            }
-        }
-        for (int i = 0; i < null_len; i++) {
-            str[(*idx)++] = null_str[i];
-        }
-        if (left_align) {
-            for (int i = 0; i < padding; i++) {
-                str[(*idx)++] = ' ';
-            }
-        }
-        return 0;
-    }
-
-    int total_bytes = 0;
-    const wchar_t *p = wsval;
-    while (*p) {
-        char utf8_buf[MaxUtf8Bytes];
-        int len = wchar_to_utf8(utf8_buf, *p);
-
-        if (len == -1) {
-            return -1;
-        }
-
-        if (len == 0) {
-            p++;
-            continue;
-        }
-        
-        if (precision != -1 && total_bytes + len > precision) {
-            break;
-        }
-        
-        total_bytes += len;
-        p++;
-    }
-
-    int padding = width_value - total_bytes;
+    int padding = width_value - null_len;
     if (padding < 0) padding = 0;
 
     if (!left_align) {
-        char pad_char = ' ';
-        for (int i = 0; i < padding; i++) {
-            str[(*idx)++] = pad_char;
-        }
+      for (int i = 0; i < padding; i++) {
+        str[(*idx)++] = ' ';
+      }
     }
-
-    int bytes_written = 0;
-    p = wsval;
-    while (*p) {
-        char utf8_buf[MaxUtf8Bytes];
-        int len = wchar_to_utf8(utf8_buf, *p);
-        if (len == 0) {
-            p++;
-            continue;
-        }
-        
-        if (precision != -1 && bytes_written + len > precision) {
-            break;
-        }
-        
-        for (int j = 0; j < len; j++) {
-            str[(*idx)++] = utf8_buf[j];
-        }
-        bytes_written += len;
-        p++;
+    for (int i = 0; i < null_len; i++) {
+      str[(*idx)++] = null_str[i];
     }
-
     if (left_align) {
-        for (int i = 0; i < padding; i++) {
-            str[(*idx)++] = ' ';
-        }
+      for (int i = 0; i < padding; i++) {
+        str[(*idx)++] = ' ';
+      }
+    }
+    return 0;
+  }
+
+  int total_bytes = 0;
+  const wchar_t *p = wsval;
+  while (*p) {
+    char utf8_buf[MaxUtf8Bytes];
+    int len = wchar_to_utf8(utf8_buf, *p);
+
+    if (len == -1) {
+      return -1;
     }
 
-    return 0;
+    if (len == 0) {
+      p++;
+      continue;
+    }
+
+    if (precision != -1 && total_bytes + len > precision) {
+      break;
+    }
+
+    total_bytes += len;
+    p++;
+  }
+
+  int padding = width_value - total_bytes;
+  if (padding < 0) padding = 0;
+
+  if (!left_align) {
+    char pad_char = ' ';
+    for (int i = 0; i < padding; i++) {
+      str[(*idx)++] = pad_char;
+    }
+  }
+
+  int bytes_written = 0;
+  p = wsval;
+  while (*p) {
+    char utf8_buf[MaxUtf8Bytes];
+    int len = wchar_to_utf8(utf8_buf, *p);
+    if (len == 0) {
+      p++;
+      continue;
+    }
+
+    if (precision != -1 && bytes_written + len > precision) {
+      break;
+    }
+
+    for (int j = 0; j < len; j++) {
+      str[(*idx)++] = utf8_buf[j];
+    }
+    bytes_written += len;
+    p++;
+  }
+
+  if (left_align) {
+    for (int i = 0; i < padding; i++) {
+      str[(*idx)++] = ' ';
+    }
+  }
+
+  return 0;
 }
 
 static void handle_pointer(char *str, int *idx, int params[], va_list args) {
@@ -687,11 +682,11 @@ static int add_sign(char *buf, bool negative, int params[]) {
     *buf = '-';
   } else {
     if (params[FLAG_PLUS]) {
-      *buf= '+';
+      *buf = '+';
     } else if (params[FLAG_SPACE]) {
       *buf = ' ';
-    }
-    else return 0;
+    } else
+      return 0;
   }
   return 1;
 }
@@ -730,7 +725,7 @@ static void convert_num_len_pad_char_to_str(char *str, int *idx, int num_len,
 static void convert_int_to_str(char *str, int *idx, long long value,
                                int params[]) {
   char buffer[MaxBufferSize] = {0};
-  int num_len = 0;  
+  int num_len = 0;
   char sign_char = 0;
 
   add_sign(&sign_char, value < 0, params);
@@ -746,41 +741,82 @@ static void convert_int_to_str(char *str, int *idx, long long value,
   if (positive == 0 && params[PARAM_PRECISION_ASTERISK_VALUE] == 0 &&
       params[PARAM_PRECISION] != -1) {
   } else {
-  convert_uint_to_buffer(buffer, &num_len, positive, params);}
+    convert_uint_to_buffer(buffer, &num_len, positive, params);
+  }
   convert_buffer_to_str(buffer, sign_char, num_len, str, idx, params);
 }
 
 static void convert_uint_to_str(char *str, int *idx, unsigned long long value,
                                 int params[]) {
-  char buffer[MaxBufferSize];
-  int num_len = 0; 
+  char buffer[MaxBufferSize] = {0};
+  int num_len = 0;
 
-  convert_uint_to_buffer(buffer, &num_len, value, params);
+  // if (value == 0) params[FLAG_HASH] = false;
+
+  // if (value == 0 && params[PARAM_PRECISION_ASTERISK_VALUE] == 0 &&
+  //     params[PARAM_PRECISION] != -1) {
+  // } else {
+  //   convert_uint_to_buffer(buffer, &num_len, value, params);
+  // }
+  // convert_buffer_to_str(buffer, LENGTH_NULL, num_len, str, idx, params);
+
+    // Особый случай: ноль с точностью 0 и флагом '#' для восьмеричных
+  if (value == 0 && params[PARAM_PRECISION_ASTERISK_VALUE] == 0 &&
+      params[PARAM_PRECISION] != -1) {
+    if (params[FLAG_HASH] && params[PARAM_SPECIFIER] == 'o')
+      convert_char_to_buffer(buffer, &num_len, '0');
+  } else {
+    convert_uint_to_buffer(buffer, &num_len, value, params);
+  }
+
+  if (value == 0) params[FLAG_HASH] = false;
   convert_buffer_to_str(buffer, LENGTH_NULL, num_len, str, idx, params);
 }
 
-static void convert_buffer_to_str(char *buffer, char sign_char, int num_len, char *str,
-                                  int *idx, int params[]) {
+static void convert_buffer_to_str(char *buffer, char sign_char, int num_len,
+                                  char *str, int *idx, int params[]) {
   int width = params[PARAM_WIDTH_ASTERISK_VALUE];
   bool left_align = (width < 0);
   width = abs(width);
 
   int precision = params[PARAM_PRECISION_ASTERISK_VALUE];
   int sign_len = (sign_char != 0) ? 1 : 0;
-  
+  int hash =
+      ((params[PARAM_SPECIFIER] == 'x' || params[PARAM_SPECIFIER] == 'X') &&
+       params[FLAG_HASH])
+          ? 2
+          : 0;
+  if (params[PARAM_SPECIFIER] == 'o' && params[FLAG_HASH])
+    params[FLAG_ZERO] = true;
+  // if (params[PARAM_SPECIFIER] == 'x' || params[PARAM_SPECIFIER] == 'X')
+  // params[FLAG_ZERO] = false;
+
   precision = (precision > num_len) ? precision - num_len : 0;
-  width = width - (sign_len + num_len + precision);
+  width = width - (sign_len + num_len + precision + hash);
 
   if (!left_align) {
-    if (params[FLAG_ZERO] && precision==0) {
+    if (params[FLAG_ZERO] && precision == 0) {
+      if (hash) {
+        if (params[PARAM_UPPERCASE])
+          convert_string_to_buffer(str, idx, "0X");
+        else
+          convert_string_to_buffer(str, idx, "0x");
+      }
       if (sign_len) convert_char_to_buffer(str, idx, sign_char);
       convert_num_len_pad_char_to_str(str, idx, width, '0');
       sign_len = 0;
+      hash = 0;
     } else {
       convert_num_len_pad_char_to_str(str, idx, width, ' ');
     }
   }
 
+  if (hash) {
+    if (params[PARAM_UPPERCASE])
+      convert_string_to_buffer(str, idx, "0X");
+    else
+      convert_string_to_buffer(str, idx, "0x");
+  }
   if (sign_len) convert_char_to_buffer(str, idx, sign_char);
   convert_num_len_pad_char_to_str(str, idx, precision, '0');
   convert_string_to_buffer(str, idx, buffer);
@@ -799,7 +835,7 @@ static void convert_string_buffer_to_str(char *str, int *idx,
   if (width < 0) width = -width;
 
   int output_len;
-  if (params[PARAM_SPECIFIER] == TYPE_CHAR) {
+  if (params[TYPE] == TYPE_CHAR) {
     output_len = 1;  // Для символа всегда длина 1
   } else {
     // Для строки: длина либо до \0, либо ограничена точностью
@@ -817,7 +853,7 @@ static void convert_string_buffer_to_str(char *str, int *idx,
     convert_num_len_pad_char_to_str(str, idx, padding, ' ');
   }
 
-  if (params[PARAM_SPECIFIER] == TYPE_CHAR) {
+  if (params[TYPE] == TYPE_CHAR) {
     convert_char_to_buffer(str, idx, buffer[0]);
   } else {
     for (int i = 0; i < output_len; i++) {
@@ -828,7 +864,6 @@ static void convert_string_buffer_to_str(char *str, int *idx,
     convert_num_len_pad_char_to_str(str, idx, padding, ' ');
   }
 }
-
 
 static void convert_float_buffer_to_str(char *buffer, int num_len, char *str,
                                         int *idx, int params[]) {
@@ -872,8 +907,8 @@ static void convert_string_to_buffer(char *buffer, int *idx_buffer,
 
 static int wchar_to_utf8(char *dest, wchar_t wc) {
   uint32_t code = (uint32_t)wc;
-  if (code > UnicodeMax ||
-      (code >= SurrogateStart && code <= SurrogateEnd) || wc < 0) {
+  if (code > UnicodeMax || (code >= SurrogateStart && code <= SurrogateEnd) ||
+      wc < 0) {
     return -1;
   }
 
@@ -938,12 +973,10 @@ static void convert_float_to_str(char *str, int *idx, long double dval,
 
   int format_G = CHAR_G;
   if (params[PARAM_SPEC_CHAR] == CHAR_G) {
-    
     if (dval != 0.0L) {
       format_G = format_g(dval, &precision, params);
-    }
-    else 
-    convert_char_to_buffer(buffer, &idx_buffer, '0');
+    } else
+      convert_char_to_buffer(buffer, &idx_buffer, '0');
   }
 
   if (params[PARAM_SPEC_CHAR] == CHAR_F || format_G == CHAR_F) {
@@ -962,7 +995,6 @@ static void convert_float_to_str(char *str, int *idx, long double dval,
 }
 
 static int format_g(long double dval, int *precision, int params[]) {
-
   int exp =
       (dval == 0.0L) ? 0 : (int)floorl(log10l(dval));  // Расчёт экспоненты
   if (exp >= -4 && exp < *precision) {
@@ -985,7 +1017,8 @@ static void format_f(char *buf, int *idx_buf, long double value, int precision,
   long double frac_part = modfl(value, &int_part);
   convert_uint_to_buffer(buf, idx_buf, (long long)int_part, params);
 
-  if (precision > 0) format_fractional_part(buf, idx_buf, frac_part, precision, params);
+  if (precision > 0)
+    format_fractional_part(buf, idx_buf, frac_part, precision, params);
 }
 
 static void format_e(char *buf, int *idx_buf, long double value, int precision,
@@ -1008,8 +1041,9 @@ static void format_e(char *buf, int *idx_buf, long double value, int precision,
   long double frac_part = modfl(value, &int_part);
   convert_uint_to_buffer(buf, idx_buf, (long long)int_part, params);
 
-  if (precision > 0) format_fractional_part(buf, idx_buf, frac_part, precision, params);
-  
+  if (precision > 0)
+    format_fractional_part(buf, idx_buf, frac_part, precision, params);
+
   format_exponent(buf, idx_buf, exp, params);
 }
 
