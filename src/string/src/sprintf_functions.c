@@ -457,11 +457,9 @@ static void handle_integer(char *str, int *idx, int params[], va_list args) {
       val = va_arg(args, long long);
       break;
   }
-  if (val == 0 && params[PARAM_PRECISION_ASTERISK_VALUE] == 0 &&
-      params[PARAM_PRECISION] != -1) {
-  } else {
+
     convert_int_to_str(str, idx, val, params);
-  }
+  
 }
 
 static void handle_unsigned(char *str, int *idx, int params[], va_list args) {
@@ -731,7 +729,7 @@ static void convert_num_len_pad_char_to_str(char *str, int *idx, int num_len,
 
 static void convert_int_to_str(char *str, int *idx, long long value,
                                int params[]) {
-  char buffer[MaxBufferSize];
+  char buffer[MaxBufferSize] = {0};
   int num_len = 0;  
   char sign_char = 0;
 
@@ -745,7 +743,10 @@ static void convert_int_to_str(char *str, int *idx, long long value,
     positive = value;
   }
 
-  convert_uint_to_buffer(buffer, &num_len, positive, params);
+  if (positive == 0 && params[PARAM_PRECISION_ASTERISK_VALUE] == 0 &&
+      params[PARAM_PRECISION] != -1) {
+  } else {
+  convert_uint_to_buffer(buffer, &num_len, positive, params);}
   convert_buffer_to_str(buffer, sign_char, num_len, str, idx, params);
 }
 
@@ -771,7 +772,7 @@ static void convert_buffer_to_str(char *buffer, char sign_char, int num_len, cha
   width = width - (sign_len + num_len + precision);
 
   if (!left_align) {
-    if (params[FLAG_ZERO]) {
+    if (params[FLAG_ZERO] && precision==0) {
       if (sign_len) convert_char_to_buffer(str, idx, sign_char);
       convert_num_len_pad_char_to_str(str, idx, width, '0');
       sign_len = 0;
