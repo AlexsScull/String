@@ -780,130 +780,130 @@ TEST_SPRINTF(test_s21_sprintf_i_neg_space, "% i", -123, int)
 TEST_SPRINTF(test_s21_sprintf_i_zero_prec, "%.0i", 0, int)
 
 // Тесты для %u
-TEST_SPRINTF(test_s21_sprintf_u_minus_negt, "%-u", -123, int)
-TEST_SPRINTF(test_s21_sprintf_u_minus_post, "%-u", 123, int)
-TEST_SPRINTF(test_s21_sprintf_u_minus_zero, "%-u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_minus_ng_z, "%-u", -0, int)
-TEST_SPRINTF(test_s21_sprintf_u_plus_negt, "%+u", -123, int)
-TEST_SPRINTF(test_s21_sprintf_u_plus_post, "%+u", 123, int)
-TEST_SPRINTF(test_s21_sprintf_u_plus_zero, "%+u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_plus_ng_z, "%+u", -0, int)
-TEST_SPRINTF(test_s21_sprintf_u_space_negt, "% u", -123, int)
-TEST_SPRINTF(test_s21_sprintf_u_space_post, "% u", 123, int)
-TEST_SPRINTF(test_s21_sprintf_u_space_zero, "% u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_space_ng_z, "% u", -0, int)
-TEST_SPRINTF(test_s21_sprintf_u_hash_negt, "%#u", -123, int)
-TEST_SPRINTF(test_s21_sprintf_u_hash_post, "%#u", 123, int)
-TEST_SPRINTF(test_s21_sprintf_u_hash_zero, "%#u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_hash_ng_z, "%#u", -0, int)
-TEST_SPRINTF(test_s21_sprintf_u_zero_negt, "%0u", -123, int)
-TEST_SPRINTF(test_s21_sprintf_u_zero_post, "%0u", 123, int)
-TEST_SPRINTF(test_s21_sprintf_u_zero_zero, "%0u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_zero_ng_z, "%0u", -0, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_minus_negt, "%-5u", -123, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_minus_post, "%-5u", 123, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_minus_zero, "%-5u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_minus_ng_z, "%-5u", -0, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_plus_negt, "%+5u", -123, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_plus_post, "%+5u", 123, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_plus_zero, "%+5u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_plus_ng_z, "%+5u", -0, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_space_negt, "% 5u", -123, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_space_post, "% 5u", 123, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_space_zero, "% 5u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_space_ng_z, "% 5u", -0, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_hash_negt, "%#5u", -123, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_hash_post, "%#5u", 123, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_hash_zero, "%#5u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_hash_ng_z, "%#5u", -0, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_zero_negt, "%05u", -123, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_zero_post, "%05u", 123, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_zero_zero, "%05u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_zero_ng_z, "%05u", -0, int)
-TEST_SPRINTF(test_s21_sprintf_u_prec_minus_negt, "%-.5u", -123, int)
-TEST_SPRINTF(test_s21_sprintf_u_prec_minus_post, "%-.5u", 123, int)
-TEST_SPRINTF(test_s21_sprintf_u_prec_minus_zero, "%-.5u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_prec_minus_ng_z, "%-.5u", -0, int)
-TEST_SPRINTF(test_s21_sprintf_u_prec_plus_negt, "%+.5u", -123, int)
-TEST_SPRINTF(test_s21_sprintf_u_prec_plus_post, "%+.5u", 123, int)
-TEST_SPRINTF(test_s21_sprintf_u_prec_plus_zero, "%+.5u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_prec_plus_ng_z, "%+.5u", -0, int)
-TEST_SPRINTF(test_s21_sprintf_u_prec_space_negt, "% .5u", -123, int)
-TEST_SPRINTF(test_s21_sprintf_u_prec_space_post, "% .5u", 123, int)
-TEST_SPRINTF(test_s21_sprintf_u_prec_space_zero, "% .5u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_prec_space_ng_z, "% .5u", -0, int)
-TEST_SPRINTF(test_s21_sprintf_u_prec_hash_negt, "%#.5u", -123, int)
-TEST_SPRINTF(test_s21_sprintf_u_prec_hash_post, "%#.5u", 123, int)
-TEST_SPRINTF(test_s21_sprintf_u_prec_hash_zero, "%#.5u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_prec_hash_ng_z, "%#.5u", -0, int)
-TEST_SPRINTF(test_s21_sprintf_u_prec_zero_negt, "%0.5u", -123, int)
-TEST_SPRINTF(test_s21_sprintf_u_prec_zero_post, "%0.5u", 123, int)
-TEST_SPRINTF(test_s21_sprintf_u_prec_zero_zero, "%0.5u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_prec_zero_ng_z, "%0.5u", -0, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_prec_minus_negt, "%-10.5u", -123, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_prec_minus_post, "%-10.5u", 123, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_prec_minus_zero, "%-10.5u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_prec_minus_ng_z, "%-10.5u", -0, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_prec_plus_negt, "%+10.5u", -123, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_prec_plus_post, "%+10.5u", 123, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_prec_plus_zero, "%+10.5u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_prec_plus_ng_z, "%+10.5u", -0, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_prec_space_negt, "% 10.5u", -123, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_prec_space_post, "% 10.5u", 123, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_prec_space_zero, "% 10.5u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_prec_space_ng_z, "% 10.5u", -0, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_prec_hash_negt, "%#10.5u", -123, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_prec_hash_post, "%#10.5u", 123, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_prec_hash_zero, "%#10.5u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_prec_hash_ng_z, "%#10.5u", -0, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_prec_zero_negt, "%010.5u", -123, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_prec_zero_post, "%010.5u", 123, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_prec_zero_zero, "%010.5u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_prec_zero_ng_z, "%010.5u", -0, int)
+TEST_SPRINTF(test_s21_sprintf_u_minus_negt, "%-u", -123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_minus_post, "%-u", 123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_minus_zero, "%-u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_minus_ng_z, "%-u", -0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_plus_negt, "%+u", -123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_plus_post, "%+u", 123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_plus_zero, "%+u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_plus_ng_z, "%+u", -0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_space_negt, "% u", -123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_space_post, "% u", 123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_space_zero, "% u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_space_ng_z, "% u", -0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_hash_negt, "%#u", -123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_hash_post, "%#u", 123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_hash_zero, "%#u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_hash_ng_z, "%#u", -0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_zero_negt, "%0u", -123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_zero_post, "%0u", 123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_zero_zero, "%0u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_zero_ng_z, "%0u", -0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_minus_negt, "%-5u", -123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_minus_post, "%-5u", 123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_minus_zero, "%-5u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_minus_ng_z, "%-5u", -0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_plus_negt, "%+5u", -123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_plus_post, "%+5u", 123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_plus_zero, "%+5u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_plus_ng_z, "%+5u", -0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_space_negt, "% 5u", -123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_space_post, "% 5u", 123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_space_zero, "% 5u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_space_ng_z, "% 5u", -0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_hash_negt, "%#5u", -123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_hash_post, "%#5u", 123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_hash_zero, "%#5u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_hash_ng_z, "%#5u", -0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_zero_negt, "%05u", -123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_zero_post, "%05u", 123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_zero_zero, "%05u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_zero_ng_z, "%05u", -0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_prec_minus_negt, "%-.5u", -123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_prec_minus_post, "%-.5u", 123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_prec_minus_zero, "%-.5u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_prec_minus_ng_z, "%-.5u", -0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_prec_plus_negt, "%+.5u", -123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_prec_plus_post, "%+.5u", 123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_prec_plus_zero, "%+.5u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_prec_plus_ng_z, "%+.5u", -0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_prec_space_negt, "% .5u", -123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_prec_space_post, "% .5u", 123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_prec_space_zero, "% .5u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_prec_space_ng_z, "% .5u", -0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_prec_hash_negt, "%#.5u", -123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_prec_hash_post, "%#.5u", 123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_prec_hash_zero, "%#.5u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_prec_hash_ng_z, "%#.5u", -0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_prec_zero_negt, "%0.5u", -123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_prec_zero_post, "%0.5u", 123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_prec_zero_zero, "%0.5u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_prec_zero_ng_z, "%0.5u", -0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_prec_minus_negt, "%-10.5u", -123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_prec_minus_post, "%-10.5u", 123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_prec_minus_zero, "%-10.5u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_prec_minus_ng_z, "%-10.5u", -0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_prec_plus_negt, "%+10.5u", -123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_prec_plus_post, "%+10.5u", 123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_prec_plus_zero, "%+10.5u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_prec_plus_ng_z, "%+10.5u", -0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_prec_space_negt, "% 10.5u", -123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_prec_space_post, "% 10.5u", 123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_prec_space_zero, "% 10.5u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_prec_space_ng_z, "% 10.5u", -0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_prec_hash_negt, "%#10.5u", -123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_prec_hash_post, "%#10.5u", 123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_prec_hash_zero, "%#10.5u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_prec_hash_ng_z, "%#10.5u", -0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_prec_zero_negt, "%010.5u", -123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_prec_zero_post, "%010.5u", 123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_prec_zero_zero, "%010.5u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_prec_zero_ng_z, "%010.5u", -0, unsigned int)
 
-TEST_SPRINTF_2(test_s21_sprintf_u_dynamic_width, "%*u", 10, 123, int)
-TEST_SPRINTF_2(test_s21_sprintf_u_dynamic_precision, "%.*u", 5, 123, int)
+TEST_SPRINTF_2(test_s21_sprintf_u_dynamic_width, "%*u", 10, 123, unsigned int)
+TEST_SPRINTF_2(test_s21_sprintf_u_dynamic_precision, "%.*u", 5, 123, unsigned int)
 TEST_SPRINTF_3(test_s21_sprintf_u_dynamic_width_precision, "%*.*u", 10, 5, 123,
-               int)
+               unsigned int)
 
-TEST_SPRINTF(test_s21_sprintf_u_width_negt, "%5u", -123, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_post, "%5u", 123, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_zero, "%5u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_ng_z, "%5u", -0, int)
-TEST_SPRINTF(test_s21_sprintf_u_prec_negt, "%.5u", -123, int)
-TEST_SPRINTF(test_s21_sprintf_u_prec_post, "%.5u", 123, int)
-TEST_SPRINTF(test_s21_sprintf_u_prec_zero_, "%.5u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_prec_ng_z, "%.5u", -0, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_prec_negt, "%10.5u", -123, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_prec_post, "%10.5u", 123, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_prec_zero, "%10.5u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_width_prec_ng_z, "%10.5u", -0, int)
-TEST_SPRINTF(test_s21_sprintf_u_zero_prec_negt, "%.0u", -123, int)
-TEST_SPRINTF(test_s21_sprintf_u_zero_prec_post, "%.0u", 123, int)
-TEST_SPRINTF(test_s21_sprintf_u_zero_prec_zero, "%.0u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_zero_prec_ng_z, "%.0u", -0, int)
-TEST_SPRINTF(test_s21_sprintf_u_zero_zero_negt, "%0u", -123, int)
-TEST_SPRINTF(test_s21_sprintf_u_zero_zero_post, "%0u", 123, int)
-TEST_SPRINTF(test_s21_sprintf_u_zero_zero_zero, "%0u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_zero_zero_ng_z, "%0u", -0, int)
-TEST_SPRINTF(test_s21_sprintf_u_zero_prec_zero_negt, "%0.0u", -123, int)
-TEST_SPRINTF(test_s21_sprintf_u_zero_prec_zero_post, "%0.0u", 123, int)
-TEST_SPRINTF(test_s21_sprintf_u_zero_prec_zero_zero, "%0.0u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_zero_prec_zero_ng_z, "%0.0u", -0, int)
-TEST_SPRINTF(test_s21_sprintf_u_zero_prec_minus_zero, "%-.0u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_zero_prec_plus_zero, "%+.0u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_zero_prec_space_zero, "% .0u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_zero_prec_hash_zero, "%#.0u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_zero_zero_minus_zero, "%-0u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_zero_zero_plus_zero, "%+0u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_zero_zero_space_zero, "% 0u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_zero_zero_hash_zero, "%#0u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_zero_width_zero_zero, "%00u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_zero_prec_zero_minus_zero, "%-0.0u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_zero_prec_zero_plus_zero, "%+0.0u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_zero_prec_zero_space_zero, "% 0.0u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_zero_prec_zero_hash_zero, "%#0.0u", 0, int)
-TEST_SPRINTF(test_s21_sprintf_u_zero_prec_width_zero_zero, "%00.0u", 0, int)
+TEST_SPRINTF(test_s21_sprintf_u_width_negt, "%5u", -123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_post, "%5u", 123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_zero, "%5u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_ng_z, "%5u", -0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_prec_negt, "%.5u", -123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_prec_post, "%.5u", 123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_prec_zero_, "%.5u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_prec_ng_z, "%.5u", -0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_prec_negt, "%10.5u", -123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_prec_post, "%10.5u", 123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_prec_zero, "%10.5u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_width_prec_ng_z, "%10.5u", -0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_zero_prec_negt, "%.0u", -123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_zero_prec_post, "%.0u", 123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_zero_prec_zero, "%.0u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_zero_prec_ng_z, "%.0u", -0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_zero_zero_negt, "%0u", -123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_zero_zero_post, "%0u", 123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_zero_zero_zero, "%0u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_zero_zero_ng_z, "%0u", -0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_zero_prec_zero_negt, "%0.0u", -123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_zero_prec_zero_post, "%0.0u", 123, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_zero_prec_zero_zero, "%0.0u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_zero_prec_zero_ng_z, "%0.0u", -0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_zero_prec_minus_zero, "%-.0u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_zero_prec_plus_zero, "%+.0u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_zero_prec_space_zero, "% .0u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_zero_prec_hash_zero, "%#.0u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_zero_zero_minus_zero, "%-0u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_zero_zero_plus_zero, "%+0u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_zero_zero_space_zero, "% 0u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_zero_zero_hash_zero, "%#0u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_zero_width_zero_zero, "%00u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_zero_prec_zero_minus_zero, "%-0.0u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_zero_prec_zero_plus_zero, "%+0.0u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_zero_prec_zero_space_zero, "% 0.0u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_zero_prec_zero_hash_zero, "%#0.0u", 0, unsigned int)
+TEST_SPRINTF(test_s21_sprintf_u_zero_prec_width_zero_zero, "%00.0u", 0, unsigned int)
 
 // Тесты для %o
 TEST_SPRINTF(test_s21_sprintf_o_minus_negt, "%-o", -123, unsigned int)
@@ -1359,11 +1359,436 @@ TEST_SPRINTF_2(test_s21_sprintf_X_dynamic_precision, "%.*X", 5, 123,
 TEST_SPRINTF_3(test_s21_sprintf_X_dynamic_width_precision, "%*.*X", 10, 5, 123,
                unsigned int)
 
+
+               // Тесты для %hu
+TEST_SPRINTF(test_s21_sprintf_hu_minus_negt, "%-hu", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_minus_post, "%-hu", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_minus_zero, "%-hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_minus_ng_z, "%-hu", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_plus_negt, "%+hu", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_plus_post, "%+hu", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_plus_zero, "%+hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_plus_ng_z, "%+hu", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_space_negt, "% hu", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_space_post, "% hu", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_space_zero, "% hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_space_ng_z, "% hu", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_hash_negt, "%#hu", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_hash_post, "%#hu", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_hash_zero, "%#hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_hash_ng_z, "%#hu", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_zero_negt, "%0hu", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_zero_post, "%0hu", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_zero_zero, "%0hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_zero_ng_z, "%0hu", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_minus_negt, "%-5hu", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_minus_post, "%-5hu", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_minus_zero, "%-5hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_minus_ng_z, "%-5hu", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_plus_negt, "%+5hu", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_plus_post, "%+5hu", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_plus_zero, "%+5hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_plus_ng_z, "%+5hu", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_space_negt, "% 5hu", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_space_post, "% 5hu", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_space_zero, "% 5hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_space_ng_z, "% 5hu", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_hash_negt, "%#5hu", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_hash_post, "%#5hu", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_hash_zero, "%#5hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_hash_ng_z, "%#5hu", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_zero_negt, "%05hu", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_zero_post, "%05hu", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_zero_zero, "%05hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_zero_ng_z, "%05hu", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_prec_minus_negt, "%-.5hu", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_prec_minus_post, "%-.5hu", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_prec_minus_zero, "%-.5hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_prec_minus_ng_z, "%-.5hu", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_prec_plus_negt, "%+.5hu", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_prec_plus_post, "%+.5hu", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_prec_plus_zero, "%+.5hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_prec_plus_ng_z, "%+.5hu", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_prec_space_negt, "% .5hu", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_prec_space_post, "% .5hu", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_prec_space_zero, "% .5hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_prec_space_ng_z, "% .5hu", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_prec_hash_negt, "%#.5hu", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_prec_hash_post, "%#.5hu", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_prec_hash_zero, "%#.5hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_prec_hash_ng_z, "%#.5hu", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_prec_zero_negt, "%0.5hu", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_prec_zero_post, "%0.5hu", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_prec_zero_zero, "%0.5hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_prec_zero_ng_z, "%0.5hu", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_prec_minus_negt, "%-10.5hu", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_prec_minus_post, "%-10.5hu", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_prec_minus_zero, "%-10.5hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_prec_minus_ng_z, "%-10.5hu", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_prec_plus_negt, "%+10.5hu", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_prec_plus_post, "%+10.5hu", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_prec_plus_zero, "%+10.5hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_prec_plus_ng_z, "%+10.5hu", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_prec_space_negt, "% 10.5hu", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_prec_space_post, "% 10.5hu", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_prec_space_zero, "% 10.5hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_prec_space_ng_z, "% 10.5hu", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_prec_hash_negt, "%#10.5hu", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_prec_hash_post, "%#10.5hu", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_prec_hash_zero, "%#10.5hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_prec_hash_ng_z, "%#10.5hu", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_prec_zero_negt, "%010.5hu", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_prec_zero_post, "%010.5hu", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_prec_zero_zero, "%010.5hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_prec_zero_ng_z, "%010.5hu", -0, unsigned short)
+
+TEST_SPRINTF_2(test_s21_sprintf_hu_dynamic_width, "%*hu", 10, 123, unsigned short)
+TEST_SPRINTF_2(test_s21_sprintf_hu_dynamic_precision, "%.*hu", 5, 123, unsigned short)
+TEST_SPRINTF_3(test_s21_sprintf_hu_dynamic_width_precision, "%*.*hu", 10, 5, 123, unsigned short)
+
+TEST_SPRINTF(test_s21_sprintf_hu_width_negt, "%5hu", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_post, "%5hu", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_zero, "%5hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_ng_z, "%5hu", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_prec_negt, "%.5hu", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_prec_post, "%.5hu", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_prec_zero_, "%.5hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_prec_ng_z, "%.5hu", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_prec_negt, "%10.5hu", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_prec_post, "%10.5hu", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_prec_zero, "%10.5hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_width_prec_ng_z, "%10.5hu", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_zero_prec_negt, "%.0hu", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_zero_prec_post, "%.0hu", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_zero_prec_zero, "%.0hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_zero_prec_ng_z, "%.0hu", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_zero_zero_negt, "%0hu", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_zero_zero_post, "%0hu", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_zero_zero_zero, "%0hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_zero_zero_ng_z, "%0hu", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_zero_prec_zero_negt, "%0.0hu", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_zero_prec_zero_post, "%0.0hu", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_zero_prec_zero_zero, "%0.0hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_zero_prec_zero_ng_z, "%0.0hu", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_zero_prec_minus_zero, "%-.0hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_zero_prec_plus_zero, "%+.0hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_zero_prec_space_zero, "% .0hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_zero_prec_hash_zero, "%#.0hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_zero_zero_minus_zero, "%-0hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_zero_zero_plus_zero, "%+0hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_zero_zero_space_zero, "% 0hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_zero_zero_hash_zero, "%#0hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_zero_width_zero_zero, "%00hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_zero_prec_zero_minus_zero, "%-0.0hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_zero_prec_zero_plus_zero, "%+0.0hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_zero_prec_zero_space_zero, "% 0.0hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_zero_prec_zero_hash_zero, "%#0.0hu", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hu_zero_prec_width_zero_zero, "%00.0hu", 0, unsigned short)
+
+// Тесты для %ho
+TEST_SPRINTF(test_s21_sprintf_ho_minus_negt, "%-ho", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_minus_post, "%-ho", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_minus_zero, "%-ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_minus_ng_z, "%-ho", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_plus_negt, "%+ho", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_plus_post, "%+ho", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_plus_zero, "%+ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_plus_ng_z, "%+ho", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_space_negt, "% ho", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_space_post, "% ho", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_space_zero, "% ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_space_ng_z, "% ho", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_hash_negt, "%#ho", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_hash_post, "%#ho", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_hash_zero, "%#ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_hash_ng_z, "%#ho", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_zero_negt, "%0ho", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_zero_post, "%0ho", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_zero_zero, "%0ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_zero_ng_z, "%0ho", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_minus_negt, "%-5ho", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_minus_post, "%-5ho", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_minus_zero, "%-5ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_minus_ng_z, "%-5ho", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_plus_negt, "%+5ho", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_plus_post, "%+5ho", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_plus_zero, "%+5ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_plus_ng_z, "%+5ho", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_space_negt, "% 5ho", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_space_post, "% 5ho", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_space_zero, "% 5ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_space_ng_z, "% 5ho", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_hash_negt, "%#5ho", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_hash_post, "%#5ho", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_hash_zero, "%#5ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_hash_ng_z, "%#5ho", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_zero_negt, "%05ho", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_zero_post, "%05ho", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_zero_zero, "%05ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_zero_ng_z, "%05ho", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_prec_minus_negt, "%-.5ho", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_prec_minus_post, "%-.5ho", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_prec_minus_zero, "%-.5ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_prec_minus_ng_z, "%-.5ho", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_prec_plus_negt, "%+.5ho", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_prec_plus_post, "%+.5ho", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_prec_plus_zero, "%+.5ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_prec_plus_ng_z, "%+.5ho", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_prec_space_negt, "% .5ho", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_prec_space_post, "% .5ho", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_prec_space_zero, "% .5ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_prec_space_ng_z, "% .5ho", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_prec_hash_negt, "%#.5ho", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_prec_hash_post, "%#.5ho", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_prec_hash_zero, "%#.5ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_prec_hash_ng_z, "%#.5ho", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_prec_zero_negt, "%0.5ho", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_prec_zero_post, "%0.5ho", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_prec_zero_zero, "%0.5ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_prec_zero_ng_z, "%0.5ho", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_prec_minus_negt, "%-10.5ho", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_prec_minus_post, "%-10.5ho", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_prec_minus_zero, "%-10.5ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_prec_minus_ng_z, "%-10.5ho", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_prec_plus_negt, "%+10.5ho", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_prec_plus_post, "%+10.5ho", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_prec_plus_zero, "%+10.5ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_prec_plus_ng_z, "%+10.5ho", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_prec_space_negt, "% 10.5ho", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_prec_space_post, "% 10.5ho", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_prec_space_zero, "% 10.5ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_prec_space_ng_z, "% 10.5ho", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_prec_hash_negt, "%#10.5ho", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_prec_hash_post, "%#10.5ho", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_prec_hash_zero, "%#10.5ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_prec_hash_ng_z, "%#10.5ho", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_prec_zero_negt, "%010.5ho", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_prec_zero_post, "%010.5ho", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_prec_zero_zero, "%010.5ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_prec_zero_ng_z, "%010.5ho", -0, unsigned short)
+TEST_SPRINTF_2(test_s21_sprintf_ho_dynamic_width, "%*ho", 10, 123, unsigned short)
+TEST_SPRINTF_2(test_s21_sprintf_ho_dynamic_precision, "%.*ho", 5, 123, unsigned short)
+TEST_SPRINTF_3(test_s21_sprintf_ho_dynamic_width_precision, "%*.*ho", 10, 5, 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_negt, "%5ho", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_post, "%5ho", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_zero, "%5ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_ng_z, "%5ho", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_prec_negt, "%.5ho", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_prec_post, "%.5ho", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_prec_zero_, "%.5ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_prec_ng_z, "%.5ho", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_prec_negt, "%10.5ho", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_prec_post, "%10.5ho", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_prec_zero, "%10.5ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_width_prec_ng_z, "%10.5ho", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_zero_prec_negt, "%.0ho", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_zero_prec_post, "%.0ho", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_zero_prec_zero, "%.0ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_zero_prec_ng_z, "%.0ho", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_zero_zero_negt, "%0ho", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_zero_zero_post, "%0ho", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_zero_zero_zero, "%0ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_zero_zero_ng_z, "%0ho", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_zero_prec_zero_negt, "%0.0ho", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_zero_prec_zero_post, "%0.0ho", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_zero_prec_zero_zero, "%0.0ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_zero_prec_zero_ng_z, "%0.0ho", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_zero_prec_minus_zero, "%-.0ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_zero_prec_plus_zero, "%+.0ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_zero_prec_space_zero, "% .0ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_zero_prec_hash_zero, "%#.0ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_zero_zero_minus_zero, "%-0ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_zero_zero_plus_zero, "%+0ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_zero_zero_space_zero, "% 0ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_zero_zero_hash_zero, "%#0ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_zero_width_zero_zero, "%00ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_zero_prec_zero_minus_zero, "%-0.0ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_zero_prec_zero_plus_zero, "%+0.0ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_zero_prec_zero_space_zero, "% 0.0ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_zero_prec_zero_hash_zero, "%#0.0ho", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_ho_zero_prec_width_zero_zero, "%00.0ho", 0, unsigned short)
+
+// Тесты для %hx
+TEST_SPRINTF(test_s21_sprintf_hx_minus_negt, "%-hx", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_minus_post, "%-hx", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_minus_zero, "%-hx", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_minus_ng_z, "%-hx", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_plus_negt, "%+hx", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_plus_post, "%+hx", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_plus_zero, "%+hx", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_plus_ng_z, "%+hx", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_space_negt, "% hx", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_space_post, "% hx", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_space_zero, "% hx", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_space_ng_z, "% hx", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_hash_negt, "%#hx", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_hash_post, "%#hx", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_hash_zero, "%#hx", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_hash_ng_z, "%#hx", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_zero_negt, "%0hx", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_zero_post, "%0hx", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_zero_zero, "%0hx", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_zero_ng_z, "%0hx", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_width_minus_negt, "%-5hx", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_width_minus_post, "%-5hx", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_width_minus_zero, "%-5hx", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_width_minus_ng_z, "%-5hx", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_width_plus_negt, "%+5hx", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_width_plus_post, "%+5hx", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_width_plus_zero, "%+5hx", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_width_plus_ng_z, "%+5hx", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_width_space_negt, "% 5hx", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_width_space_post, "% 5hx", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_width_space_zero, "% 5hx", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_width_space_ng_z, "% 5hx", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_width_hash_negt, "%#5hx", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_width_hash_post, "%#5hx", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_width_hash_zero, "%#5hx", 0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_width_hash_ng_z, "%#5hx", -0, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_width_zero_negt, "%05hx", -123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_width_zero_post, "%05hx", 123, unsigned short)
+TEST_SPRINTF(test_s21_sprintf_hx_width_zero_zero, "%05hx", 0, unsigned short)
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ================================================================
 // Тесты для флагов форматирования (f, e, E, g, G)
 // ================================================================
 
+
+TEST_SPRINTF(test_s21_sprintf_f_minus_negt, "%-f", -123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_minus_post, "%-f", 123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_minus_zero_, "%-f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_minus_ng_z, "%-f", -0, double)
+TEST_SPRINTF(test_s21_sprintf_f_plus_negt, "%+f", -123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_plus_post, "%+f", 123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_plus_zero, "%+f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_plus_ng_z, "%+f", -0, double)
+TEST_SPRINTF(test_s21_sprintf_f_space_negt, "% f", -123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_space_post, "% f", 123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_space_zero, "% f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_space_ng_z, "% f", -0, double)
+TEST_SPRINTF(test_s21_sprintf_f_hash_negt, "%#f", -123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_hash_post, "%#f", 123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_hash_zero, "%#f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_hash_ng_z, "%#f", -0, double)
+TEST_SPRINTF(test_s21_sprintf_f_zero_negt, "%0f", -123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_zero_post, "%0f", 123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_zero_zero, "%0f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_zero_ng_z, "%0f", -0, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_minus_negt, "%-5f", -123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_minus_post, "%-5f", 123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_minus_zero, "%-5f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_minus_ng_z, "%-5f", -0, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_plus_negt, "%+5f", -123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_plus_post, "%+5f", 123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_plus_zero, "%+5f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_plus_ng_z, "%+5f", -0, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_space_negt, "% 5f", -123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_space_post, "% 5f", 123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_space_zero, "% 5f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_space_ng_z, "% 5f", -0, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_hash_negt, "%#5f", -123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_hash_post, "%#5f", 123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_hash_zero, "%#5f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_hash_ng_z, "%#5f", -0, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_zero_negt, "%05f", -123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_zero_post, "%05f", 123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_zero_zero, "%05f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_zero_ng_z, "%05f", -0, double)
+TEST_SPRINTF(test_s21_sprintf_f_prec_minus_negt, "%-.5f", -1123.45623, double)
+TEST_SPRINTF(test_s21_sprintf_f_prec_minus_post, "%-.5f", 123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_prec_minus_zero, "%-.5f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_prec_minus_ng_z, "%-.5f", -0, double)
+TEST_SPRINTF(test_s21_sprintf_f_prec_plus_negt, "%+.5f", -123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_prec_plus_post, "%+.5f", 123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_prec_plus_zero, "%+.5f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_prec_plus_ng_z, "%+.5f", -0, double)
+TEST_SPRINTF(test_s21_sprintf_f_prec_space_negt, "% .5f", -123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_prec_space_post, "% .5f", 123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_prec_space_zero, "% .5f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_prec_space_ng_z, "% .5f", -0, double)
+TEST_SPRINTF(test_s21_sprintf_f_prec_hash_negt, "%#.5f", -123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_prec_hash_post, "%#.5f", 123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_prec_hash_zero, "%#.5f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_prec_hash_ng_z, "%#.5f", -0, double)
+TEST_SPRINTF(test_s21_sprintf_f_prec_zero_negt, "%0.5f", -123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_prec_zero_post, "%0.5f", 123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_prec_zero_zero, "%0.5f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_prec_zero_ng_z, "%0.5f", -0, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_prec_minus_negt, "%-10.5f", -123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_prec_minus_post, "%-10.5f", 123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_prec_minus_zero, "%-10.5f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_prec_minus_ng_z, "%-10.5f", -0, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_prec_plus_negt, "%+10.5f", -123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_prec_plus_post, "%+10.5f", 123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_prec_plus_zero, "%+10.5f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_prec_plus_ng_z, "%+10.5f", -0, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_prec_space_negt, "% 10.5f", -123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_prec_space_post, "% 10.5f", 123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_prec_space_zero, "% 10.5f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_prec_space_ng_z, "% 10.5f", -0, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_prec_hash_negt, "%#10.5f", -123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_prec_hash_post, "%#10.5f", 123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_prec_hash_zero, "%#10.5f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_prec_hash_ng_z, "%#10.5f", -0, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_prec_zero_negt, "%010.5f", -123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_prec_zero_post, "%010.5f", 123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_prec_zero_zero, "%010.5f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_prec_zero_ng_z, "%010.5f", -0, double)
+TEST_SPRINTF_2(test_s21_sprintf_f_dynamic_width, "%*f", 10, 123.456, double)
+TEST_SPRINTF_2(test_s21_sprintf_f_dynamic_precision, "%.*f", 5, 123.456, double)
+TEST_SPRINTF_3(test_s21_sprintf_f_dynamic_width_precision, "%*.*f", 10, 5, 123.456,double)
+TEST_SPRINTF(test_s21_sprintf_f_width_negt, "%5f", -123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_post, "%5f", 123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_zero, "%5f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_ng_z, "%5f", -0, double)
+TEST_SPRINTF(test_s21_sprintf_f_prec_negt, "%.5f", -123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_prec_post, "%.5f", 123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_prec_zero_, "%.5f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_prec_ng_z, "%.5f", -0, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_prec_negt, "%10.5f", -123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_prec_post, "%10.5f", 123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_prec_zero, "%10.5f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_width_prec_ng_z, "%10.5f", -0, double)
+TEST_SPRINTF(test_s21_sprintf_f_zero_prec_negt, "%.0f", -123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_zero_prec_post, "%.0f", 123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_zero_prec_zero, "%.0f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_zero_prec_ng_z, "%.0f", -0, double)
+TEST_SPRINTF(test_s21_sprintf_f_zero_zero_negt, "%0f", -123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_zero_zero_post, "%0f", 123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_zero_zero_zero, "%0f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_zero_zero_ng_z, "%0f", -0, double)
+TEST_SPRINTF(test_s21_sprintf_f_zero_prec_zero_negt, "%0.0f", -123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_zero_prec_zero_post, "%0.0f", 123.456, double)
+TEST_SPRINTF(test_s21_sprintf_f_zero_prec_zero_zero, "%0.0f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_zero_prec_zero_ng_z, "%0.0f", -0, double)
+TEST_SPRINTF(test_s21_sprintf_f_zero_prec_minus_zero, "%-.0f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_zero_prec_plus_zero, "%+.0f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_zero_prec_space_zero, "% .0f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_zero_prec_hash_zero, "%#.0f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_zero_zero_minus_zero, "%-0f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_zero_zero_plus_zero, "%+0f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_zero_zero_space_zero, "% 0f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_zero_zero_hash_zero, "%#0f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_zero_width_zero_zero, "%00f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_zero_prec_zero_minus_zero, "%-0.0f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_zero_prec_zero_plus_zero, "%+0.0f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_zero_prec_zero_space_zero, "% 0.0f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_zero_prec_zero_hash_zero, "%#0.0f", 0, double)
+TEST_SPRINTF(test_s21_sprintf_f_zero_prec_width_zero_zero, "%00.0f", 0, double)
 // Тесты для %f
+
 TEST_SPRINTF(test_s21_sprintf_f_minus, "%-15f", 123.456, double)
 TEST_SPRINTF(test_s21_sprintf_f_plus, "%+f", 123.456, double)
 TEST_SPRINTF(test_s21_sprintf_f_space, "% f", 123.456, double)
@@ -1371,9 +1796,6 @@ TEST_SPRINTF(test_s21_sprintf_f_zero_form, "%015f", 123.456, double)
 TEST_SPRINTF(test_s21_sprintf_f_width, "%15f", 123.456, double)
 TEST_SPRINTF(test_s21_sprintf_f_precision, "%.2f", 123.456, double)
 TEST_SPRINTF(test_s21_sprintf_f_width_precision, "%15.2f", 123.456, double)
-TEST_SPRINTF_2(test_s21_sprintf_f_star_width, "%*f", 15, 123.456, double)
-TEST_SPRINTF_2(test_s21_sprintf_f_star_precision, "%.*f", 2, 123.456, double)
-TEST_SPRINTF_3(test_s21_sprintf_f_star_both, "%*.*f", 15, 2, 123.456, double)
 
 // Тесты для %e
 TEST_SPRINTF(test_s21_sprintf_e_minus, "%-15e", 123.456, double)
@@ -1474,961 +1896,1360 @@ END_TEST
 Suite *sprintf_suite(void) {
   Suite *s = suite_create("test_sprintf");
   TCase *tc = tcase_create("Core");
-  tcase_add_test(tc, test_s21_sprintf_d);
-  tcase_add_test(tc, test_s21_sprintf_d_min);
-  tcase_add_test(tc, test_s21_sprintf_d_max);
-  tcase_add_test(tc, test_s21_sprintf_i);
-  tcase_add_test(tc, test_s21_sprintf_i_min);
-  tcase_add_test(tc, test_s21_sprintf_i_max);
-  tcase_add_test(tc, test_s21_sprintf_o);
-  tcase_add_test(tc, test_s21_sprintf_o_min);
-  tcase_add_test(tc, test_s21_sprintf_o_max);
-  tcase_add_test(tc, test_s21_sprintf_u);
-  tcase_add_test(tc, test_s21_sprintf_u_min);
-  tcase_add_test(tc, test_s21_sprintf_u_max);
-  tcase_add_test(tc, test_s21_sprintf_x);
-  tcase_add_test(tc, test_s21_sprintf_x_min);
-  tcase_add_test(tc, test_s21_sprintf_x_max);
-  tcase_add_test(tc, test_s21_sprintf_X);
-  tcase_add_test(tc, test_s21_sprintf_X_min);
-  tcase_add_test(tc, test_s21_sprintf_X_max);
-  tcase_add_test(tc, test_s21_sprintf_hd);
-  tcase_add_test(tc, test_s21_sprintf_hd_min);
-  tcase_add_test(tc, test_s21_sprintf_hd_max);
-  tcase_add_test(tc, test_s21_sprintf_hi);
-  tcase_add_test(tc, test_s21_sprintf_hi_min);
-  tcase_add_test(tc, test_s21_sprintf_hi_max);
-  tcase_add_test(tc, test_s21_sprintf_ho);
-  tcase_add_test(tc, test_s21_sprintf_ho_min);
-  tcase_add_test(tc, test_s21_sprintf_ho_max);
-  tcase_add_test(tc, test_s21_sprintf_hu);
-  tcase_add_test(tc, test_s21_sprintf_hu_min);
-  tcase_add_test(tc, test_s21_sprintf_hu_max);
-  tcase_add_test(tc, test_s21_sprintf_hx);
-  tcase_add_test(tc, test_s21_sprintf_hx_min);
-  tcase_add_test(tc, test_s21_sprintf_hx_max);
-  tcase_add_test(tc, test_s21_sprintf_hX);
-  tcase_add_test(tc, test_s21_sprintf_hX_min);
-  tcase_add_test(tc, test_s21_sprintf_hX_max);
-  tcase_add_test(tc, test_s21_sprintf_hhd);
-  tcase_add_test(tc, test_s21_sprintf_hhd_min);
-  tcase_add_test(tc, test_s21_sprintf_hhd_max);
-  tcase_add_test(tc, test_s21_sprintf_hhi);
-  tcase_add_test(tc, test_s21_sprintf_hhi_min);
-  tcase_add_test(tc, test_s21_sprintf_hhi_max);
-  tcase_add_test(tc, test_s21_sprintf_hho);
-  tcase_add_test(tc, test_s21_sprintf_hho_min);
-  tcase_add_test(tc, test_s21_sprintf_hho_max);
-  tcase_add_test(tc, test_s21_sprintf_hhu);
-  tcase_add_test(tc, test_s21_sprintf_hhu_min);
-  tcase_add_test(tc, test_s21_sprintf_hhu_max);
-  tcase_add_test(tc, test_s21_sprintf_hhx);
-  tcase_add_test(tc, test_s21_sprintf_hhx_min);
-  tcase_add_test(tc, test_s21_sprintf_hhx_max);
-  tcase_add_test(tc, test_s21_sprintf_hhX);
-  tcase_add_test(tc, test_s21_sprintf_hhX_min);
-  tcase_add_test(tc, test_s21_sprintf_hhX_max);
-  tcase_add_test(tc, test_s21_sprintf_ld);
-  tcase_add_test(tc, test_s21_sprintf_ld_min);
-  tcase_add_test(tc, test_s21_sprintf_ld_max);
-  tcase_add_test(tc, test_s21_sprintf_li);
-  tcase_add_test(tc, test_s21_sprintf_li_min);
-  tcase_add_test(tc, test_s21_sprintf_li_max);
-  tcase_add_test(tc, test_s21_sprintf_lo);
-  tcase_add_test(tc, test_s21_sprintf_lo_min);
-  tcase_add_test(tc, test_s21_sprintf_lo_max);
-  tcase_add_test(tc, test_s21_sprintf_lu);
-  tcase_add_test(tc, test_s21_sprintf_lu_min);
-  tcase_add_test(tc, test_s21_sprintf_lu_max);
-  tcase_add_test(tc, test_s21_sprintf_lx);
-  tcase_add_test(tc, test_s21_sprintf_lx_min);
-  tcase_add_test(tc, test_s21_sprintf_lx_max);
-  tcase_add_test(tc, test_s21_sprintf_lX);
-  tcase_add_test(tc, test_s21_sprintf_lX_min);
-  tcase_add_test(tc, test_s21_sprintf_lX_max);
-  tcase_add_test(tc, test_s21_sprintf_lld);
-  tcase_add_test(tc, test_s21_sprintf_lld_min);
-  tcase_add_test(tc, test_s21_sprintf_lld_max);
-  tcase_add_test(tc, test_s21_sprintf_lli);
-  tcase_add_test(tc, test_s21_sprintf_lli_min);
-  tcase_add_test(tc, test_s21_sprintf_lli_max);
-  tcase_add_test(tc, test_s21_sprintf_llo);
-  tcase_add_test(tc, test_s21_sprintf_llo_min);
-  tcase_add_test(tc, test_s21_sprintf_llo_max);
-  tcase_add_test(tc, test_s21_sprintf_llu);
-  tcase_add_test(tc, test_s21_sprintf_llu_min);
-  tcase_add_test(tc, test_s21_sprintf_llu_max);
-  tcase_add_test(tc, test_s21_sprintf_llx);
-  tcase_add_test(tc, test_s21_sprintf_llx_min);
-  tcase_add_test(tc, test_s21_sprintf_llx_max);
-  tcase_add_test(tc, test_s21_sprintf_llX);
-  tcase_add_test(tc, test_s21_sprintf_llX_min);
-  tcase_add_test(tc, test_s21_sprintf_llX_max);
-  tcase_add_test(tc, test_s21_sprintf_c);
-  tcase_add_test(tc, test_s21_sprintf_c_min);
-  tcase_add_test(tc, test_s21_sprintf_c_max);
-  tcase_add_test(tc, test_s21_sprintf_c_nonprint);
-  tcase_add_test(tc, test_s21_sprintf_c_zero);
-  tcase_add_test(tc, test_s21_sprintf_c_newline);
-  tcase_add_test(tc, test_s21_sprintf_c_tab);
-  tcase_add_test(tc, test_s21_sprintf_c_null_char);
-  tcase_add_test(tc, test_s21_sprintf_s);
-  tcase_add_test(tc, test_s21_sprintf_s_special);
-  tcase_add_test(tc, test_s21_sprintf_s_special_chars);
-  tcase_add_test(tc, test_s21_sprintf_s_unicode);
-  tcase_add_test(tc, test_s21_sprintf_s_null);
-  tcase_add_test(tc, test_s21_sprintf_s_empty);
-  tcase_add_test(tc, test_s21_sprintf_e_zero);
-  tcase_add_test(tc, test_s21_sprintf_e_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_E_zero);
-  tcase_add_test(tc, test_s21_sprintf_E_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_f_zero);
-  tcase_add_test(tc, test_s21_sprintf_f_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_g_zero);
-  tcase_add_test(tc, test_s21_sprintf_g_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_G_zero);
-  tcase_add_test(tc, test_s21_sprintf_G_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_le_zero);
-  tcase_add_test(tc, test_s21_sprintf_le_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_lE_zero);
-  tcase_add_test(tc, test_s21_sprintf_lE_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_lf_zero);
-  tcase_add_test(tc, test_s21_sprintf_lf_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_lg_zero);
-  tcase_add_test(tc, test_s21_sprintf_lg_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_lG_zero);
-  tcase_add_test(tc, test_s21_sprintf_lG_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_Le_zero);
-  tcase_add_test(tc, test_s21_sprintf_Le_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_LE_zero);
-  tcase_add_test(tc, test_s21_sprintf_LE_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_Lf_zero);
-  tcase_add_test(tc, test_s21_sprintf_Lf_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_Lg_zero);
-  tcase_add_test(tc, test_s21_sprintf_Lg_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_LG_zero);
-  tcase_add_test(tc, test_s21_sprintf_LG_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_e);
-  tcase_add_test(tc, test_s21_sprintf_e_neg);
-  tcase_add_test(tc, test_s21_sprintf_e_big);
-  tcase_add_test(tc, test_s21_sprintf_e_small);
-  tcase_add_test(tc, test_s21_sprintf_E);
-  tcase_add_test(tc, test_s21_sprintf_E_neg);
-  tcase_add_test(tc, test_s21_sprintf_E_big);
-  tcase_add_test(tc, test_s21_sprintf_E_small);
-  tcase_add_test(tc, test_s21_sprintf_f);
-  tcase_add_test(tc, test_s21_sprintf_f2);
-  tcase_add_test(tc, test_s21_sprintf_f_neg);
-  tcase_add_test(tc, test_s21_sprintf_f_small);
-  tcase_add_test(tc, test_s21_sprintf_g);
-  tcase_add_test(tc, test_s21_sprintf_g2);
-  tcase_add_test(tc, test_s21_sprintf_g3);
-  tcase_add_test(tc, test_s21_sprintf_g_neg);
-  tcase_add_test(tc, test_s21_sprintf_g_big);
-  tcase_add_test(tc, test_s21_sprintf_g_small);
-  tcase_add_test(tc, test_s21_sprintf_G);
-  tcase_add_test(tc, test_s21_sprintf_G2);
-  tcase_add_test(tc, test_s21_sprintf_G3);
-  tcase_add_test(tc, test_s21_sprintf_G_neg);
-  tcase_add_test(tc, test_s21_sprintf_G_big);
-  tcase_add_test(tc, test_s21_sprintf_G_small);
-  tcase_add_test(tc, test_s21_sprintf_le);
-  tcase_add_test(tc, test_s21_sprintf_le_neg);
-  tcase_add_test(tc, test_s21_sprintf_le_big);
-  tcase_add_test(tc, test_s21_sprintf_le_small);
-  tcase_add_test(tc, test_s21_sprintf_lE);
-  tcase_add_test(tc, test_s21_sprintf_lE_neg);
-  tcase_add_test(tc, test_s21_sprintf_lE_big);
-  tcase_add_test(tc, test_s21_sprintf_lE_small);
-  tcase_add_test(tc, test_s21_sprintf_lf);
-  tcase_add_test(tc, test_s21_sprintf_lf2);
-  tcase_add_test(tc, test_s21_sprintf_lf_neg);
-  tcase_add_test(tc, test_s21_sprintf_lf_small);
-  tcase_add_test(tc, test_s21_sprintf_lg);
-  tcase_add_test(tc, test_s21_sprintf_lg2);
-  tcase_add_test(tc, test_s21_sprintf_lg3);
-  tcase_add_test(tc, test_s21_sprintf_lg_neg);
-  tcase_add_test(tc, test_s21_sprintf_lg_big);
-  tcase_add_test(tc, test_s21_sprintf_lg_small);
-  tcase_add_test(tc, test_s21_sprintf_lG);
-  tcase_add_test(tc, test_s21_sprintf_lG2);
-  tcase_add_test(tc, test_s21_sprintf_lG3);
-  tcase_add_test(tc, test_s21_sprintf_lG_neg);
-  tcase_add_test(tc, test_s21_sprintf_lG_big);
-  tcase_add_test(tc, test_s21_sprintf_lG_small);
-  tcase_add_test(tc, test_s21_sprintf_Le);
-  tcase_add_test(tc, test_s21_sprintf_Le_neg);
-  tcase_add_test(tc, test_s21_sprintf_Le_big);
-  tcase_add_test(tc, test_s21_sprintf_Le_small);
-  tcase_add_test(tc, test_s21_sprintf_LE);
-  tcase_add_test(tc, test_s21_sprintf_LE_neg);
-  tcase_add_test(tc, test_s21_sprintf_LE_big);
-  tcase_add_test(tc, test_s21_sprintf_LE_small);
-  tcase_add_test(tc, test_s21_sprintf_Lf);
-  tcase_add_test(tc, test_s21_sprintf_Lf2);
-  tcase_add_test(tc, test_s21_sprintf_Lf_neg);
-  tcase_add_test(tc, test_s21_sprintf_Lf_small);
-  tcase_add_test(tc, test_s21_sprintf_Lg);
-  tcase_add_test(tc, test_s21_sprintf_Lg2);
-  tcase_add_test(tc, test_s21_sprintf_Lg3);
-  tcase_add_test(tc, test_s21_sprintf_Lg_neg);
-  tcase_add_test(tc, test_s21_sprintf_Lg_big);
-  tcase_add_test(tc, test_s21_sprintf_Lg_small);
-  tcase_add_test(tc, test_s21_sprintf_LG);
-  tcase_add_test(tc, test_s21_sprintf_LG2);
-  tcase_add_test(tc, test_s21_sprintf_LG3);
-  tcase_add_test(tc, test_s21_sprintf_LG_neg);
-  tcase_add_test(tc, test_s21_sprintf_LG_big);
-  tcase_add_test(tc, test_s21_sprintf_LG_small);
-  tcase_add_test(tc, test_s21_sprintf_g_switch_to_e);
-  tcase_add_test(tc, test_s21_sprintf_g_switch_to_f);
-  tcase_add_test(tc, test_s21_sprintf_g_switch);
-  tcase_add_test(tc, test_s21_sprintf_G_switch_to_e);
-  tcase_add_test(tc, test_s21_sprintf_G_switch_to_f);
-  tcase_add_test(tc, test_s21_sprintf_G_switch);
-  tcase_add_test(tc, test_s21_sprintf_e_nan);
-  tcase_add_test(tc, test_s21_sprintf_e_inf);
-  tcase_add_test(tc, test_s21_sprintf_e_neg_inf);
-  tcase_add_test(tc, test_s21_sprintf_E_nan);
-  tcase_add_test(tc, test_s21_sprintf_E_inf);
-  tcase_add_test(tc, test_s21_sprintf_E_neg_inf);
-  tcase_add_test(tc, test_s21_sprintf_f_nan);
-  tcase_add_test(tc, test_s21_sprintf_f_inf);
-  tcase_add_test(tc, test_s21_sprintf_f_neg_inf);
-  tcase_add_test(tc, test_s21_sprintf_g_nan);
-  tcase_add_test(tc, test_s21_sprintf_g_inf);
-  tcase_add_test(tc, test_s21_sprintf_g_neg_inf);
-  tcase_add_test(tc, test_s21_sprintf_G_nan);
-  tcase_add_test(tc, test_s21_sprintf_G_inf);
-  tcase_add_test(tc, test_s21_sprintf_G_neg_inf);
-  tcase_add_test(tc, test_s21_sprintf_le_nan);
-  tcase_add_test(tc, test_s21_sprintf_le_inf);
-  tcase_add_test(tc, test_s21_sprintf_le_neg_inf);
-  tcase_add_test(tc, test_s21_sprintf_lE_nan);
-  tcase_add_test(tc, test_s21_sprintf_lE_inf);
-  tcase_add_test(tc, test_s21_sprintf_lE_neg_inf);
-  tcase_add_test(tc, test_s21_sprintf_lf_nan);
-  tcase_add_test(tc, test_s21_sprintf_lf_inf);
-  tcase_add_test(tc, test_s21_sprintf_lf_neg_inf);
-  tcase_add_test(tc, test_s21_sprintf_lg_nan);
-  tcase_add_test(tc, test_s21_sprintf_lg_inf);
-  tcase_add_test(tc, test_s21_sprintf_lg_neg_inf);
-  tcase_add_test(tc, test_s21_sprintf_lG_nan);
-  tcase_add_test(tc, test_s21_sprintf_lG_inf);
-  tcase_add_test(tc, test_s21_sprintf_lG_neg_inf);
-  tcase_add_test(tc, test_s21_sprintf_Le_nan);
-  tcase_add_test(tc, test_s21_sprintf_Le_inf);
-  tcase_add_test(tc, test_s21_sprintf_Le_neg_inf);
-  tcase_add_test(tc, test_s21_sprintf_LE_nan);
-  tcase_add_test(tc, test_s21_sprintf_LE_inf);
-  tcase_add_test(tc, test_s21_sprintf_LE_neg_inf);
-  tcase_add_test(tc, test_s21_sprintf_Lf_nan);
-  tcase_add_test(tc, test_s21_sprintf_Lf_inf);
-  tcase_add_test(tc, test_s21_sprintf_Lf_neg_inf);
-  tcase_add_test(tc, test_s21_sprintf_Lg_nan);
-  tcase_add_test(tc, test_s21_sprintf_Lg_inf);
-  tcase_add_test(tc, test_s21_sprintf_Lg_neg_inf);
-  tcase_add_test(tc, test_s21_sprintf_LG_nan);
-  tcase_add_test(tc, test_s21_sprintf_LG_inf);
-  tcase_add_test(tc, test_s21_sprintf_LG_neg_inf);
-  tcase_add_test(tc, test_s21_sprintf_p);
-  tcase_add_test(tc, test_s21_sprintf_p_int);
-  tcase_add_test(tc, test_s21_sprintf_p_unsigned_int);
-  tcase_add_test(tc, test_s21_sprintf_p_double);
-  tcase_add_test(tc, test_s21_sprintf_p_null);
-  tcase_add_test(tc, test_s21_sprintf_double_percent);
-  tcase_add_test(tc, test_s21_sprintf_percent_combined);
-  tcase_add_test(tc, test_s21_sprintf_n);
-  tcase_add_test(tc, test_s21_sprintf_n_middle);
-  tcase_add_test(tc, test_s21_sprintf_hn);
-  tcase_add_test(tc, test_s21_sprintf_hhn);
-  tcase_add_test(tc, test_s21_sprintf_ln);
-  tcase_add_test(tc, test_s21_sprintf_lln);
-  tcase_add_test(tc, test_s21_sprintf_p_null_int);
-  tcase_add_test(tc, test_s21_sprintf_p_struct);
-  tcase_add_test(tc, test_s21_sprintf_p_func);
-  tcase_add_test(tc, test_s21_sprintf_c_all_chars);
-  tcase_add_test(tc, test_s21_sprintf_d_minus_negt);
-  tcase_add_test(tc, test_s21_sprintf_d_minus_post);
-  tcase_add_test(tc, test_s21_sprintf_d_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_minus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_d_plus_negt);
-  tcase_add_test(tc, test_s21_sprintf_d_plus_post);
-  tcase_add_test(tc, test_s21_sprintf_d_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_plus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_d_space_negt);
-  tcase_add_test(tc, test_s21_sprintf_d_space_post);
-  tcase_add_test(tc, test_s21_sprintf_d_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_space_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_d_hash_negt);
-  tcase_add_test(tc, test_s21_sprintf_d_hash_post);
-  tcase_add_test(tc, test_s21_sprintf_d_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_hash_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_d_zero_negt);
-  tcase_add_test(tc, test_s21_sprintf_d_zero_post);
-  tcase_add_test(tc, test_s21_sprintf_d_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_zero_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_d_width_minus_negt);
-  tcase_add_test(tc, test_s21_sprintf_d_width_minus_post);
-  tcase_add_test(tc, test_s21_sprintf_d_width_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_width_minus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_d_width_plus_negt);
-  tcase_add_test(tc, test_s21_sprintf_d_width_plus_post);
-  tcase_add_test(tc, test_s21_sprintf_d_width_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_width_plus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_d_width_space_negt);
-  tcase_add_test(tc, test_s21_sprintf_d_width_space_post);
-  tcase_add_test(tc, test_s21_sprintf_d_width_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_width_space_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_d_width_hash_negt);
-  tcase_add_test(tc, test_s21_sprintf_d_width_hash_post);
-  tcase_add_test(tc, test_s21_sprintf_d_width_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_width_hash_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_d_width_zero_negt);
-  tcase_add_test(tc, test_s21_sprintf_d_width_zero_post);
-  tcase_add_test(tc, test_s21_sprintf_d_width_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_width_zero_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_d_prec_minus_negt);
-  tcase_add_test(tc, test_s21_sprintf_d_prec_minus_post);
-  tcase_add_test(tc, test_s21_sprintf_d_prec_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_prec_minus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_d_prec_plus_negt);
-  tcase_add_test(tc, test_s21_sprintf_d_prec_plus_post);
-  tcase_add_test(tc, test_s21_sprintf_d_prec_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_prec_plus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_d_prec_space_negt);
-  tcase_add_test(tc, test_s21_sprintf_d_prec_space_post);
-  tcase_add_test(tc, test_s21_sprintf_d_prec_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_prec_space_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_d_prec_hash_negt);
-  tcase_add_test(tc, test_s21_sprintf_d_prec_hash_post);
-  tcase_add_test(tc, test_s21_sprintf_d_prec_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_prec_hash_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_d_prec_zero_negt);
-  tcase_add_test(tc, test_s21_sprintf_d_prec_zero_post);
-  tcase_add_test(tc, test_s21_sprintf_d_prec_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_prec_zero_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_d_width_prec_minus_negt);
-  tcase_add_test(tc, test_s21_sprintf_d_width_prec_minus_post);
-  tcase_add_test(tc, test_s21_sprintf_d_width_prec_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_width_prec_minus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_d_width_prec_plus_negt);
-  tcase_add_test(tc, test_s21_sprintf_d_width_prec_plus_post);
-  tcase_add_test(tc, test_s21_sprintf_d_width_prec_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_width_prec_plus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_d_width_prec_space_negt);
-  tcase_add_test(tc, test_s21_sprintf_d_width_prec_space_post);
-  tcase_add_test(tc, test_s21_sprintf_d_width_prec_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_width_prec_space_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_d_width_prec_hash_negt);
-  tcase_add_test(tc, test_s21_sprintf_d_width_prec_hash_post);
-  tcase_add_test(tc, test_s21_sprintf_d_width_prec_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_width_prec_hash_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_d_width_prec_zero_negt);
-  tcase_add_test(tc, test_s21_sprintf_d_width_prec_zero_post);
-  tcase_add_test(tc, test_s21_sprintf_d_width_prec_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_width_prec_zero_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_d_dynamic_width);
-  tcase_add_test(tc, test_s21_sprintf_d_dynamic_precision);
-  tcase_add_test(tc, test_s21_sprintf_d_dynamic_width_precision);
-  tcase_add_test(tc, test_s21_sprintf_d_width_negt);
-  tcase_add_test(tc, test_s21_sprintf_d_width_post);
-  tcase_add_test(tc, test_s21_sprintf_d_width_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_width_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_d_prec_negt);
-  tcase_add_test(tc, test_s21_sprintf_d_prec_post);
-  tcase_add_test(tc, test_s21_sprintf_d_prec_zero_);
-  tcase_add_test(tc, test_s21_sprintf_d_prec_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_d_width_prec_negt);
-  tcase_add_test(tc, test_s21_sprintf_d_width_prec_post);
-  tcase_add_test(tc, test_s21_sprintf_d_width_prec_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_width_prec_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_d_zero_prec_negt);
-  tcase_add_test(tc, test_s21_sprintf_d_zero_prec_post);
-  tcase_add_test(tc, test_s21_sprintf_d_zero_prec_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_zero_prec_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_d_zero_zero_negt);
-  tcase_add_test(tc, test_s21_sprintf_d_zero_zero_post);
-  tcase_add_test(tc, test_s21_sprintf_d_zero_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_zero_zero_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_d_zero_prec_zero_negt);
-  tcase_add_test(tc, test_s21_sprintf_d_zero_prec_zero_post);
-  tcase_add_test(tc, test_s21_sprintf_d_zero_prec_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_zero_prec_zero_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_d_zero_prec_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_zero_prec_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_zero_prec_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_zero_prec_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_zero_zero_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_zero_zero_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_zero_zero_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_zero_zero_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_zero_width_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_zero_prec_zero_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_zero_prec_zero_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_zero_prec_zero_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_zero_prec_zero_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_d_zero_prec_width_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_i_minus);
-  tcase_add_test(tc, test_s21_sprintf_i_plus);
-  tcase_add_test(tc, test_s21_sprintf_i_space);
-  tcase_add_test(tc, test_s21_sprintf_i_zero_form);
-  tcase_add_test(tc, test_s21_sprintf_i_width);
-  tcase_add_test(tc, test_s21_sprintf_i_precision);
-  tcase_add_test(tc, test_s21_sprintf_i_width_precision);
-  tcase_add_test(tc, test_s21_sprintf_i_star_width);
-  tcase_add_test(tc, test_s21_sprintf_i_star_precision);
-  tcase_add_test(tc, test_s21_sprintf_i_star_both);
-  tcase_add_test(tc, test_s21_sprintf_i_neg);
-  tcase_add_test(tc, test_s21_sprintf_i_neg_plus);
-  tcase_add_test(tc, test_s21_sprintf_i_neg_space);
-  tcase_add_test(tc, test_s21_sprintf_i_zero_prec);
-  tcase_add_test(tc, test_s21_sprintf_u_minus_negt);
-  tcase_add_test(tc, test_s21_sprintf_u_minus_post);
-  tcase_add_test(tc, test_s21_sprintf_u_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_minus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_u_plus_negt);
-  tcase_add_test(tc, test_s21_sprintf_u_plus_post);
-  tcase_add_test(tc, test_s21_sprintf_u_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_plus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_u_space_negt);
-  tcase_add_test(tc, test_s21_sprintf_u_space_post);
-  tcase_add_test(tc, test_s21_sprintf_u_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_space_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_u_hash_negt);
-  tcase_add_test(tc, test_s21_sprintf_u_hash_post);
-  tcase_add_test(tc, test_s21_sprintf_u_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_hash_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_u_zero_negt);
-  tcase_add_test(tc, test_s21_sprintf_u_zero_post);
-  tcase_add_test(tc, test_s21_sprintf_u_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_zero_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_u_width_minus_negt);
-  tcase_add_test(tc, test_s21_sprintf_u_width_minus_post);
-  tcase_add_test(tc, test_s21_sprintf_u_width_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_width_minus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_u_width_plus_negt);
-  tcase_add_test(tc, test_s21_sprintf_u_width_plus_post);
-  tcase_add_test(tc, test_s21_sprintf_u_width_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_width_plus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_u_width_space_negt);
-  tcase_add_test(tc, test_s21_sprintf_u_width_space_post);
-  tcase_add_test(tc, test_s21_sprintf_u_width_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_width_space_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_u_width_hash_negt);
-  tcase_add_test(tc, test_s21_sprintf_u_width_hash_post);
-  tcase_add_test(tc, test_s21_sprintf_u_width_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_width_hash_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_u_width_zero_negt);
-  tcase_add_test(tc, test_s21_sprintf_u_width_zero_post);
-  tcase_add_test(tc, test_s21_sprintf_u_width_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_width_zero_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_u_prec_minus_negt);
-  tcase_add_test(tc, test_s21_sprintf_u_prec_minus_post);
-  tcase_add_test(tc, test_s21_sprintf_u_prec_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_prec_minus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_u_prec_plus_negt);
-  tcase_add_test(tc, test_s21_sprintf_u_prec_plus_post);
-  tcase_add_test(tc, test_s21_sprintf_u_prec_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_prec_plus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_u_prec_space_negt);
-  tcase_add_test(tc, test_s21_sprintf_u_prec_space_post);
-  tcase_add_test(tc, test_s21_sprintf_u_prec_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_prec_space_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_u_prec_hash_negt);
-  tcase_add_test(tc, test_s21_sprintf_u_prec_hash_post);
-  tcase_add_test(tc, test_s21_sprintf_u_prec_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_prec_hash_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_u_prec_zero_negt);
-  tcase_add_test(tc, test_s21_sprintf_u_prec_zero_post);
-  tcase_add_test(tc, test_s21_sprintf_u_prec_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_prec_zero_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_u_width_prec_minus_negt);
-  tcase_add_test(tc, test_s21_sprintf_u_width_prec_minus_post);
-  tcase_add_test(tc, test_s21_sprintf_u_width_prec_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_width_prec_minus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_u_width_prec_plus_negt);
-  tcase_add_test(tc, test_s21_sprintf_u_width_prec_plus_post);
-  tcase_add_test(tc, test_s21_sprintf_u_width_prec_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_width_prec_plus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_u_width_prec_space_negt);
-  tcase_add_test(tc, test_s21_sprintf_u_width_prec_space_post);
-  tcase_add_test(tc, test_s21_sprintf_u_width_prec_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_width_prec_space_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_u_width_prec_hash_negt);
-  tcase_add_test(tc, test_s21_sprintf_u_width_prec_hash_post);
-  tcase_add_test(tc, test_s21_sprintf_u_width_prec_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_width_prec_hash_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_u_width_prec_zero_negt);
-  tcase_add_test(tc, test_s21_sprintf_u_width_prec_zero_post);
-  tcase_add_test(tc, test_s21_sprintf_u_width_prec_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_width_prec_zero_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_u_dynamic_width);
-  tcase_add_test(tc, test_s21_sprintf_u_dynamic_precision);
-  tcase_add_test(tc, test_s21_sprintf_u_dynamic_width_precision);
-  tcase_add_test(tc, test_s21_sprintf_u_width_negt);
-  tcase_add_test(tc, test_s21_sprintf_u_width_post);
-  tcase_add_test(tc, test_s21_sprintf_u_width_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_width_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_u_prec_negt);
-  tcase_add_test(tc, test_s21_sprintf_u_prec_post);
-  tcase_add_test(tc, test_s21_sprintf_u_prec_zero_);
-  tcase_add_test(tc, test_s21_sprintf_u_prec_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_u_width_prec_negt);
-  tcase_add_test(tc, test_s21_sprintf_u_width_prec_post);
-  tcase_add_test(tc, test_s21_sprintf_u_width_prec_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_width_prec_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_u_zero_prec_negt);
-  tcase_add_test(tc, test_s21_sprintf_u_zero_prec_post);
-  tcase_add_test(tc, test_s21_sprintf_u_zero_prec_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_zero_prec_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_u_zero_zero_negt);
-  tcase_add_test(tc, test_s21_sprintf_u_zero_zero_post);
-  tcase_add_test(tc, test_s21_sprintf_u_zero_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_zero_zero_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_u_zero_prec_zero_negt);
-  tcase_add_test(tc, test_s21_sprintf_u_zero_prec_zero_post);
-  tcase_add_test(tc, test_s21_sprintf_u_zero_prec_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_zero_prec_zero_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_u_zero_prec_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_zero_prec_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_zero_prec_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_zero_prec_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_zero_zero_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_zero_zero_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_zero_zero_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_zero_zero_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_zero_width_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_zero_prec_zero_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_zero_prec_zero_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_zero_prec_zero_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_zero_prec_zero_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_u_zero_prec_width_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_minus_negt);
-  tcase_add_test(tc, test_s21_sprintf_o_minus_post);
-  tcase_add_test(tc, test_s21_sprintf_o_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_minus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_o_plus_negt);
-  tcase_add_test(tc, test_s21_sprintf_o_plus_post);
-  tcase_add_test(tc, test_s21_sprintf_o_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_plus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_o_space_negt);
-  tcase_add_test(tc, test_s21_sprintf_o_space_post);
-  tcase_add_test(tc, test_s21_sprintf_o_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_space_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_o_hash_negt);
-  tcase_add_test(tc, test_s21_sprintf_o_hash_post);
-  tcase_add_test(tc, test_s21_sprintf_o_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_hash_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_o_zero_negt);
-  tcase_add_test(tc, test_s21_sprintf_o_zero_post);
-  tcase_add_test(tc, test_s21_sprintf_o_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_zero_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_o_width_minus_negt);
-  tcase_add_test(tc, test_s21_sprintf_o_width_minus_post);
-  tcase_add_test(tc, test_s21_sprintf_o_width_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_width_minus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_o_width_plus_negt);
-  tcase_add_test(tc, test_s21_sprintf_o_width_plus_post);
-  tcase_add_test(tc, test_s21_sprintf_o_width_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_width_plus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_o_width_space_negt);
-  tcase_add_test(tc, test_s21_sprintf_o_width_space_post);
-  tcase_add_test(tc, test_s21_sprintf_o_width_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_width_space_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_o_width_hash_negt);
-  tcase_add_test(tc, test_s21_sprintf_o_width_hash_post);
-  tcase_add_test(tc, test_s21_sprintf_o_width_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_width_hash_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_o_width_zero_negt);
-  tcase_add_test(tc, test_s21_sprintf_o_width_zero_post);
-  tcase_add_test(tc, test_s21_sprintf_o_width_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_width_zero_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_o_prec_minus_negt);
-  tcase_add_test(tc, test_s21_sprintf_o_prec_minus_post);
-  tcase_add_test(tc, test_s21_sprintf_o_prec_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_prec_minus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_o_prec_plus_negt);
-  tcase_add_test(tc, test_s21_sprintf_o_prec_plus_post);
-  tcase_add_test(tc, test_s21_sprintf_o_prec_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_prec_plus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_o_prec_space_negt);
-  tcase_add_test(tc, test_s21_sprintf_o_prec_space_post);
-  tcase_add_test(tc, test_s21_sprintf_o_prec_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_prec_space_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_o_prec_hash_negt);
-  tcase_add_test(tc, test_s21_sprintf_o_prec_hash_post);
-  tcase_add_test(tc, test_s21_sprintf_o_prec_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_prec_hash_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_o_prec_zero_negt);
-  tcase_add_test(tc, test_s21_sprintf_o_prec_zero_post);
-  tcase_add_test(tc, test_s21_sprintf_o_prec_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_prec_zero_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_o_width_prec_minus_negt);
-  tcase_add_test(tc, test_s21_sprintf_o_width_prec_minus_post);
-  tcase_add_test(tc, test_s21_sprintf_o_width_prec_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_width_prec_minus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_o_width_prec_plus_negt);
-  tcase_add_test(tc, test_s21_sprintf_o_width_prec_plus_post);
-  tcase_add_test(tc, test_s21_sprintf_o_width_prec_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_width_prec_plus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_o_width_prec_space_negt);
-  tcase_add_test(tc, test_s21_sprintf_o_width_prec_space_post);
-  tcase_add_test(tc, test_s21_sprintf_o_width_prec_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_width_prec_space_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_o_width_prec_hash_negt);
-  tcase_add_test(tc, test_s21_sprintf_o_width_prec_hash_post);
-  tcase_add_test(tc, test_s21_sprintf_o_width_prec_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_width_prec_hash_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_o_width_prec_zero_negt);
-  tcase_add_test(tc, test_s21_sprintf_o_width_prec_zero_post);
-  tcase_add_test(tc, test_s21_sprintf_o_width_prec_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_width_prec_zero_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_o_dynamic_width);
-  tcase_add_test(tc, test_s21_sprintf_o_dynamic_precision);
-  tcase_add_test(tc, test_s21_sprintf_o_dynamic_width_precision);
-  tcase_add_test(tc, test_s21_sprintf_o_width_negt);
-  tcase_add_test(tc, test_s21_sprintf_o_width_post);
-  tcase_add_test(tc, test_s21_sprintf_o_width_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_width_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_o_prec_negt);
-  tcase_add_test(tc, test_s21_sprintf_o_prec_post);
-  tcase_add_test(tc, test_s21_sprintf_o_prec_zero_);
-  tcase_add_test(tc, test_s21_sprintf_o_prec_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_o_width_prec_negt);
-  tcase_add_test(tc, test_s21_sprintf_o_width_prec_post);
-  tcase_add_test(tc, test_s21_sprintf_o_width_prec_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_width_prec_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_o_zero_prec_negt);
-  tcase_add_test(tc, test_s21_sprintf_o_zero_prec_post);
-  tcase_add_test(tc, test_s21_sprintf_o_zero_prec_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_zero_prec_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_o_zero_zero_negt);
-  tcase_add_test(tc, test_s21_sprintf_o_zero_zero_post);
-  tcase_add_test(tc, test_s21_sprintf_o_zero_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_zero_zero_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_o_zero_prec_zero_negt);
-  tcase_add_test(tc, test_s21_sprintf_o_zero_prec_zero_post);
-  tcase_add_test(tc, test_s21_sprintf_o_zero_prec_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_zero_prec_zero_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_o_zero_prec_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_zero_prec_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_zero_prec_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_zero_prec_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_zero_zero_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_zero_zero_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_zero_zero_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_zero_zero_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_zero_width_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_zero_prec_zero_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_zero_prec_zero_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_zero_prec_zero_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_zero_prec_zero_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_o_zero_prec_width_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_minus_negt);
-  tcase_add_test(tc, test_s21_sprintf_x_minus_post);
-  tcase_add_test(tc, test_s21_sprintf_x_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_minus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_x_plus_negt);
-  tcase_add_test(tc, test_s21_sprintf_x_plus_post);
-  tcase_add_test(tc, test_s21_sprintf_x_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_plus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_x_space_negt);
-  tcase_add_test(tc, test_s21_sprintf_x_space_post);
-  tcase_add_test(tc, test_s21_sprintf_x_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_space_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_x_hash_negt);
-  tcase_add_test(tc, test_s21_sprintf_x_hash_post);
-  tcase_add_test(tc, test_s21_sprintf_x_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_hash_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_x_zero_negt);
-  tcase_add_test(tc, test_s21_sprintf_x_zero_post);
-  tcase_add_test(tc, test_s21_sprintf_x_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_zero_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_x_width_minus_negt);
-  tcase_add_test(tc, test_s21_sprintf_x_width_minus_post);
-  tcase_add_test(tc, test_s21_sprintf_x_width_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_width_minus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_x_width_plus_negt);
-  tcase_add_test(tc, test_s21_sprintf_x_width_plus_post);
-  tcase_add_test(tc, test_s21_sprintf_x_width_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_width_plus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_x_width_space_negt);
-  tcase_add_test(tc, test_s21_sprintf_x_width_space_post);
-  tcase_add_test(tc, test_s21_sprintf_x_width_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_width_space_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_x_width_hash_negt);
-  tcase_add_test(tc, test_s21_sprintf_x_width_hash_post);
-  tcase_add_test(tc, test_s21_sprintf_x_width_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_width_hash_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_x_width_zero_negt);
-  tcase_add_test(tc, test_s21_sprintf_x_width_zero_post);
-  tcase_add_test(tc, test_s21_sprintf_x_width_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_width_zero_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_x_prec_minus_negt);
-  tcase_add_test(tc, test_s21_sprintf_x_prec_minus_post);
-  tcase_add_test(tc, test_s21_sprintf_x_prec_minus);
-  tcase_add_test(tc, test_s21_sprintf_x_prec_minus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_x_prec_plus_negt);
-  tcase_add_test(tc, test_s21_sprintf_x_prec_plus_post);
-  tcase_add_test(tc, test_s21_sprintf_x_prec_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_prec_plus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_x_prec_space_negt);
-  tcase_add_test(tc, test_s21_sprintf_x_prec_space_post);
-  tcase_add_test(tc, test_s21_sprintf_x_prec_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_prec_space_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_x_prec_hash_negt);
-  tcase_add_test(tc, test_s21_sprintf_x_prec_hash_post);
-  tcase_add_test(tc, test_s21_sprintf_x_prec_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_prec_hash_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_x_prec_zero_negt);
-  tcase_add_test(tc, test_s21_sprintf_x_prec_zero_post);
-  tcase_add_test(tc, test_s21_sprintf_x_prec_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_prec_zero_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_x_width_prec_minus_negt);
-  tcase_add_test(tc, test_s21_sprintf_x_width_prec_minus_post);
-  tcase_add_test(tc, test_s21_sprintf_x_width_prec_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_width_prec_minus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_x_width_prec_plus_negt);
-  tcase_add_test(tc, test_s21_sprintf_x_width_prec_plus_post);
-  tcase_add_test(tc, test_s21_sprintf_x_width_prec_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_width_prec_plus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_x_width_prec_space_negt);
-  tcase_add_test(tc, test_s21_sprintf_x_width_prec_space_post);
-  tcase_add_test(tc, test_s21_sprintf_x_width_prec_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_width_prec_space_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_x_width_prec_hash_negt);
-  tcase_add_test(tc, test_s21_sprintf_x_width_prec_hash_post);
-  tcase_add_test(tc, test_s21_sprintf_x_width_prec_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_width_prec_hash_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_x_width_prec_zero_negt);
-  tcase_add_test(tc, test_s21_sprintf_x_width_prec_zero_post);
-  tcase_add_test(tc, test_s21_sprintf_x_width_prec_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_width_prec_zero_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_x_dynamic_width);
-  tcase_add_test(tc, test_s21_sprintf_x_dynamic_precision);
-  tcase_add_test(tc, test_s21_sprintf_x_dynamic_width_precision);
-  tcase_add_test(tc, test_s21_sprintf_x_width_negt);
-  tcase_add_test(tc, test_s21_sprintf_x_width_post);
-  tcase_add_test(tc, test_s21_sprintf_x_width_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_width_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_x_prec_negt);
-  tcase_add_test(tc, test_s21_sprintf_x_prec_post);
-  tcase_add_test(tc, test_s21_sprintf_x_prec_zero_);
-  tcase_add_test(tc, test_s21_sprintf_x_prec_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_x_width_prec_negt);
-  tcase_add_test(tc, test_s21_sprintf_x_width_prec_post);
-  tcase_add_test(tc, test_s21_sprintf_x_width_prec_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_width_prec_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_x_zero_prec_negt);
-  tcase_add_test(tc, test_s21_sprintf_x_zero_prec_post);
-  tcase_add_test(tc, test_s21_sprintf_x_zero_prec_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_zero_prec_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_x_zero_zero_negt);
-  tcase_add_test(tc, test_s21_sprintf_x_zero_zero_post);
-  tcase_add_test(tc, test_s21_sprintf_x_zero_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_zero_zero_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_x_zero_prec_zero_negt);
-  tcase_add_test(tc, test_s21_sprintf_x_zero_prec_zero_post);
-  tcase_add_test(tc, test_s21_sprintf_x_zero_prec_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_zero_prec_zero_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_x_zero_prec_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_zero_prec_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_zero_prec_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_zero_prec_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_zero_zero_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_zero_zero_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_zero_zero_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_zero_zero_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_zero_width_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_zero_prec_zero_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_zero_prec_zero_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_zero_prec_zero_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_zero_prec_zero_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_x_zero_prec_width_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_minus_negt);
-  tcase_add_test(tc, test_s21_sprintf_X_minus_post);
-  tcase_add_test(tc, test_s21_sprintf_X_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_minus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_X_plus_negt);
-  tcase_add_test(tc, test_s21_sprintf_X_plus_post);
-  tcase_add_test(tc, test_s21_sprintf_X_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_plus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_X_space_negt);
-  tcase_add_test(tc, test_s21_sprintf_X_space_post);
-  tcase_add_test(tc, test_s21_sprintf_X_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_space_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_X_hash_negt);
-  tcase_add_test(tc, test_s21_sprintf_X_hash_post);
-  tcase_add_test(tc, test_s21_sprintf_X_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_hash_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_X_zero_negt);
-  tcase_add_test(tc, test_s21_sprintf_X_zero_post);
-  tcase_add_test(tc, test_s21_sprintf_X_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_zero_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_X_width_minus_negt);
-  tcase_add_test(tc, test_s21_sprintf_X_width_minus_post);
-  tcase_add_test(tc, test_s21_sprintf_X_width_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_width_minus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_X_width_plus_negt);
-  tcase_add_test(tc, test_s21_sprintf_X_width_plus_post);
-  tcase_add_test(tc, test_s21_sprintf_X_width_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_width_plus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_X_width_space_negt);
-  tcase_add_test(tc, test_s21_sprintf_X_width_space_post);
-  tcase_add_test(tc, test_s21_sprintf_X_width_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_width_space_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_X_width_hash_negt);
-  tcase_add_test(tc, test_s21_sprintf_X_width_hash_post);
-  tcase_add_test(tc, test_s21_sprintf_X_width_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_width_hash_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_X_width_zero_negt);
-  tcase_add_test(tc, test_s21_sprintf_X_width_zero_post);
-  tcase_add_test(tc, test_s21_sprintf_X_width_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_width_zero_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_X_prec_minus_negt);
-  tcase_add_test(tc, test_s21_sprintf_X_prec_minus_post);
-  tcase_add_test(tc, test_s21_sprintf_X_prec_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_prec_minus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_X_prec_plus_negt);
-  tcase_add_test(tc, test_s21_sprintf_X_prec_plus_post);
-  tcase_add_test(tc, test_s21_sprintf_X_prec_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_prec_plus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_X_prec_space_negt);
-  tcase_add_test(tc, test_s21_sprintf_X_prec_space_post);
-  tcase_add_test(tc, test_s21_sprintf_X_prec_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_prec_space_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_X_prec_hash_negt);
-  tcase_add_test(tc, test_s21_sprintf_X_prec_hash_post);
-  tcase_add_test(tc, test_s21_sprintf_X_prec_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_prec_hash_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_X_prec_zero_negt);
-  tcase_add_test(tc, test_s21_sprintf_X_prec_zero_post);
-  tcase_add_test(tc, test_s21_sprintf_X_prec_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_prec_zero_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_X_width_prec_minus_negt);
-  tcase_add_test(tc, test_s21_sprintf_X_width_prec_minus_post);
-  tcase_add_test(tc, test_s21_sprintf_X_width_prec_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_width_prec_minus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_X_width_prec_plus_negt);
-  tcase_add_test(tc, test_s21_sprintf_X_width_prec_plus_post);
-  tcase_add_test(tc, test_s21_sprintf_X_width_prec_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_width_prec_plus_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_X_width_prec_space_negt);
-  tcase_add_test(tc, test_s21_sprintf_X_width_prec_space_post);
-  tcase_add_test(tc, test_s21_sprintf_X_width_prec_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_width_prec_space_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_X_width_prec_hash_negt);
-  tcase_add_test(tc, test_s21_sprintf_X_width_prec_hash_post);
-  tcase_add_test(tc, test_s21_sprintf_X_width_prec_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_width_prec_hash_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_X_width_prec_zero_negt);
-  tcase_add_test(tc, test_s21_sprintf_X_width_prec_zero_post);
-  tcase_add_test(tc, test_s21_sprintf_X_width_prec_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_width_prec_zero_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_X_width_negt);
-  tcase_add_test(tc, test_s21_sprintf_X_width_post);
-  tcase_add_test(tc, test_s21_sprintf_X_width_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_width_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_X_prec_negt);
-  tcase_add_test(tc, test_s21_sprintf_X_prec_post);
-  tcase_add_test(tc, test_s21_sprintf_X_prec_zero_);
-  tcase_add_test(tc, test_s21_sprintf_X_prec_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_X_width_prec_negt);
-  tcase_add_test(tc, test_s21_sprintf_X_width_prec_post);
-  tcase_add_test(tc, test_s21_sprintf_X_width_prec_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_width_prec_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_X_zero_prec_negt);
-  tcase_add_test(tc, test_s21_sprintf_X_zero_prec_post);
-  tcase_add_test(tc, test_s21_sprintf_X_zero_prec_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_zero_prec_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_X_zero_zero_negt);
-  tcase_add_test(tc, test_s21_sprintf_X_zero_zero_post);
-  tcase_add_test(tc, test_s21_sprintf_X_zero_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_zero_zero_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_X_zero_prec_zero_negt);
-  tcase_add_test(tc, test_s21_sprintf_X_zero_prec_zero_post);
-  tcase_add_test(tc, test_s21_sprintf_X_zero_prec_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_zero_prec_zero_ng_z);
-  tcase_add_test(tc, test_s21_sprintf_X_zero_prec_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_zero_prec_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_zero_prec_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_zero_prec_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_zero_zero_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_zero_zero_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_zero_zero_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_zero_zero_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_zero_width_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_zero_prec_zero_minus_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_zero_prec_zero_plus_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_zero_prec_zero_space_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_zero_prec_zero_hash_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_zero_prec_width_zero_zero);
-  tcase_add_test(tc, test_s21_sprintf_X_dynamic_width);
-  tcase_add_test(tc, test_s21_sprintf_X_dynamic_precision);
-  tcase_add_test(tc, test_s21_sprintf_X_dynamic_width_precision);
-  tcase_add_test(tc, test_s21_sprintf_f_minus);
-  tcase_add_test(tc, test_s21_sprintf_f_plus);
-  tcase_add_test(tc, test_s21_sprintf_f_space);
-  tcase_add_test(tc, test_s21_sprintf_f_zero_form);
-  tcase_add_test(tc, test_s21_sprintf_f_width);
-  tcase_add_test(tc, test_s21_sprintf_f_precision);
-  tcase_add_test(tc, test_s21_sprintf_f_width_precision);
-  tcase_add_test(tc, test_s21_sprintf_f_star_width);
-  tcase_add_test(tc, test_s21_sprintf_f_star_precision);
-  tcase_add_test(tc, test_s21_sprintf_f_star_both);
-  tcase_add_test(tc, test_s21_sprintf_e_minus);
-  tcase_add_test(tc, test_s21_sprintf_e_plus);
-  tcase_add_test(tc, test_s21_sprintf_e_space);
-  tcase_add_test(tc, test_s21_sprintf_e_zero_form);
-  tcase_add_test(tc, test_s21_sprintf_e_width);
-  tcase_add_test(tc, test_s21_sprintf_e_precision);
-  tcase_add_test(tc, test_s21_sprintf_e_width_precision);
-  tcase_add_test(tc, test_s21_sprintf_e_star_width);
-  tcase_add_test(tc, test_s21_sprintf_e_star_precision);
-  tcase_add_test(tc, test_s21_sprintf_e_star_both);
-  tcase_add_test(tc, test_s21_sprintf_E_minus);
-  tcase_add_test(tc, test_s21_sprintf_E_plus);
-  tcase_add_test(tc, test_s21_sprintf_E_space);
-  tcase_add_test(tc, test_s21_sprintf_E_zero_form);
-  tcase_add_test(tc, test_s21_sprintf_E_width);
-  tcase_add_test(tc, test_s21_sprintf_E_precision);
-  tcase_add_test(tc, test_s21_sprintf_E_width_precision);
-  tcase_add_test(tc, test_s21_sprintf_E_star_width);
-  tcase_add_test(tc, test_s21_sprintf_E_star_precision);
-  tcase_add_test(tc, test_s21_sprintf_E_star_both);
-  tcase_add_test(tc, test_s21_sprintf_g_minus);
-  tcase_add_test(tc, test_s21_sprintf_g_plus);
-  tcase_add_test(tc, test_s21_sprintf_g_space);
-  tcase_add_test(tc, test_s21_sprintf_g_zero_form);
-  tcase_add_test(tc, test_s21_sprintf_g_width);
-  tcase_add_test(tc, test_s21_sprintf_g_precision);
-  tcase_add_test(tc, test_s21_sprintf_g_width_precision);
-  tcase_add_test(tc, test_s21_sprintf_g_star_width);
-  tcase_add_test(tc, test_s21_sprintf_g_star_precision);
-  tcase_add_test(tc, test_s21_sprintf_g_star_both);
-  tcase_add_test(tc, test_s21_sprintf_G_minus);
-  tcase_add_test(tc, test_s21_sprintf_G_plus);
-  tcase_add_test(tc, test_s21_sprintf_G_space);
-  tcase_add_test(tc, test_s21_sprintf_G_zero_form);
-  tcase_add_test(tc, test_s21_sprintf_G_width);
-  tcase_add_test(tc, test_s21_sprintf_G_precision);
-  tcase_add_test(tc, test_s21_sprintf_G_width_precision);
-  tcase_add_test(tc, test_s21_sprintf_G_star_width);
-  tcase_add_test(tc, test_s21_sprintf_G_star_precision);
-  tcase_add_test(tc, test_s21_sprintf_G_star_both);
-  tcase_add_test(tc, test_s21_sprintf_s_minus);
-  tcase_add_test(tc, test_s21_sprintf_s_width);
-  tcase_add_test(tc, test_s21_sprintf_s_precision);
-  tcase_add_test(tc, test_s21_sprintf_s_width_precision);
-  tcase_add_test(tc, test_s21_sprintf_s_star_width);
-  tcase_add_test(tc, test_s21_sprintf_s_star_precision);
-  tcase_add_test(tc, test_s21_sprintf_s_star_both);
-  tcase_add_test(tc, test_s21_sprintf_s_null_wish_form);
-  tcase_add_test(tc, test_s21_sprintf_c_minus);
-  tcase_add_test(tc, test_s21_sprintf_c_width);
-  tcase_add_test(tc, test_s21_sprintf_c_star_width);
-  tcase_add_test(tc, test_s21_sprintf_p_format);
+    tcase_add_test(tc, test_s21_sprintf_d);
+    tcase_add_test(tc, test_s21_sprintf_d_min);
+    tcase_add_test(tc, test_s21_sprintf_d_max);
+    tcase_add_test(tc, test_s21_sprintf_i);
+    tcase_add_test(tc, test_s21_sprintf_i_min);
+    tcase_add_test(tc, test_s21_sprintf_i_max);
+    tcase_add_test(tc, test_s21_sprintf_o);
+    tcase_add_test(tc, test_s21_sprintf_o_min);
+    tcase_add_test(tc, test_s21_sprintf_o_max);
+    tcase_add_test(tc, test_s21_sprintf_u);
+    tcase_add_test(tc, test_s21_sprintf_u_min);
+    tcase_add_test(tc, test_s21_sprintf_u_max);
+    tcase_add_test(tc, test_s21_sprintf_x);
+    tcase_add_test(tc, test_s21_sprintf_x_min);
+    tcase_add_test(tc, test_s21_sprintf_x_max);
+    tcase_add_test(tc, test_s21_sprintf_X);
+    tcase_add_test(tc, test_s21_sprintf_X_min);
+    tcase_add_test(tc, test_s21_sprintf_X_max);
+    tcase_add_test(tc, test_s21_sprintf_hd);
+    tcase_add_test(tc, test_s21_sprintf_hd_min);
+    tcase_add_test(tc, test_s21_sprintf_hd_max);
+    tcase_add_test(tc, test_s21_sprintf_hi);
+    tcase_add_test(tc, test_s21_sprintf_hi_min);
+    tcase_add_test(tc, test_s21_sprintf_hi_max);
+    tcase_add_test(tc, test_s21_sprintf_ho);
+    tcase_add_test(tc, test_s21_sprintf_ho_min);
+    tcase_add_test(tc, test_s21_sprintf_ho_max);
+    tcase_add_test(tc, test_s21_sprintf_hu);
+    tcase_add_test(tc, test_s21_sprintf_hu_min);
+    tcase_add_test(tc, test_s21_sprintf_hu_max);
+    tcase_add_test(tc, test_s21_sprintf_hx);
+    tcase_add_test(tc, test_s21_sprintf_hx_min);
+    tcase_add_test(tc, test_s21_sprintf_hx_max);
+    tcase_add_test(tc, test_s21_sprintf_hX);
+    tcase_add_test(tc, test_s21_sprintf_hX_min);
+    tcase_add_test(tc, test_s21_sprintf_hX_max);
+    tcase_add_test(tc, test_s21_sprintf_hhd);
+    tcase_add_test(tc, test_s21_sprintf_hhd_min);
+    tcase_add_test(tc, test_s21_sprintf_hhd_max);
+    tcase_add_test(tc, test_s21_sprintf_hhi);
+    tcase_add_test(tc, test_s21_sprintf_hhi_min);
+    tcase_add_test(tc, test_s21_sprintf_hhi_max);
+    tcase_add_test(tc, test_s21_sprintf_hho);
+    tcase_add_test(tc, test_s21_sprintf_hho_min);
+    tcase_add_test(tc, test_s21_sprintf_hho_max);
+    tcase_add_test(tc, test_s21_sprintf_hhu);
+    tcase_add_test(tc, test_s21_sprintf_hhu_min);
+    tcase_add_test(tc, test_s21_sprintf_hhu_max);
+    tcase_add_test(tc, test_s21_sprintf_hhx);
+    tcase_add_test(tc, test_s21_sprintf_hhx_min);
+    tcase_add_test(tc, test_s21_sprintf_hhx_max);
+    tcase_add_test(tc, test_s21_sprintf_hhX);
+    tcase_add_test(tc, test_s21_sprintf_hhX_min);
+    tcase_add_test(tc, test_s21_sprintf_hhX_max);
+    tcase_add_test(tc, test_s21_sprintf_ld);
+    tcase_add_test(tc, test_s21_sprintf_ld_min);
+    tcase_add_test(tc, test_s21_sprintf_ld_max);
+    tcase_add_test(tc, test_s21_sprintf_li);
+    tcase_add_test(tc, test_s21_sprintf_li_min);
+    tcase_add_test(tc, test_s21_sprintf_li_max);
+    tcase_add_test(tc, test_s21_sprintf_lo);
+    tcase_add_test(tc, test_s21_sprintf_lo_min);
+    tcase_add_test(tc, test_s21_sprintf_lo_max);
+    tcase_add_test(tc, test_s21_sprintf_lu);
+    tcase_add_test(tc, test_s21_sprintf_lu_min);
+    tcase_add_test(tc, test_s21_sprintf_lu_max);
+    tcase_add_test(tc, test_s21_sprintf_lx);
+    tcase_add_test(tc, test_s21_sprintf_lx_min);
+    tcase_add_test(tc, test_s21_sprintf_lx_max);
+    tcase_add_test(tc, test_s21_sprintf_lX);
+    tcase_add_test(tc, test_s21_sprintf_lX_min);
+    tcase_add_test(tc, test_s21_sprintf_lX_max);
+    tcase_add_test(tc, test_s21_sprintf_lld);
+    tcase_add_test(tc, test_s21_sprintf_lld_min);
+    tcase_add_test(tc, test_s21_sprintf_lld_max);
+    tcase_add_test(tc, test_s21_sprintf_lli);
+    tcase_add_test(tc, test_s21_sprintf_lli_min);
+    tcase_add_test(tc, test_s21_sprintf_lli_max);
+    tcase_add_test(tc, test_s21_sprintf_llo);
+    tcase_add_test(tc, test_s21_sprintf_llo_min);
+    tcase_add_test(tc, test_s21_sprintf_llo_max);
+    tcase_add_test(tc, test_s21_sprintf_llu);
+    tcase_add_test(tc, test_s21_sprintf_llu_min);
+    tcase_add_test(tc, test_s21_sprintf_llu_max);
+    tcase_add_test(tc, test_s21_sprintf_llx);
+    tcase_add_test(tc, test_s21_sprintf_llx_min);
+    tcase_add_test(tc, test_s21_sprintf_llx_max);
+    tcase_add_test(tc, test_s21_sprintf_llX);
+    tcase_add_test(tc, test_s21_sprintf_llX_min);
+    tcase_add_test(tc, test_s21_sprintf_llX_max);
+    tcase_add_test(tc, test_s21_sprintf_c);
+    tcase_add_test(tc, test_s21_sprintf_c_min);
+    tcase_add_test(tc, test_s21_sprintf_c_max);
+    tcase_add_test(tc, test_s21_sprintf_c_nonprint);
+    tcase_add_test(tc, test_s21_sprintf_c_zero);
+    tcase_add_test(tc, test_s21_sprintf_c_newline);
+    tcase_add_test(tc, test_s21_sprintf_c_tab);
+    tcase_add_test(tc, test_s21_sprintf_c_null_char);
+    tcase_add_test(tc, test_s21_sprintf_s);
+    tcase_add_test(tc, test_s21_sprintf_s_special);
+    tcase_add_test(tc, test_s21_sprintf_s_special_chars);
+    tcase_add_test(tc, test_s21_sprintf_s_unicode);
+    tcase_add_test(tc, test_s21_sprintf_s_null);
+    tcase_add_test(tc, test_s21_sprintf_s_empty);
+    tcase_add_test(tc, test_s21_sprintf_e_zero);
+    tcase_add_test(tc, test_s21_sprintf_e_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_E_zero);
+    tcase_add_test(tc, test_s21_sprintf_E_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_g_zero);
+    tcase_add_test(tc, test_s21_sprintf_g_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_G_zero);
+    tcase_add_test(tc, test_s21_sprintf_G_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_le_zero);
+    tcase_add_test(tc, test_s21_sprintf_le_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_lE_zero);
+    tcase_add_test(tc, test_s21_sprintf_lE_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_lf_zero);
+    tcase_add_test(tc, test_s21_sprintf_lf_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_lg_zero);
+    tcase_add_test(tc, test_s21_sprintf_lg_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_lG_zero);
+    tcase_add_test(tc, test_s21_sprintf_lG_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_Le_zero);
+    tcase_add_test(tc, test_s21_sprintf_Le_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_LE_zero);
+    tcase_add_test(tc, test_s21_sprintf_LE_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_Lf_zero);
+    tcase_add_test(tc, test_s21_sprintf_Lf_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_Lg_zero);
+    tcase_add_test(tc, test_s21_sprintf_Lg_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_LG_zero);
+    tcase_add_test(tc, test_s21_sprintf_LG_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_e);
+    tcase_add_test(tc, test_s21_sprintf_e_neg);
+    tcase_add_test(tc, test_s21_sprintf_e_big);
+    tcase_add_test(tc, test_s21_sprintf_e_small);
+    tcase_add_test(tc, test_s21_sprintf_E);
+    tcase_add_test(tc, test_s21_sprintf_E_neg);
+    tcase_add_test(tc, test_s21_sprintf_E_big);
+    tcase_add_test(tc, test_s21_sprintf_E_small);
+    tcase_add_test(tc, test_s21_sprintf_f);
+    tcase_add_test(tc, test_s21_sprintf_f2);
+    tcase_add_test(tc, test_s21_sprintf_f_neg);
+    tcase_add_test(tc, test_s21_sprintf_f_small);
+    tcase_add_test(tc, test_s21_sprintf_g);
+    tcase_add_test(tc, test_s21_sprintf_g2);
+    tcase_add_test(tc, test_s21_sprintf_g3);
+    tcase_add_test(tc, test_s21_sprintf_g_neg);
+    tcase_add_test(tc, test_s21_sprintf_g_big);
+    tcase_add_test(tc, test_s21_sprintf_g_small);
+    tcase_add_test(tc, test_s21_sprintf_G);
+    tcase_add_test(tc, test_s21_sprintf_G2);
+    tcase_add_test(tc, test_s21_sprintf_G3);
+    tcase_add_test(tc, test_s21_sprintf_G_neg);
+    tcase_add_test(tc, test_s21_sprintf_G_big);
+    tcase_add_test(tc, test_s21_sprintf_G_small);
+    tcase_add_test(tc, test_s21_sprintf_le);
+    tcase_add_test(tc, test_s21_sprintf_le_neg);
+    tcase_add_test(tc, test_s21_sprintf_le_big);
+    tcase_add_test(tc, test_s21_sprintf_le_small);
+    tcase_add_test(tc, test_s21_sprintf_lE);
+    tcase_add_test(tc, test_s21_sprintf_lE_neg);
+    tcase_add_test(tc, test_s21_sprintf_lE_big);
+    tcase_add_test(tc, test_s21_sprintf_lE_small);
+    tcase_add_test(tc, test_s21_sprintf_lf);
+    tcase_add_test(tc, test_s21_sprintf_lf2);
+    tcase_add_test(tc, test_s21_sprintf_lf_neg);
+    tcase_add_test(tc, test_s21_sprintf_lf_small);
+    tcase_add_test(tc, test_s21_sprintf_lg);
+    tcase_add_test(tc, test_s21_sprintf_lg2);
+    tcase_add_test(tc, test_s21_sprintf_lg3);
+    tcase_add_test(tc, test_s21_sprintf_lg_neg);
+    tcase_add_test(tc, test_s21_sprintf_lg_big);
+    tcase_add_test(tc, test_s21_sprintf_lg_small);
+    tcase_add_test(tc, test_s21_sprintf_lG);
+    tcase_add_test(tc, test_s21_sprintf_lG2);
+    tcase_add_test(tc, test_s21_sprintf_lG3);
+    tcase_add_test(tc, test_s21_sprintf_lG_neg);
+    tcase_add_test(tc, test_s21_sprintf_lG_big);
+    tcase_add_test(tc, test_s21_sprintf_lG_small);
+    tcase_add_test(tc, test_s21_sprintf_Le);
+    tcase_add_test(tc, test_s21_sprintf_Le_neg);
+    tcase_add_test(tc, test_s21_sprintf_Le_big);
+    tcase_add_test(tc, test_s21_sprintf_Le_small);
+    tcase_add_test(tc, test_s21_sprintf_LE);
+    tcase_add_test(tc, test_s21_sprintf_LE_neg);
+    tcase_add_test(tc, test_s21_sprintf_LE_big);
+    tcase_add_test(tc, test_s21_sprintf_LE_small);
+    tcase_add_test(tc, test_s21_sprintf_Lf);
+    tcase_add_test(tc, test_s21_sprintf_Lf2);
+    tcase_add_test(tc, test_s21_sprintf_Lf_neg);
+    tcase_add_test(tc, test_s21_sprintf_Lf_small);
+    tcase_add_test(tc, test_s21_sprintf_Lg);
+    tcase_add_test(tc, test_s21_sprintf_Lg2);
+    tcase_add_test(tc, test_s21_sprintf_Lg3);
+    tcase_add_test(tc, test_s21_sprintf_Lg_neg);
+    tcase_add_test(tc, test_s21_sprintf_Lg_big);
+    tcase_add_test(tc, test_s21_sprintf_Lg_small);
+    tcase_add_test(tc, test_s21_sprintf_LG);
+    tcase_add_test(tc, test_s21_sprintf_LG2);
+    tcase_add_test(tc, test_s21_sprintf_LG3);
+    tcase_add_test(tc, test_s21_sprintf_LG_neg);
+    tcase_add_test(tc, test_s21_sprintf_LG_big);
+    tcase_add_test(tc, test_s21_sprintf_LG_small);
+    tcase_add_test(tc, test_s21_sprintf_g_switch_to_e);
+    tcase_add_test(tc, test_s21_sprintf_g_switch_to_f);
+    tcase_add_test(tc, test_s21_sprintf_g_switch);
+    tcase_add_test(tc, test_s21_sprintf_G_switch_to_e);
+    tcase_add_test(tc, test_s21_sprintf_G_switch_to_f);
+    tcase_add_test(tc, test_s21_sprintf_G_switch);
+    tcase_add_test(tc, test_s21_sprintf_e_nan);
+    tcase_add_test(tc, test_s21_sprintf_e_inf);
+    tcase_add_test(tc, test_s21_sprintf_e_neg_inf);
+    tcase_add_test(tc, test_s21_sprintf_E_nan);
+    tcase_add_test(tc, test_s21_sprintf_E_inf);
+    tcase_add_test(tc, test_s21_sprintf_E_neg_inf);
+    tcase_add_test(tc, test_s21_sprintf_f_nan);
+    tcase_add_test(tc, test_s21_sprintf_f_inf);
+    tcase_add_test(tc, test_s21_sprintf_f_neg_inf);
+    tcase_add_test(tc, test_s21_sprintf_g_nan);
+    tcase_add_test(tc, test_s21_sprintf_g_inf);
+    tcase_add_test(tc, test_s21_sprintf_g_neg_inf);
+    tcase_add_test(tc, test_s21_sprintf_G_nan);
+    tcase_add_test(tc, test_s21_sprintf_G_inf);
+    tcase_add_test(tc, test_s21_sprintf_G_neg_inf);
+    tcase_add_test(tc, test_s21_sprintf_le_nan);
+    tcase_add_test(tc, test_s21_sprintf_le_inf);
+    tcase_add_test(tc, test_s21_sprintf_le_neg_inf);
+    tcase_add_test(tc, test_s21_sprintf_lE_nan);
+    tcase_add_test(tc, test_s21_sprintf_lE_inf);
+    tcase_add_test(tc, test_s21_sprintf_lE_neg_inf);
+    tcase_add_test(tc, test_s21_sprintf_lf_nan);
+    tcase_add_test(tc, test_s21_sprintf_lf_inf);
+    tcase_add_test(tc, test_s21_sprintf_lf_neg_inf);
+    tcase_add_test(tc, test_s21_sprintf_lg_nan);
+    tcase_add_test(tc, test_s21_sprintf_lg_inf);
+    tcase_add_test(tc, test_s21_sprintf_lg_neg_inf);
+    tcase_add_test(tc, test_s21_sprintf_lG_nan);
+    tcase_add_test(tc, test_s21_sprintf_lG_inf);
+    tcase_add_test(tc, test_s21_sprintf_lG_neg_inf);
+    tcase_add_test(tc, test_s21_sprintf_Le_nan);
+    tcase_add_test(tc, test_s21_sprintf_Le_inf);
+    tcase_add_test(tc, test_s21_sprintf_Le_neg_inf);
+    tcase_add_test(tc, test_s21_sprintf_LE_nan);
+    tcase_add_test(tc, test_s21_sprintf_LE_inf);
+    tcase_add_test(tc, test_s21_sprintf_LE_neg_inf);
+    tcase_add_test(tc, test_s21_sprintf_Lf_nan);
+    tcase_add_test(tc, test_s21_sprintf_Lf_inf);
+    tcase_add_test(tc, test_s21_sprintf_Lf_neg_inf);
+    tcase_add_test(tc, test_s21_sprintf_Lg_nan);
+    tcase_add_test(tc, test_s21_sprintf_Lg_inf);
+    tcase_add_test(tc, test_s21_sprintf_Lg_neg_inf);
+    tcase_add_test(tc, test_s21_sprintf_LG_nan);
+    tcase_add_test(tc, test_s21_sprintf_LG_inf);
+    tcase_add_test(tc, test_s21_sprintf_LG_neg_inf);
+    tcase_add_test(tc, test_s21_sprintf_p);
+    tcase_add_test(tc, test_s21_sprintf_p_int);
+    tcase_add_test(tc, test_s21_sprintf_p_unsigned_int);
+    tcase_add_test(tc, test_s21_sprintf_p_double);
+    tcase_add_test(tc, test_s21_sprintf_p_null);
+    tcase_add_test(tc, test_s21_sprintf_double_percent);
+    tcase_add_test(tc, test_s21_sprintf_percent_combined);
+    tcase_add_test(tc, test_s21_sprintf_n);
+    tcase_add_test(tc, test_s21_sprintf_n_middle);
+    tcase_add_test(tc, test_s21_sprintf_hn);
+    tcase_add_test(tc, test_s21_sprintf_hhn);
+    tcase_add_test(tc, test_s21_sprintf_ln);
+    tcase_add_test(tc, test_s21_sprintf_lln);
+    tcase_add_test(tc, test_s21_sprintf_p_null_int);
+    tcase_add_test(tc, test_s21_sprintf_p_struct);
+    tcase_add_test(tc, test_s21_sprintf_p_func);
+    tcase_add_test(tc, test_s21_sprintf_c_all_chars);
+    tcase_add_test(tc, test_s21_sprintf_d_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_d_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_d_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_d_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_d_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_d_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_d_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_d_space_post);
+    tcase_add_test(tc, test_s21_sprintf_d_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_d_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_d_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_d_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_d_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_d_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_d_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_d_width_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_d_width_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_d_width_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_width_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_d_width_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_d_width_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_d_width_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_width_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_d_width_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_d_width_space_post);
+    tcase_add_test(tc, test_s21_sprintf_d_width_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_width_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_d_width_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_d_width_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_d_width_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_width_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_d_width_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_d_width_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_d_width_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_width_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_d_prec_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_d_prec_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_d_prec_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_prec_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_d_prec_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_d_prec_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_d_prec_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_prec_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_d_prec_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_d_prec_space_post);
+    tcase_add_test(tc, test_s21_sprintf_d_prec_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_prec_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_d_prec_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_d_prec_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_d_prec_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_prec_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_d_prec_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_d_prec_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_d_prec_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_prec_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_d_width_prec_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_d_width_prec_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_d_width_prec_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_width_prec_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_d_width_prec_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_d_width_prec_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_d_width_prec_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_width_prec_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_d_width_prec_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_d_width_prec_space_post);
+    tcase_add_test(tc, test_s21_sprintf_d_width_prec_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_width_prec_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_d_width_prec_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_d_width_prec_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_d_width_prec_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_width_prec_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_d_width_prec_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_d_width_prec_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_d_width_prec_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_width_prec_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_d_dynamic_width);
+    tcase_add_test(tc, test_s21_sprintf_d_dynamic_precision);
+    tcase_add_test(tc, test_s21_sprintf_d_dynamic_width_precision);
+    tcase_add_test(tc, test_s21_sprintf_d_width_negt);
+    tcase_add_test(tc, test_s21_sprintf_d_width_post);
+    tcase_add_test(tc, test_s21_sprintf_d_width_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_width_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_d_prec_negt);
+    tcase_add_test(tc, test_s21_sprintf_d_prec_post);
+    tcase_add_test(tc, test_s21_sprintf_d_prec_zero_);
+    tcase_add_test(tc, test_s21_sprintf_d_prec_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_d_width_prec_negt);
+    tcase_add_test(tc, test_s21_sprintf_d_width_prec_post);
+    tcase_add_test(tc, test_s21_sprintf_d_width_prec_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_width_prec_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_d_zero_prec_negt);
+    tcase_add_test(tc, test_s21_sprintf_d_zero_prec_post);
+    tcase_add_test(tc, test_s21_sprintf_d_zero_prec_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_zero_prec_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_d_zero_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_d_zero_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_d_zero_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_zero_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_d_zero_prec_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_d_zero_prec_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_d_zero_prec_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_zero_prec_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_d_zero_prec_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_zero_prec_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_zero_prec_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_zero_prec_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_zero_zero_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_zero_zero_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_zero_zero_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_zero_zero_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_zero_width_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_zero_prec_zero_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_zero_prec_zero_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_zero_prec_zero_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_zero_prec_zero_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_d_zero_prec_width_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_i_minus);
+    tcase_add_test(tc, test_s21_sprintf_i_plus);
+    tcase_add_test(tc, test_s21_sprintf_i_space);
+    tcase_add_test(tc, test_s21_sprintf_i_zero_form);
+    tcase_add_test(tc, test_s21_sprintf_i_width);
+    tcase_add_test(tc, test_s21_sprintf_i_precision);
+    tcase_add_test(tc, test_s21_sprintf_i_width_precision);
+    tcase_add_test(tc, test_s21_sprintf_i_star_width);
+    tcase_add_test(tc, test_s21_sprintf_i_star_precision);
+    tcase_add_test(tc, test_s21_sprintf_i_star_both);
+    tcase_add_test(tc, test_s21_sprintf_i_neg);
+    tcase_add_test(tc, test_s21_sprintf_i_neg_plus);
+    tcase_add_test(tc, test_s21_sprintf_i_neg_space);
+    tcase_add_test(tc, test_s21_sprintf_i_zero_prec);
+    tcase_add_test(tc, test_s21_sprintf_u_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_u_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_u_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_u_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_u_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_u_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_u_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_u_space_post);
+    tcase_add_test(tc, test_s21_sprintf_u_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_u_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_u_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_u_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_u_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_u_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_u_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_u_width_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_u_width_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_u_width_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_width_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_u_width_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_u_width_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_u_width_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_width_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_u_width_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_u_width_space_post);
+    tcase_add_test(tc, test_s21_sprintf_u_width_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_width_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_u_width_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_u_width_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_u_width_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_width_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_u_width_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_u_width_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_u_width_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_width_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_u_prec_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_u_prec_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_u_prec_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_prec_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_u_prec_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_u_prec_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_u_prec_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_prec_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_u_prec_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_u_prec_space_post);
+    tcase_add_test(tc, test_s21_sprintf_u_prec_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_prec_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_u_prec_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_u_prec_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_u_prec_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_prec_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_u_prec_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_u_prec_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_u_prec_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_prec_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_u_width_prec_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_u_width_prec_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_u_width_prec_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_width_prec_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_u_width_prec_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_u_width_prec_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_u_width_prec_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_width_prec_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_u_width_prec_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_u_width_prec_space_post);
+    tcase_add_test(tc, test_s21_sprintf_u_width_prec_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_width_prec_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_u_width_prec_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_u_width_prec_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_u_width_prec_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_width_prec_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_u_width_prec_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_u_width_prec_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_u_width_prec_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_width_prec_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_u_dynamic_width);
+    tcase_add_test(tc, test_s21_sprintf_u_dynamic_precision);
+    tcase_add_test(tc, test_s21_sprintf_u_dynamic_width_precision);
+    tcase_add_test(tc, test_s21_sprintf_u_width_negt);
+    tcase_add_test(tc, test_s21_sprintf_u_width_post);
+    tcase_add_test(tc, test_s21_sprintf_u_width_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_width_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_u_prec_negt);
+    tcase_add_test(tc, test_s21_sprintf_u_prec_post);
+    tcase_add_test(tc, test_s21_sprintf_u_prec_zero_);
+    tcase_add_test(tc, test_s21_sprintf_u_prec_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_u_width_prec_negt);
+    tcase_add_test(tc, test_s21_sprintf_u_width_prec_post);
+    tcase_add_test(tc, test_s21_sprintf_u_width_prec_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_width_prec_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_u_zero_prec_negt);
+    tcase_add_test(tc, test_s21_sprintf_u_zero_prec_post);
+    tcase_add_test(tc, test_s21_sprintf_u_zero_prec_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_zero_prec_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_u_zero_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_u_zero_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_u_zero_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_zero_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_u_zero_prec_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_u_zero_prec_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_u_zero_prec_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_zero_prec_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_u_zero_prec_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_zero_prec_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_zero_prec_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_zero_prec_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_zero_zero_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_zero_zero_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_zero_zero_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_zero_zero_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_zero_width_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_zero_prec_zero_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_zero_prec_zero_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_zero_prec_zero_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_zero_prec_zero_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_u_zero_prec_width_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_o_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_o_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_o_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_o_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_o_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_o_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_o_space_post);
+    tcase_add_test(tc, test_s21_sprintf_o_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_o_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_o_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_o_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_o_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_o_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_o_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_o_width_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_o_width_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_o_width_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_width_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_o_width_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_o_width_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_o_width_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_width_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_o_width_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_o_width_space_post);
+    tcase_add_test(tc, test_s21_sprintf_o_width_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_width_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_o_width_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_o_width_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_o_width_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_width_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_o_width_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_o_width_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_o_width_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_width_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_o_prec_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_o_prec_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_o_prec_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_prec_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_o_prec_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_o_prec_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_o_prec_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_prec_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_o_prec_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_o_prec_space_post);
+    tcase_add_test(tc, test_s21_sprintf_o_prec_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_prec_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_o_prec_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_o_prec_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_o_prec_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_prec_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_o_prec_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_o_prec_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_o_prec_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_prec_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_o_width_prec_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_o_width_prec_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_o_width_prec_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_width_prec_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_o_width_prec_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_o_width_prec_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_o_width_prec_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_width_prec_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_o_width_prec_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_o_width_prec_space_post);
+    tcase_add_test(tc, test_s21_sprintf_o_width_prec_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_width_prec_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_o_width_prec_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_o_width_prec_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_o_width_prec_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_width_prec_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_o_width_prec_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_o_width_prec_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_o_width_prec_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_width_prec_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_o_dynamic_width);
+    tcase_add_test(tc, test_s21_sprintf_o_dynamic_precision);
+    tcase_add_test(tc, test_s21_sprintf_o_dynamic_width_precision);
+    tcase_add_test(tc, test_s21_sprintf_o_width_negt);
+    tcase_add_test(tc, test_s21_sprintf_o_width_post);
+    tcase_add_test(tc, test_s21_sprintf_o_width_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_width_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_o_prec_negt);
+    tcase_add_test(tc, test_s21_sprintf_o_prec_post);
+    tcase_add_test(tc, test_s21_sprintf_o_prec_zero_);
+    tcase_add_test(tc, test_s21_sprintf_o_prec_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_o_width_prec_negt);
+    tcase_add_test(tc, test_s21_sprintf_o_width_prec_post);
+    tcase_add_test(tc, test_s21_sprintf_o_width_prec_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_width_prec_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_o_zero_prec_negt);
+    tcase_add_test(tc, test_s21_sprintf_o_zero_prec_post);
+    tcase_add_test(tc, test_s21_sprintf_o_zero_prec_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_zero_prec_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_o_zero_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_o_zero_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_o_zero_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_zero_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_o_zero_prec_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_o_zero_prec_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_o_zero_prec_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_zero_prec_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_o_zero_prec_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_zero_prec_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_zero_prec_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_zero_prec_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_zero_zero_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_zero_zero_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_zero_zero_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_zero_zero_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_zero_width_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_zero_prec_zero_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_zero_prec_zero_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_zero_prec_zero_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_zero_prec_zero_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_o_zero_prec_width_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_x_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_x_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_x_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_x_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_x_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_x_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_x_space_post);
+    tcase_add_test(tc, test_s21_sprintf_x_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_x_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_x_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_x_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_x_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_x_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_x_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_x_width_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_x_width_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_x_width_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_width_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_x_width_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_x_width_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_x_width_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_width_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_x_width_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_x_width_space_post);
+    tcase_add_test(tc, test_s21_sprintf_x_width_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_width_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_x_width_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_x_width_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_x_width_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_width_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_x_width_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_x_width_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_x_width_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_width_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_x_prec_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_x_prec_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_x_prec_minus);
+    tcase_add_test(tc, test_s21_sprintf_x_prec_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_x_prec_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_x_prec_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_x_prec_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_prec_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_x_prec_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_x_prec_space_post);
+    tcase_add_test(tc, test_s21_sprintf_x_prec_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_prec_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_x_prec_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_x_prec_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_x_prec_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_prec_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_x_prec_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_x_prec_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_x_prec_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_prec_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_x_width_prec_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_x_width_prec_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_x_width_prec_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_width_prec_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_x_width_prec_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_x_width_prec_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_x_width_prec_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_width_prec_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_x_width_prec_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_x_width_prec_space_post);
+    tcase_add_test(tc, test_s21_sprintf_x_width_prec_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_width_prec_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_x_width_prec_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_x_width_prec_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_x_width_prec_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_width_prec_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_x_width_prec_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_x_width_prec_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_x_width_prec_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_width_prec_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_x_dynamic_width);
+    tcase_add_test(tc, test_s21_sprintf_x_dynamic_precision);
+    tcase_add_test(tc, test_s21_sprintf_x_dynamic_width_precision);
+    tcase_add_test(tc, test_s21_sprintf_x_width_negt);
+    tcase_add_test(tc, test_s21_sprintf_x_width_post);
+    tcase_add_test(tc, test_s21_sprintf_x_width_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_width_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_x_prec_negt);
+    tcase_add_test(tc, test_s21_sprintf_x_prec_post);
+    tcase_add_test(tc, test_s21_sprintf_x_prec_zero_);
+    tcase_add_test(tc, test_s21_sprintf_x_prec_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_x_width_prec_negt);
+    tcase_add_test(tc, test_s21_sprintf_x_width_prec_post);
+    tcase_add_test(tc, test_s21_sprintf_x_width_prec_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_width_prec_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_x_zero_prec_negt);
+    tcase_add_test(tc, test_s21_sprintf_x_zero_prec_post);
+    tcase_add_test(tc, test_s21_sprintf_x_zero_prec_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_zero_prec_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_x_zero_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_x_zero_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_x_zero_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_zero_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_x_zero_prec_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_x_zero_prec_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_x_zero_prec_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_zero_prec_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_x_zero_prec_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_zero_prec_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_zero_prec_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_zero_prec_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_zero_zero_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_zero_zero_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_zero_zero_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_zero_zero_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_zero_width_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_zero_prec_zero_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_zero_prec_zero_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_zero_prec_zero_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_zero_prec_zero_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_x_zero_prec_width_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_X_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_X_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_X_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_X_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_X_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_X_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_X_space_post);
+    tcase_add_test(tc, test_s21_sprintf_X_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_X_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_X_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_X_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_X_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_X_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_X_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_X_width_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_X_width_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_X_width_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_width_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_X_width_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_X_width_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_X_width_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_width_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_X_width_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_X_width_space_post);
+    tcase_add_test(tc, test_s21_sprintf_X_width_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_width_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_X_width_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_X_width_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_X_width_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_width_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_X_width_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_X_width_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_X_width_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_width_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_X_prec_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_X_prec_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_X_prec_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_prec_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_X_prec_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_X_prec_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_X_prec_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_prec_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_X_prec_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_X_prec_space_post);
+    tcase_add_test(tc, test_s21_sprintf_X_prec_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_prec_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_X_prec_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_X_prec_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_X_prec_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_prec_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_X_prec_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_X_prec_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_X_prec_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_prec_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_X_width_prec_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_X_width_prec_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_X_width_prec_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_width_prec_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_X_width_prec_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_X_width_prec_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_X_width_prec_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_width_prec_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_X_width_prec_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_X_width_prec_space_post);
+    tcase_add_test(tc, test_s21_sprintf_X_width_prec_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_width_prec_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_X_width_prec_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_X_width_prec_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_X_width_prec_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_width_prec_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_X_width_prec_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_X_width_prec_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_X_width_prec_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_width_prec_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_X_width_negt);
+    tcase_add_test(tc, test_s21_sprintf_X_width_post);
+    tcase_add_test(tc, test_s21_sprintf_X_width_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_width_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_X_prec_negt);
+    tcase_add_test(tc, test_s21_sprintf_X_prec_post);
+    tcase_add_test(tc, test_s21_sprintf_X_prec_zero_);
+    tcase_add_test(tc, test_s21_sprintf_X_prec_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_X_width_prec_negt);
+    tcase_add_test(tc, test_s21_sprintf_X_width_prec_post);
+    tcase_add_test(tc, test_s21_sprintf_X_width_prec_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_width_prec_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_X_zero_prec_negt);
+    tcase_add_test(tc, test_s21_sprintf_X_zero_prec_post);
+    tcase_add_test(tc, test_s21_sprintf_X_zero_prec_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_zero_prec_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_X_zero_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_X_zero_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_X_zero_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_zero_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_X_zero_prec_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_X_zero_prec_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_X_zero_prec_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_zero_prec_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_X_zero_prec_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_zero_prec_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_zero_prec_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_zero_prec_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_zero_zero_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_zero_zero_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_zero_zero_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_zero_zero_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_zero_width_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_zero_prec_zero_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_zero_prec_zero_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_zero_prec_zero_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_zero_prec_zero_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_zero_prec_width_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_X_dynamic_width);
+    tcase_add_test(tc, test_s21_sprintf_X_dynamic_precision);
+    tcase_add_test(tc, test_s21_sprintf_X_dynamic_width_precision);
+    tcase_add_test(tc, test_s21_sprintf_hu_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_hu_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_hu_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hu_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_hu_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_hu_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hu_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_hu_space_post);
+    tcase_add_test(tc, test_s21_sprintf_hu_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hu_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_hu_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_hu_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hu_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_hu_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_hu_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_space_post);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hu_prec_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_hu_prec_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_hu_prec_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_prec_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hu_prec_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_hu_prec_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_hu_prec_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_prec_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hu_prec_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_hu_prec_space_post);
+    tcase_add_test(tc, test_s21_sprintf_hu_prec_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_prec_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hu_prec_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_hu_prec_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_hu_prec_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_prec_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hu_prec_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_hu_prec_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_hu_prec_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_prec_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_prec_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_prec_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_prec_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_prec_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_prec_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_prec_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_prec_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_prec_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_prec_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_prec_space_post);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_prec_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_prec_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_prec_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_prec_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_prec_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_prec_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_prec_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_prec_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_prec_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_prec_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hu_dynamic_width);
+    tcase_add_test(tc, test_s21_sprintf_hu_dynamic_precision);
+    tcase_add_test(tc, test_s21_sprintf_hu_dynamic_width_precision);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_negt);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_post);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hu_prec_negt);
+    tcase_add_test(tc, test_s21_sprintf_hu_prec_post);
+    tcase_add_test(tc, test_s21_sprintf_hu_prec_zero_);
+    tcase_add_test(tc, test_s21_sprintf_hu_prec_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_prec_negt);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_prec_post);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_prec_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_width_prec_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hu_zero_prec_negt);
+    tcase_add_test(tc, test_s21_sprintf_hu_zero_prec_post);
+    tcase_add_test(tc, test_s21_sprintf_hu_zero_prec_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_zero_prec_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hu_zero_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_hu_zero_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_hu_zero_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_zero_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hu_zero_prec_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_hu_zero_prec_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_hu_zero_prec_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_zero_prec_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hu_zero_prec_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_zero_prec_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_zero_prec_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_zero_prec_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_zero_zero_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_zero_zero_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_zero_zero_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_zero_zero_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_zero_width_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_zero_prec_zero_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_zero_prec_zero_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_zero_prec_zero_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_zero_prec_zero_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_hu_zero_prec_width_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_ho_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_ho_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_ho_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_ho_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_ho_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_ho_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_ho_space_post);
+    tcase_add_test(tc, test_s21_sprintf_ho_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_ho_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_ho_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_ho_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_ho_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_ho_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_ho_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_space_post);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_ho_prec_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_ho_prec_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_ho_prec_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_prec_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_ho_prec_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_ho_prec_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_ho_prec_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_prec_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_ho_prec_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_ho_prec_space_post);
+    tcase_add_test(tc, test_s21_sprintf_ho_prec_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_prec_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_ho_prec_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_ho_prec_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_ho_prec_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_prec_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_ho_prec_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_ho_prec_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_ho_prec_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_prec_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_prec_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_prec_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_prec_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_prec_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_prec_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_prec_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_prec_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_prec_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_prec_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_prec_space_post);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_prec_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_prec_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_prec_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_prec_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_prec_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_prec_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_prec_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_prec_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_prec_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_prec_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_ho_dynamic_width);
+    tcase_add_test(tc, test_s21_sprintf_ho_dynamic_precision);
+    tcase_add_test(tc, test_s21_sprintf_ho_dynamic_width_precision);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_negt);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_post);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_ho_prec_negt);
+    tcase_add_test(tc, test_s21_sprintf_ho_prec_post);
+    tcase_add_test(tc, test_s21_sprintf_ho_prec_zero_);
+    tcase_add_test(tc, test_s21_sprintf_ho_prec_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_prec_negt);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_prec_post);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_prec_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_width_prec_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_ho_zero_prec_negt);
+    tcase_add_test(tc, test_s21_sprintf_ho_zero_prec_post);
+    tcase_add_test(tc, test_s21_sprintf_ho_zero_prec_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_zero_prec_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_ho_zero_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_ho_zero_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_ho_zero_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_zero_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_ho_zero_prec_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_ho_zero_prec_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_ho_zero_prec_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_zero_prec_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_ho_zero_prec_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_zero_prec_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_zero_prec_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_zero_prec_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_zero_zero_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_zero_zero_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_zero_zero_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_zero_zero_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_zero_width_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_zero_prec_zero_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_zero_prec_zero_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_zero_prec_zero_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_zero_prec_zero_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_ho_zero_prec_width_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_hx_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_hx_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_hx_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_hx_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hx_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_hx_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_hx_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_hx_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hx_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_hx_space_post);
+    tcase_add_test(tc, test_s21_sprintf_hx_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_hx_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hx_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_hx_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_hx_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_hx_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hx_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_hx_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_hx_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_hx_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hx_width_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_hx_width_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_hx_width_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_hx_width_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hx_width_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_hx_width_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_hx_width_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_hx_width_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hx_width_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_hx_width_space_post);
+    tcase_add_test(tc, test_s21_sprintf_hx_width_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_hx_width_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hx_width_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_hx_width_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_hx_width_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_hx_width_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_hx_width_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_hx_width_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_hx_width_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_f_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_f_minus_zero_);
+    tcase_add_test(tc, test_s21_sprintf_f_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_f_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_f_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_f_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_f_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_f_space_post);
+    tcase_add_test(tc, test_s21_sprintf_f_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_f_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_f_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_f_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_f_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_f_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_f_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_f_width_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_f_width_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_f_width_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_width_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_f_width_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_f_width_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_f_width_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_width_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_f_width_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_f_width_space_post);
+    tcase_add_test(tc, test_s21_sprintf_f_width_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_width_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_f_width_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_f_width_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_f_width_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_width_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_f_width_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_f_width_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_f_width_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_width_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_f_prec_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_f_prec_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_f_prec_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_prec_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_f_prec_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_f_prec_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_f_prec_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_prec_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_f_prec_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_f_prec_space_post);
+    tcase_add_test(tc, test_s21_sprintf_f_prec_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_prec_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_f_prec_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_f_prec_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_f_prec_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_prec_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_f_prec_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_f_prec_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_f_prec_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_prec_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_f_width_prec_minus_negt);
+    tcase_add_test(tc, test_s21_sprintf_f_width_prec_minus_post);
+    tcase_add_test(tc, test_s21_sprintf_f_width_prec_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_width_prec_minus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_f_width_prec_plus_negt);
+    tcase_add_test(tc, test_s21_sprintf_f_width_prec_plus_post);
+    tcase_add_test(tc, test_s21_sprintf_f_width_prec_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_width_prec_plus_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_f_width_prec_space_negt);
+    tcase_add_test(tc, test_s21_sprintf_f_width_prec_space_post);
+    tcase_add_test(tc, test_s21_sprintf_f_width_prec_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_width_prec_space_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_f_width_prec_hash_negt);
+    tcase_add_test(tc, test_s21_sprintf_f_width_prec_hash_post);
+    tcase_add_test(tc, test_s21_sprintf_f_width_prec_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_width_prec_hash_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_f_width_prec_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_f_width_prec_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_f_width_prec_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_width_prec_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_f_dynamic_width);
+    tcase_add_test(tc, test_s21_sprintf_f_dynamic_precision);
+    tcase_add_test(tc, test_s21_sprintf_f_dynamic_width_precision);
+    tcase_add_test(tc, test_s21_sprintf_f_width_negt);
+    tcase_add_test(tc, test_s21_sprintf_f_width_post);
+    tcase_add_test(tc, test_s21_sprintf_f_width_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_width_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_f_prec_negt);
+    tcase_add_test(tc, test_s21_sprintf_f_prec_post);
+    tcase_add_test(tc, test_s21_sprintf_f_prec_zero_);
+    tcase_add_test(tc, test_s21_sprintf_f_prec_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_f_width_prec_negt);
+    tcase_add_test(tc, test_s21_sprintf_f_width_prec_post);
+    tcase_add_test(tc, test_s21_sprintf_f_width_prec_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_width_prec_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_f_zero_prec_negt);
+    tcase_add_test(tc, test_s21_sprintf_f_zero_prec_post);
+    tcase_add_test(tc, test_s21_sprintf_f_zero_prec_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_zero_prec_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_f_zero_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_f_zero_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_f_zero_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_zero_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_f_zero_prec_zero_negt);
+    tcase_add_test(tc, test_s21_sprintf_f_zero_prec_zero_post);
+    tcase_add_test(tc, test_s21_sprintf_f_zero_prec_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_zero_prec_zero_ng_z);
+    tcase_add_test(tc, test_s21_sprintf_f_zero_prec_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_zero_prec_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_zero_prec_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_zero_prec_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_zero_zero_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_zero_zero_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_zero_zero_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_zero_zero_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_zero_width_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_zero_prec_zero_minus_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_zero_prec_zero_plus_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_zero_prec_zero_space_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_zero_prec_zero_hash_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_zero_prec_width_zero_zero);
+    tcase_add_test(tc, test_s21_sprintf_f_minus);
+    tcase_add_test(tc, test_s21_sprintf_f_plus);
+    tcase_add_test(tc, test_s21_sprintf_f_space);
+    tcase_add_test(tc, test_s21_sprintf_f_zero_form);
+    tcase_add_test(tc, test_s21_sprintf_f_width);
+    tcase_add_test(tc, test_s21_sprintf_f_precision);
+    tcase_add_test(tc, test_s21_sprintf_f_width_precision);
+    tcase_add_test(tc, test_s21_sprintf_e_minus);
+    tcase_add_test(tc, test_s21_sprintf_e_plus);
+    tcase_add_test(tc, test_s21_sprintf_e_space);
+    tcase_add_test(tc, test_s21_sprintf_e_zero_form);
+    tcase_add_test(tc, test_s21_sprintf_e_width);
+    tcase_add_test(tc, test_s21_sprintf_e_precision);
+    tcase_add_test(tc, test_s21_sprintf_e_width_precision);
+    tcase_add_test(tc, test_s21_sprintf_e_star_width);
+    tcase_add_test(tc, test_s21_sprintf_e_star_precision);
+    tcase_add_test(tc, test_s21_sprintf_e_star_both);
+    tcase_add_test(tc, test_s21_sprintf_E_minus);
+    tcase_add_test(tc, test_s21_sprintf_E_plus);
+    tcase_add_test(tc, test_s21_sprintf_E_space);
+    tcase_add_test(tc, test_s21_sprintf_E_zero_form);
+    tcase_add_test(tc, test_s21_sprintf_E_width);
+    tcase_add_test(tc, test_s21_sprintf_E_precision);
+    tcase_add_test(tc, test_s21_sprintf_E_width_precision);
+    tcase_add_test(tc, test_s21_sprintf_E_star_width);
+    tcase_add_test(tc, test_s21_sprintf_E_star_precision);
+    tcase_add_test(tc, test_s21_sprintf_E_star_both);
+    tcase_add_test(tc, test_s21_sprintf_g_minus);
+    tcase_add_test(tc, test_s21_sprintf_g_plus);
+    tcase_add_test(tc, test_s21_sprintf_g_space);
+    tcase_add_test(tc, test_s21_sprintf_g_zero_form);
+    tcase_add_test(tc, test_s21_sprintf_g_width);
+    tcase_add_test(tc, test_s21_sprintf_g_precision);
+    tcase_add_test(tc, test_s21_sprintf_g_width_precision);
+    tcase_add_test(tc, test_s21_sprintf_g_star_width);
+    tcase_add_test(tc, test_s21_sprintf_g_star_precision);
+    tcase_add_test(tc, test_s21_sprintf_g_star_both);
+    tcase_add_test(tc, test_s21_sprintf_G_minus);
+    tcase_add_test(tc, test_s21_sprintf_G_plus);
+    tcase_add_test(tc, test_s21_sprintf_G_space);
+    tcase_add_test(tc, test_s21_sprintf_G_zero_form);
+    tcase_add_test(tc, test_s21_sprintf_G_width);
+    tcase_add_test(tc, test_s21_sprintf_G_precision);
+    tcase_add_test(tc, test_s21_sprintf_G_width_precision);
+    tcase_add_test(tc, test_s21_sprintf_G_star_width);
+    tcase_add_test(tc, test_s21_sprintf_G_star_precision);
+    tcase_add_test(tc, test_s21_sprintf_G_star_both);
+    tcase_add_test(tc, test_s21_sprintf_s_minus);
+    tcase_add_test(tc, test_s21_sprintf_s_width);
+    tcase_add_test(tc, test_s21_sprintf_s_precision);
+    tcase_add_test(tc, test_s21_sprintf_s_width_precision);
+    tcase_add_test(tc, test_s21_sprintf_s_star_width);
+    tcase_add_test(tc, test_s21_sprintf_s_star_precision);
+    tcase_add_test(tc, test_s21_sprintf_s_star_both);
+    tcase_add_test(tc, test_s21_sprintf_s_null_wish_form);
+    tcase_add_test(tc, test_s21_sprintf_c_minus);
+    tcase_add_test(tc, test_s21_sprintf_c_width);
+    tcase_add_test(tc, test_s21_sprintf_c_star_width);
+    tcase_add_test(tc, test_s21_sprintf_p_format);
   suite_add_tcase(s, tc);
   return s;
 }
