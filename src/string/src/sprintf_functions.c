@@ -147,6 +147,7 @@ static void convert_string_buffer_to_str(char *str, int *idx,
                                          const char *buffer, int params[]);
 static void convert_buffer_to_str(char *buffer, char ch, int num_len, char *str,
                                   int *idx, int params[]);
+static void convert_hash_to_buffer(int params[],int *hash, char *str, int *idx);
 static void convert_float_buffer_to_str(char *buffer, int num_len, char *str,
                                         int *idx, int params[]);
 static void convert_char_to_buffer(char *buffer, int *idx_buffer, char c);
@@ -751,16 +752,6 @@ static void convert_uint_to_str(char *str, int *idx, unsigned long long value,
   char buffer[MaxBufferSize] = {0};
   int num_len = 0;
 
-  // if (value == 0) params[FLAG_HASH] = false;
-
-  // if (value == 0 && params[PARAM_PRECISION_ASTERISK_VALUE] == 0 &&
-  //     params[PARAM_PRECISION] != -1) {
-  // } else {
-  //   convert_uint_to_buffer(buffer, &num_len, value, params);
-  // }
-  // convert_buffer_to_str(buffer, LENGTH_NULL, num_len, str, idx, params);
-
-    // Особый случай: ноль с точностью 0 и флагом '#' для восьмеричных
   if (value == 0 && params[PARAM_PRECISION_ASTERISK_VALUE] == 0 &&
       params[PARAM_PRECISION] != -1) {
     if (params[FLAG_HASH] && params[PARAM_SPECIFIER] == 'o')
@@ -770,60 +761,65 @@ static void convert_uint_to_str(char *str, int *idx, unsigned long long value,
   }
 
   if (value == 0) params[FLAG_HASH] = false;
+
   convert_buffer_to_str(buffer, LENGTH_NULL, num_len, str, idx, params);
 }
 
-static void convert_buffer_to_str(char *buffer, char sign_char, int num_len,
-                                  char *str, int *idx, int params[]) {
+static void convert_buffer_to_str(char *buffer, char sign_char, int num_len, char *str,
+                                  int *idx, int params[]) {
   int width = params[PARAM_WIDTH_ASTERISK_VALUE];
   bool left_align = (width < 0);
   width = abs(width);
 
   int precision = params[PARAM_PRECISION_ASTERISK_VALUE];
-  int sign_len = (sign_char != 0) ? 1 : 0;
-  int hash =
-      ((params[PARAM_SPECIFIER] == 'x' || params[PARAM_SPECIFIER] == 'X') &&
-       params[FLAG_HASH])
-          ? 2
-          : 0;
-  if (params[PARAM_SPECIFIER] == 'o' && params[FLAG_HASH])
-    params[FLAG_ZERO] = true;
-  // if (params[PARAM_SPECIFIER] == 'x' || params[PARAM_SPECIFIER] == 'X')
-  // params[FLAG_ZERO] = false;
-
   precision = (precision > num_len) ? precision - num_len : 0;
+
+  int sign_len = (sign_char != 0) ? 1 : 0;
+  
+  int hash = 0;
+  if (params[FLAG_HASH]) {
+    if (params[PARAM_SPECIFIER] == 'o') {
+      if (precision == 0)
+      hash = 1; // Префикс "0"
+      else
+      params[FLAG_ZERO] = true;
+    } else if (params[PARAM_SPECIFIER] == 'x' || params[PARAM_SPECIFIER] == 'X') {
+      hash = 2; // Префикс "0x" или "0X"
+    }
+  }
+
   width = width - (sign_len + num_len + precision + hash);
 
   if (!left_align) {
-    if (params[FLAG_ZERO] && precision == 0) {
-      if (hash) {
-        if (params[PARAM_UPPERCASE])
-          convert_string_to_buffer(str, idx, "0X");
-        else
-          convert_string_to_buffer(str, idx, "0x");
-      }
+    
+    if (params[FLAG_ZERO] && precision == 0 && params[PARAM_PRECISION] == -1) {
+      if (hash) convert_hash_to_buffer(params, &hash, str, idx);
       if (sign_len) convert_char_to_buffer(str, idx, sign_char);
       convert_num_len_pad_char_to_str(str, idx, width, '0');
       sign_len = 0;
-      hash = 0;
     } else {
       convert_num_len_pad_char_to_str(str, idx, width, ' ');
     }
   }
 
-  if (hash) {
-    if (params[PARAM_UPPERCASE])
-      convert_string_to_buffer(str, idx, "0X");
-    else
-      convert_string_to_buffer(str, idx, "0x");
-  }
+  if (hash) convert_hash_to_buffer(params, &hash, str, idx);
   if (sign_len) convert_char_to_buffer(str, idx, sign_char);
   convert_num_len_pad_char_to_str(str, idx, precision, '0');
-  convert_string_to_buffer(str, idx, buffer);
 
+  convert_string_to_buffer(str, idx, buffer);
+  
   if (left_align) {
     convert_num_len_pad_char_to_str(str, idx, width, ' ');
   }
+}
+
+static void convert_hash_to_buffer(int params[],int *hash, char *str, int *idx) {
+  if (params[PARAM_SPECIFIER] == 'o') {
+    convert_char_to_buffer(str, idx, '0');
+  } else {
+    convert_string_to_buffer(str, idx, params[PARAM_UPPERCASE] ? "0X" : "0x");
+  }
+  *hash = 0;
 }
 
 static void convert_string_buffer_to_str(char *str, int *idx,
