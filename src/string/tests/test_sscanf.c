@@ -10,499 +10,264 @@
 
 #include "../include/s21_string.h"
 
-#include <math.h>
+// Для целочисленных типов
+#define TEST_SSCANF_INT(test_name, format, input_str, type, expected_value) \
+  START_TEST(test_name) { \
+    type val_sp = 0, val_s21 = 0; \
+    int res_sp = sscanf(input_str, format, &val_sp); \
+    int res_s21 = s21_sscanf(input_str, format, &val_s21); \
+    ck_assert_int_eq(res_sp, res_s21); \
+      ck_assert(val_sp == val_s21); \
+      ck_assert(val_sp == (type)(expected_value)); \
+  } \
+  END_TEST
 
-  // Для целочисленных типов и символов
-void CompareDefault(const void *val_sp, const void *val_s21, void *dummy) {
-    (void)dummy; // Подавление предупреждений о неиспользуемом параметре
-    ck_assert(*(const long long *)val_sp == *(const long long *)val_s21);
-}
+// Для строк
+#define TEST_SSCANF_STRING(test_name, format, input_str, expected_str) \
+  START_TEST(test_name) { \
+    char str_sp[256] = {0}; \
+    char str_s21[256] = {0}; \
+    int res_sp = sscanf(input_str, format, str_sp); \
+    int res_s21 = s21_sscanf(input_str, format, str_s21); \
+    ck_assert_int_eq(res_sp, res_s21); \
+      ck_assert_str_eq(str_sp, str_s21); \
+      ck_assert_str_eq(str_sp, expected_str); \
+  } \
+  END_TEST
 
-// Для float
-void CompareFloat(const void *val_sp, const void *val_s21, void *dummy) {
-    (void)dummy;
-    if (isnan(*(const float *)val_sp)) {
-        ck_assert(isnan(*(const float *)val_s21));
-    } else if (isinf(*(const float *)val_sp)) {
-        ck_assert(isinf(*(const float *)val_s21));
-        ck_assert(signbit(*(const float *)val_sp) == signbit(*(const float *)val_s21));
-    } else {
-        ck_assert_float_eq(*(const float *)val_sp, *(const float *)val_s21);
-    }
-}
+// Для символов
+#define TEST_SSCANF_CHAR(test_name, format, input_str, expected_char) \
+  START_TEST(test_name) { \
+    char c_sp = 0, c_s21 = 0; \
+    int res_sp = sscanf(input_str, format, &c_sp); \
+    int res_s21 = s21_sscanf(input_str, format, &c_s21); \
+    ck_assert_int_eq(res_sp, res_s21); \
+      ck_assert(c_sp == c_s21); \
+      ck_assert(c_sp == expected_char); \
+  } \
+  END_TEST
 
-// Для double
-void CompareDouble(const void *val_sp, const void *val_s21, void *dummy) {
-    (void)dummy;
-    if (isnan(*(const double *)val_sp)) {
-        ck_assert(isnan(*(const double *)val_s21));
-    } else if (isinf(*(const double *)val_sp)) {
-        ck_assert(isinf(*(const double *)val_s21));
-        ck_assert(signbit(*(const double *)val_sp) == signbit(*(const double *)val_s21));
-    } else {
-        ck_assert_double_eq(*(const double *)val_sp, *(const double *)val_s21);
-    }
-}
+// Для вещественных чисел
+#define TEST_SSCANF_FLOAT(test_name, format, input_str, expected_value) \
+  START_TEST(test_name) { \
+    float val_sp = 0, val_s21 = 0; \
+    int res_sp = sscanf(input_str, format, &val_sp); \
+    int res_s21 = s21_sscanf(input_str, format, &val_s21); \
+    ck_assert_int_eq(res_sp, res_s21); \
+      ck_assert_float_eq_tol(val_sp, val_s21, 1e-6); \
+      ck_assert_float_eq_tol(val_sp, expected_value, 1e-6); \
+  } \
+  END_TEST
 
-// Для long double
-void CompareLongDouble(const void *val_sp, const void *val_s21, void *dummy) {
-    (void)dummy;
-    if (isnan(*(const long double *)val_sp)) {
-        ck_assert(isnan(*(const long double *)val_s21));
-    } else if (isinf(*(const long double *)val_sp)) {
-        ck_assert(isinf(*(const long double *)val_s21));
-        ck_assert(signbit(*(const long double *)val_sp) == signbit(*(const long double *)val_s21));
-    } else {
-        ck_assert_ldouble_eq(*(const long double *)val_sp, *(const long double *)val_s21);
-    }
-}
+#define TEST_SSCANF_DOUBLE(test_name, format, input_str, expected_value) \
+  START_TEST(test_name) { \
+    double val_sp = 0, val_s21 = 0; \
+    int res_sp = sscanf(input_str, format, &val_sp); \
+    int res_s21 = s21_sscanf(input_str, format, &val_s21); \
+    ck_assert_int_eq(res_sp, res_s21); \
+      ck_assert_double_eq_tol(val_sp, val_s21, 1e-6); \
+      ck_assert_double_eq_tol(val_sp, expected_value, 1e-6); \
+  } \
+  END_TEST
 
-
-#define TEST_SPRINTF(test_name, format_str, value, type) \
-    START_TEST(test_name) { \
-        char str[200] = {0}; \
-        type val = (value); \
-        sprintf(str, format_str, val); \
-        type val_sp = 0; \
-        type val_s21 = 0; \
-        int res_sp = sscanf(str, format_str, &val_sp); \
-        int res_s21 = s21_sscanf(str, format_str, &val_s21); \
-        COMPARE_VALUES(&val_sp, &val_s21, type); \
-        ck_assert_int_eq(res_sp, res_s21); \
-    } \
-    END_TEST
-
-
-    #define TEST_SSCANF_S(test_name, input_str, format_str) \
-    START_TEST(test_name) { \
-        char str1[200] = {0}; \
-        char str2[200] = {0}; \
-        int res1 = sscanf(input_str, format_str, str1); \
-        int res2 = s21_sscanf(input_str, format_str, str2); \
-        ck_assert_str_eq(str1, str2); \
-        ck_assert_int_eq(res1, res2); \
-    } \
-    END_TEST
-
-    #define COMPARE_VALUES(val_sp, val_s21, type) \
-    _Generic((type){0}, \
-        float: CompareFloat, \
-        double: CompareDouble, \
-        long double: CompareLongDouble, \
-        default: CompareDefault \
-    )(val_sp, val_s21, (type){0})
-
+// Для указателей
+#define TEST_SSCANF_POINTER(test_name, format, input_str, expected_ptr) \
+  START_TEST(test_name) { \
+    void* ptr_sp = NULL; \
+    void* ptr_s21 = NULL; \
+    int res_sp = sscanf(input_str, format, &ptr_sp); \
+    int res_s21 = s21_sscanf(input_str, format, &ptr_s21); \
+    ck_assert_int_eq(res_sp, res_s21); \
+      ck_assert_ptr_eq(ptr_sp, ptr_s21); \
+      ck_assert_ptr_eq(ptr_sp, expected_ptr); \
+  } \
+  END_TEST
 
 // ================================================================
 // Целочисленные типы без модификаторов
 // ================================================================
 
-// %d - int
-TEST_SPRINTF(test_s21_sprintf_d, "%d", 123, int)
-TEST_SPRINTF(test_s21_sprintf_d_min, "%d", INT_MIN, int)
-TEST_SPRINTF(test_s21_sprintf_d_max, "%d", INT_MAX, int)
+// %d - int (обычное значение)
+TEST_SSCANF_INT(test_s21_sscanf_d, "%d", "123", int, 123)
+// INT_MIN
+TEST_SSCANF_INT(test_s21_sscanf_d_min, "%d", "-2147483648", int, INT_MIN)
+// INT_MAX
+TEST_SSCANF_INT(test_s21_sscanf_d_max, "%d", "2147483647", int, INT_MAX)
 
-// %i - int
-TEST_SPRINTF(test_s21_sprintf_i, "%i", 123, int)
-TEST_SPRINTF(test_s21_sprintf_i_min, "%i", INT_MIN, int)
-TEST_SPRINTF(test_s21_sprintf_i_max, "%i", INT_MAX, int)
+// %i - int (шестнадцатеричное)
+TEST_SSCANF_INT(test_s21_sscanf_i_hex, "%i", "0x7B", int, 123)
+// Восьмеричное
+TEST_SSCANF_INT(test_s21_sscanf_i_oct, "%i", "0173", int, 123)
 
 // %o - unsigned int
-TEST_SPRINTF(test_s21_sprintf_o, "%o", 123, unsigned int)
-TEST_SPRINTF(test_s21_sprintf_o_min, "%o", 0, unsigned int)
-TEST_SPRINTF(test_s21_sprintf_o_max, "%o", UINT_MAX, unsigned int)
+TEST_SSCANF_INT(test_s21_sscanf_o, "%o", "173", unsigned int, 0123)
+// UINT_MAX в восьмеричной системе
+TEST_SSCANF_INT(test_s21_sscanf_o_max, "%o", "37777777777", unsigned int, UINT_MAX)
 
 // %u - unsigned int
-TEST_SPRINTF(test_s21_sprintf_u, "%u", 123, unsigned int)
-TEST_SPRINTF(test_s21_sprintf_u_min, "%u", 0, unsigned int)
-TEST_SPRINTF(test_s21_sprintf_u_max, "%u", UINT_MAX, unsigned int)
+TEST_SSCANF_INT(test_s21_sscanf_u, "%u", "123", unsigned int, 123)
+// UINT_MAX
+TEST_SSCANF_INT(test_s21_sscanf_u_max, "%u", "4294967295", unsigned int, UINT_MAX)
 
-// %x - unsigned int
-TEST_SPRINTF(test_s21_sprintf_x, "%x", 123, unsigned int)
-TEST_SPRINTF(test_s21_sprintf_x_min, "%x", 0, unsigned int)
-TEST_SPRINTF(test_s21_sprintf_x_max, "%x", UINT_MAX, unsigned int)
+// %x - unsigned int (нижний регистр)
+TEST_SSCANF_INT(test_s21_sscanf_x, "%x", "7b", unsigned int, 0x7B)
+// UINT_MAX в шестнадцатеричной
+TEST_SSCANF_INT(test_s21_sscanf_x_max, "%x", "ffffffff", unsigned int, UINT_MAX)
 
-// %X - unsigned int
-TEST_SPRINTF(test_s21_sprintf_X, "%X", 123, unsigned int)
-TEST_SPRINTF(test_s21_sprintf_X_min, "%X", 0, unsigned int)
-TEST_SPRINTF(test_s21_sprintf_X_max, "%X", UINT_MAX, unsigned int)
+// %X - unsigned int (верхний регистр)
+TEST_SSCANF_INT(test_s21_sscanf_X, "%X", "7B", unsigned int, 0x7B)
 
 // ================================================================
 // Модификатор h (short)
 // ================================================================
 
 // %hd - short
-TEST_SPRINTF(test_s21_sprintf_hd, " %hd", 123, short)
-TEST_SPRINTF(test_s21_sprintf_hd_min, "%hd", SHRT_MIN, short)
-TEST_SPRINTF(test_s21_sprintf_hd_max, "%hd", SHRT_MAX, short)
-
-// %hi - short
-TEST_SPRINTF(test_s21_sprintf_hi, "%hi", 123, short)
-TEST_SPRINTF(test_s21_sprintf_hi_min, "%hi", SHRT_MIN, short)
-TEST_SPRINTF(test_s21_sprintf_hi_max, "%hi", SHRT_MAX, short)
-
-// %ho - unsigned short
-TEST_SPRINTF(test_s21_sprintf_ho, "%ho", 123, unsigned short)
-TEST_SPRINTF(test_s21_sprintf_ho_min, "%ho", 0, unsigned short)
-TEST_SPRINTF(test_s21_sprintf_ho_max, "%ho", USHRT_MAX,
-             unsigned short)
+TEST_SSCANF_INT(test_s21_sscanf_hd, "%hd", "123", short, 123)
+// SHRT_MIN
+TEST_SSCANF_INT(test_s21_sscanf_hd_min, "%hd", "-32768", short, SHRT_MIN)
 
 // %hu - unsigned short
-TEST_SPRINTF(test_s21_sprintf_hu, "%hu", 123, unsigned short)
-TEST_SPRINTF(test_s21_sprintf_hu_min, "%hu", 0, unsigned short)
-TEST_SPRINTF(test_s21_sprintf_hu_max, "%hu", USHRT_MAX,
-             unsigned short)
-
-// %hx - unsigned short
-TEST_SPRINTF(test_s21_sprintf_hx, "%hx", 123, unsigned short)
-TEST_SPRINTF(test_s21_sprintf_hx_min, "%hx", 0, unsigned short)
-TEST_SPRINTF(test_s21_sprintf_hx_max, "%hx", USHRT_MAX,
-             unsigned short)
-
-// %hX - unsigned short
-TEST_SPRINTF(test_s21_sprintf_hX, "%hX", 123, unsigned short)
-TEST_SPRINTF(test_s21_sprintf_hX_min, "%hX", 0, unsigned short)
-TEST_SPRINTF(test_s21_sprintf_hX_max, "%hX", USHRT_MAX,
-             unsigned short)
+TEST_SSCANF_INT(test_s21_sscanf_hu, "%hu", "123", unsigned short, 123)
+// USHRT_MAX
+TEST_SSCANF_INT(test_s21_sscanf_hu_max, "%hu", "65535", unsigned short, USHRT_MAX)
 
 // ================================================================
 // Модификатор hh (char)
 // ================================================================
 
 // %hhd - signed char
-TEST_SPRINTF(test_s21_sprintf_hhd, "%hhd", 123, signed char)
-TEST_SPRINTF(test_s21_sprintf_hhd_min, "%hhd", SCHAR_MIN,
-             signed char)
-TEST_SPRINTF(test_s21_sprintf_hhd_max, "%hhd", SCHAR_MAX,
-             signed char)
-
-// %hhi - signed char
-TEST_SPRINTF(test_s21_sprintf_hhi, "%hhi", 123, signed char)
-TEST_SPRINTF(test_s21_sprintf_hhi_min, "%hhi", SCHAR_MIN,
-             signed char)
-TEST_SPRINTF(test_s21_sprintf_hhi_max, "%hhi", SCHAR_MAX,
-             signed char)
-
-// %hho - unsigned char
-TEST_SPRINTF(test_s21_sprintf_hho, "%hho", 123, unsigned char)
-TEST_SPRINTF(test_s21_sprintf_hho_min, "%hho", 0, unsigned char)
-TEST_SPRINTF(test_s21_sprintf_hho_max, "%hho", UCHAR_MAX,
-             unsigned char)
+TEST_SSCANF_INT(test_s21_sscanf_hhd, "%hhd", "123", signed char, 123)
+// SCHAR_MIN
+TEST_SSCANF_INT(test_s21_sscanf_hhd_min, "%hhd", "-128", signed char, SCHAR_MIN)
 
 // %hhu - unsigned char
-TEST_SPRINTF(test_s21_sprintf_hhu, "%hhu", 123, unsigned char)
-TEST_SPRINTF(test_s21_sprintf_hhu_min, "%hhu", 0, unsigned char)
-TEST_SPRINTF(test_s21_sprintf_hhu_max, "%hhu", UCHAR_MAX,
-             unsigned char)
-
-// %hhx - unsigned char
-TEST_SPRINTF(test_s21_sprintf_hhx, "%hhx", 123, unsigned char)
-TEST_SPRINTF(test_s21_sprintf_hhx_min, "%hhx", 0, unsigned char)
-TEST_SPRINTF(test_s21_sprintf_hhx_max, "%hhx", UCHAR_MAX,
-             unsigned char)
-
-// %hhX - unsigned char
-TEST_SPRINTF(test_s21_sprintf_hhX, "%hhX", 123, unsigned char)
-TEST_SPRINTF(test_s21_sprintf_hhX_min, "%hhX", 0, unsigned char)
-TEST_SPRINTF(test_s21_sprintf_hhX_max, "%hhX", UCHAR_MAX,
-             unsigned char)
+TEST_SSCANF_INT(test_s21_sscanf_hhu, "%hhu", "123", unsigned char, 123)
+// UCHAR_MAX
+TEST_SSCANF_INT(test_s21_sscanf_hhu_max, "%hhu", "255", unsigned char, UCHAR_MAX)
 
 // ================================================================
 // Модификатор l (long)
 // ================================================================
 
 // %ld - long
-TEST_SPRINTF(test_s21_sprintf_ld, "%ld", 123, long)
-TEST_SPRINTF(test_s21_sprintf_ld_min, "%ld", LONG_MIN, long)
-TEST_SPRINTF(test_s21_sprintf_ld_max, "%ld", LONG_MAX, long)
-
-// %li - long
-TEST_SPRINTF(test_s21_sprintf_li, "%li", 123, long)
-TEST_SPRINTF(test_s21_sprintf_li_min, "%li", LONG_MIN, long)
-TEST_SPRINTF(test_s21_sprintf_li_max, "%li", LONG_MAX, long)
-
-// %lo - unsigned long
-TEST_SPRINTF(test_s21_sprintf_lo, "%lo", 123, unsigned long)
-TEST_SPRINTF(test_s21_sprintf_lo_min, "%lo", 0, unsigned long)
-TEST_SPRINTF(test_s21_sprintf_lo_max, "%lo", ULONG_MAX,
-             unsigned long)
+TEST_SSCANF_INT(test_s21_sscanf_ld, "%ld", "1234567890", long, 1234567890L)
+// LONG_MIN
+TEST_SSCANF_INT(test_s21_sscanf_ld_min, "%ld", "-9223372036854775808", long, LONG_MIN)
 
 // %lu - unsigned long
-TEST_SPRINTF(test_s21_sprintf_lu, "%lu", 123, unsigned long)
-TEST_SPRINTF(test_s21_sprintf_lu_min, "%lu", 0, unsigned long)
-TEST_SPRINTF(test_s21_sprintf_lu_max, "%lu", ULONG_MAX,
-             unsigned long)
-
-// %lx - unsigned long
-TEST_SPRINTF(test_s21_sprintf_lx, "%lx", 123, unsigned long)
-TEST_SPRINTF(test_s21_sprintf_lx_min, "%lx", 0, unsigned long)
-TEST_SPRINTF(test_s21_sprintf_lx_max, "%lx", ULONG_MAX,
-             unsigned long)
-
-// %lX - unsigned long
-TEST_SPRINTF(test_s21_sprintf_lX, "%lX", 123, unsigned long)
-TEST_SPRINTF(test_s21_sprintf_lX_min, "%lX", 0, unsigned long)
-TEST_SPRINTF(test_s21_sprintf_lX_max, "%lX", USHRT_MAX,
-             unsigned long)
+TEST_SSCANF_INT(test_s21_sscanf_lu, "%lu", "1234567890", unsigned long, 1234567890UL)
+// ULONG_MAX
+TEST_SSCANF_INT(test_s21_sscanf_lu_max, "%lu", "18446744073709551615", unsigned long, ULONG_MAX)
 
 // ================================================================
 // Модификатор ll (long long)
 // ================================================================
 
 // %lld - long long
-TEST_SPRINTF(test_s21_sprintf_lld, "%lld", 123, long long)
-TEST_SPRINTF(test_s21_sprintf_lld_min, "%lld", LLONG_MIN, long long)
-TEST_SPRINTF(test_s21_sprintf_lld_max, "%lld", LLONG_MAX, long long)
-
-// %lli - long long
-TEST_SPRINTF(test_s21_sprintf_lli, "%lli", 123, long long)
-TEST_SPRINTF(test_s21_sprintf_lli_min, "%lli", LLONG_MIN, long long)
-TEST_SPRINTF(test_s21_sprintf_lli_max, "%lli", LLONG_MAX, long long)
-
-// %llo - unsigned long long
-TEST_SPRINTF(test_s21_sprintf_llo, "%llo", 123,
-             unsigned long long)
-TEST_SPRINTF(test_s21_sprintf_llo_min, "%llo", 0,
-             unsigned long long)
-TEST_SPRINTF(test_s21_sprintf_llo_max, "%llo", ULLONG_MAX,
-             unsigned long long)
+TEST_SSCANF_INT(test_s21_sscanf_lld, "%lld", "123456789012345", long long, 123456789012345LL)
+// LLONG_MIN
+TEST_SSCANF_INT(test_s21_sscanf_lld_min, "%lld", "-9223372036854775808", long long, LLONG_MIN)
 
 // %llu - unsigned long long
-TEST_SPRINTF(test_s21_sprintf_llu, "%llu", 123,
-             unsigned long long)
-TEST_SPRINTF(test_s21_sprintf_llu_min, "%llu", 0,
-             unsigned long long)
-TEST_SPRINTF(test_s21_sprintf_llu_max, "%llu", ULLONG_MAX,
-             unsigned long long)
-
-// %llx - unsigned long long
-TEST_SPRINTF(test_s21_sprintf_llx, "%llx", 123,
-             unsigned long long)
-TEST_SPRINTF(test_s21_sprintf_llx_min, "%llx", 0,
-             unsigned long long)
-TEST_SPRINTF(test_s21_sprintf_llx_max, "%llx", ULLONG_MAX,
-             unsigned long long)
-
-// %llX - unsigned long long
-TEST_SPRINTF(test_s21_sprintf_llX, "%llX", 123,
-             unsigned long long)
-TEST_SPRINTF(test_s21_sprintf_llX_min, "%llX", 0,
-             unsigned long long)
-TEST_SPRINTF(test_s21_sprintf_llX_max, "%llX", ULLONG_MAX,
-             unsigned long long)
+TEST_SSCANF_INT(test_s21_sscanf_llu, "%llu", "123456789012345", unsigned long long, 123456789012345ULL)
+// ULLONG_MAX
+TEST_SSCANF_INT(test_s21_sscanf_llu_max, "%llu", "18446744073709551615", unsigned long long, ULLONG_MAX)
 
 // ================================================================
 // Строковые типы
 // ================================================================
 
 // %c - char
-TEST_SPRINTF(test_s21_sprintf_c, "%c", 'A', char)
-TEST_SPRINTF(test_s21_sprintf_c_min, "%c", -128, char)
-TEST_SPRINTF(test_s21_sprintf_c_max, "%c", 127, char)
-TEST_SPRINTF(test_s21_sprintf_c_nonprint, "%c", '\x01', char)
-TEST_SPRINTF(test_s21_sprintf_c_zero, "%c", 0, char)
-TEST_SPRINTF(test_s21_sprintf_c_newline, "%c", '\n', char)
-TEST_SPRINTF(test_s21_sprintf_c_tab, "%c", '\t', char)
-TEST_SPRINTF(test_s21_sprintf_c_null_char, "%c", '\0', char)
+TEST_SSCANF_CHAR(test_s21_sscanf_c, "%c", "A", 'A')
+TEST_SSCANF_CHAR(test_s21_sscanf_c_newline, "%c", "\n", '\n')
 
 // %s - string
-TEST_SSCANF_S(test_s21_sprintf_s, "%s", "Hello, world!")
-TEST_SSCANF_S(test_s21_sprintf_s_special, "%s", "Hello\tWorld\n")
-TEST_SSCANF_S(test_s21_sprintf_s_special_chars, "%s","Line1\nLine2\tTab\x01")
-TEST_SSCANF_S(test_s21_sprintf_s_unicode, "%s", "Привет мир!")
-TEST_SSCANF_S(test_s21_sprintf_s_null, "%s", NULL)
-TEST_SSCANF_S(test_s21_sprintf_s_empty, "%s", "")
+TEST_SSCANF_STRING(test_s21_sscanf_s, "%s", "Hello", "Hello")
+TEST_SSCANF_STRING(test_s21_sscanf_s_unicode, "%s", "Привет", "Привет")
 
 // ================================================================
 // Вещественные типы
 // ================================================================
 
-// // %e %E %f %g %G
-// TEST_SPRINTF(test_s21_sprintf_e_zero, "%e", 0.0, double)
-// TEST_SPRINTF(test_s21_sprintf_e_minus_zero, "%e", -0.0, double)
-// TEST_SPRINTF(test_s21_sprintf_E_zero, "%E", 0.0, double)
-// TEST_SPRINTF(test_s21_sprintf_E_minus_zero, "%E", -0.0, double)
-// TEST_SPRINTF(test_s21_sprintf_f_zero, "%f", 0.0, double)
-// TEST_SPRINTF(test_s21_sprintf_f_minus_zero, "%f", -0.0, double)
-// TEST_SPRINTF(test_s21_sprintf_g_zero, "%g", 0.0, double)
-// TEST_SPRINTF(test_s21_sprintf_g_minus_zero, "%g", -0.0, double)
-// TEST_SPRINTF(test_s21_sprintf_G_zero, "%G", 0.0, double)
-// TEST_SPRINTF(test_s21_sprintf_G_minus_zero, "%G", -0.0, double)
-// // %le %lE %lf %lg %lG
-// TEST_SPRINTF(test_s21_sprintf_le_zero, "%le", 0.0, double)
-// TEST_SPRINTF(test_s21_sprintf_le_minus_zero, "%le", -0.0, double)
-// TEST_SPRINTF(test_s21_sprintf_lE_zero, "%lE", 0.0, double)
-// TEST_SPRINTF(test_s21_sprintf_lE_minus_zero, "%lE", -0.0, double)
-// TEST_SPRINTF(test_s21_sprintf_lf_zero, "%lf", 0.0, double)
-// TEST_SPRINTF(test_s21_sprintf_lf_minus_zero, "%lf", -0.0, double)
-// TEST_SPRINTF(test_s21_sprintf_lg_zero, "%lg", 0.0, double)
-// TEST_SPRINTF(test_s21_sprintf_lg_minus_zero, "%lg", -0.0, double)
-// TEST_SPRINTF(test_s21_sprintf_lG_zero, "%lG", 0.0, double)
-// TEST_SPRINTF(test_s21_sprintf_lG_minus_zero, "%lG", -0.0, double)
-// // %Le %LE %Lf %Lg %LG
-// TEST_SPRINTF(test_s21_sprintf_Le_zero, "%Le", 0.0L, long double)
-// TEST_SPRINTF(test_s21_sprintf_Le_minus_zero, "%Le", -0.0L, long double)
-// TEST_SPRINTF(test_s21_sprintf_LE_zero, "%LE", 0.0L, long double)
-// TEST_SPRINTF(test_s21_sprintf_LE_minus_zero, "%LE", -0.0L, long double)
-// TEST_SPRINTF(test_s21_sprintf_Lf_zero, "%Lf", 0.0L, long double)
-// TEST_SPRINTF(test_s21_sprintf_Lf_minus_zero, "%Lf", -0.0L, long double)
-// TEST_SPRINTF(test_s21_sprintf_Lg_zero, "%Lg", 0.0L, long double)
-// TEST_SPRINTF(test_s21_sprintf_Lg_minus_zero, "%Lg", -0.0L, long double)
-// TEST_SPRINTF(test_s21_sprintf_LG_zero, "%LG", 0.0L, long double)
-// TEST_SPRINTF(test_s21_sprintf_LG_minus_zero, "%LG", -0.0L, long double)
+// %f - float
+TEST_SSCANF_FLOAT(test_s21_sscanf_f, "%f", "123.456", 123.456f)
+TEST_SSCANF_FLOAT(test_s21_sscanf_f_zero, "%f", "0.0", 0.0f)
 
-// // %e %E %f %g %G
-// TEST_SPRINTF(test_s21_sprintf_e, "%e", 123.456, double)
-// TEST_SPRINTF(test_s21_sprintf_e_neg, "%e", -123.456, double)
-// TEST_SPRINTF(test_s21_sprintf_e_big, "%e", 1e308, double)
-// TEST_SPRINTF(test_s21_sprintf_e_small, "%e", 1e-308, double)
-// TEST_SPRINTF(test_s21_sprintf_E, "%E", 123.456, double)
-// TEST_SPRINTF(test_s21_sprintf_E_neg, "%E", -123.456, double)
-// TEST_SPRINTF(test_s21_sprintf_E_big, "%E", 1e308, double)
-// TEST_SPRINTF(test_s21_sprintf_E_small, "%E", 1e-308, double)
-// TEST_SPRINTF(test_s21_sprintf_f, "%f", 123.456, double)
-// TEST_SPRINTF(test_s21_sprintf_f2, "%f", 123.9999996, double)
-// TEST_SPRINTF(test_s21_sprintf_f_neg, "%f", -123.456, double)
-// TEST_SPRINTF(test_s21_sprintf_f_small, "%f", 1e-308, double)
-// TEST_SPRINTF(test_s21_sprintf_g, "%g", 123.456, double)
-// TEST_SPRINTF(test_s21_sprintf_g2, "%g", 123.9999996, double)
-// TEST_SPRINTF(test_s21_sprintf_g3, "%g", 1.89, double)
-// TEST_SPRINTF(test_s21_sprintf_g_neg, "%g", -123.456, double)
-// TEST_SPRINTF(test_s21_sprintf_g_big, "%g", 1e308, double)
-// TEST_SPRINTF(test_s21_sprintf_g_small, "%g", 1e-308, double)
-// TEST_SPRINTF(test_s21_sprintf_G, "%G", 123.456, double)
-// TEST_SPRINTF(test_s21_sprintf_G2, "%G", 123.9999996, double)
-// TEST_SPRINTF(test_s21_sprintf_G3, "%G", 1.89, double)
-// TEST_SPRINTF(test_s21_sprintf_G_neg, "%G", -123.456, double)
-// TEST_SPRINTF(test_s21_sprintf_G_big, "%G", 1e308, double)
-// TEST_SPRINTF(test_s21_sprintf_G_small, "%G", 1e-308, double)
-// // %le %lE %lf %lg %lG
-// TEST_SPRINTF(test_s21_sprintf_le, "%le", 123.456, double)
-// TEST_SPRINTF(test_s21_sprintf_le_neg, "%le", -123.456, double)
-// TEST_SPRINTF(test_s21_sprintf_le_big, "%le", 1e308, double)
-// TEST_SPRINTF(test_s21_sprintf_le_small, "%le", 1e-308, double)
-// TEST_SPRINTF(test_s21_sprintf_lE, "%lE", 123.456, double)
-// TEST_SPRINTF(test_s21_sprintf_lE_neg, "%lE", -123.456, double)
-// TEST_SPRINTF(test_s21_sprintf_lE_big, "%lE", 1e308, double)
-// TEST_SPRINTF(test_s21_sprintf_lE_small, "%lE", 1e-308, double)
-// TEST_SPRINTF(test_s21_sprintf_lf, "%lf", 123.456, double)
-// TEST_SPRINTF(test_s21_sprintf_lf2, "%lf", 123.9999996, double)
-// TEST_SPRINTF(test_s21_sprintf_lf_neg, "%lf", -123.456, double)
-// TEST_SPRINTF(test_s21_sprintf_lf_small, "%lf", 1e-308, double)
-// TEST_SPRINTF(test_s21_sprintf_lg, "%lg", 123.456, double)
-// TEST_SPRINTF(test_s21_sprintf_lg2, "%lg", 123.9999996, double)
-// TEST_SPRINTF(test_s21_sprintf_lg3, "%lg", 1.89, double)
-// TEST_SPRINTF(test_s21_sprintf_lg_neg, "%lg", -123.456, double)
-// TEST_SPRINTF(test_s21_sprintf_lg_big, "%lg", 1e308, double)
-// TEST_SPRINTF(test_s21_sprintf_lg_small, "%lg", 1e-308, double)
-// TEST_SPRINTF(test_s21_sprintf_lG, "%lG", 123.456, double)
-// TEST_SPRINTF(test_s21_sprintf_lG2, "%lG", 123.9999996, double)
-// TEST_SPRINTF(test_s21_sprintf_lG3, "%lG", 1.89, double)
-// TEST_SPRINTF(test_s21_sprintf_lG_neg, "%lG", -123.456, double)
-// TEST_SPRINTF(test_s21_sprintf_lG_big, "%lG", 1e308, double)
-// TEST_SPRINTF(test_s21_sprintf_lG_small, "%lG", 1e-308, double)
-// // %Le %LE %Lf %Lg %LG
-// TEST_SPRINTF(test_s21_sprintf_Le, "%Le", 123.456L, long double)
-// TEST_SPRINTF(test_s21_sprintf_Le_neg, "%Le", -123.456L, long double)
-// TEST_SPRINTF(test_s21_sprintf_Le_big, "%Le", 1e308L, long double)
-// TEST_SPRINTF(test_s21_sprintf_Le_small, "%Le", 1e-308L, long double)
-// TEST_SPRINTF(test_s21_sprintf_LE, "%LE", 123.456L, long double)
-// TEST_SPRINTF(test_s21_sprintf_LE_neg, "%LE", -123.456L, long double)
-// TEST_SPRINTF(test_s21_sprintf_LE_big, "%LE", 1e308L, long double)
-// TEST_SPRINTF(test_s21_sprintf_LE_small, "%LE", 1e-308L, long double)
-// TEST_SPRINTF(test_s21_sprintf_Lf, "%Lf", 123.456L, long double)
-// TEST_SPRINTF(test_s21_sprintf_Lf2, "%Lf", 123.9999996L, long double)
-// TEST_SPRINTF(test_s21_sprintf_Lf_neg, "%Lf", -123.456L, long double)
-// TEST_SPRINTF(test_s21_sprintf_Lf_small, "%Lf", 1e-308L, long double)
-// TEST_SPRINTF(test_s21_sprintf_Lg, "%Lg", 123.456L, long double)
-// TEST_SPRINTF(test_s21_sprintf_Lg2, "%Lg", 123.9999996L, long double)
-// TEST_SPRINTF(test_s21_sprintf_Lg3, "%Lg", 1.89L, long double)
-// TEST_SPRINTF(test_s21_sprintf_Lg_neg, "%Lg", -123.456L, long double)
-// TEST_SPRINTF(test_s21_sprintf_Lg_big, "%Lg", 1e308L, long double)
-// TEST_SPRINTF(test_s21_sprintf_Lg_small, "%Lg", 1e-308L, long double)
-// TEST_SPRINTF(test_s21_sprintf_LG, "%LG", 123.456L, long double)
-// TEST_SPRINTF(test_s21_sprintf_LG2, "%LG", 123.9999996L, long double)
-// TEST_SPRINTF(test_s21_sprintf_LG3, "%LG", 1.89L, long double)
-// TEST_SPRINTF(test_s21_sprintf_LG_neg, "%LG", -123.456L, long double)
-// TEST_SPRINTF(test_s21_sprintf_LG_big, "%LG", 1e308L, long double)
-// TEST_SPRINTF(test_s21_sprintf_LG_small, "%LG", 1e-308L, long double)
+// %lf - double
+TEST_SSCANF_DOUBLE(test_s21_sscanf_lf, "%lf", "123.456", 123.456)
+TEST_SSCANF_DOUBLE(test_s21_sscanf_lf_exp, "%lf", "1.23456e2", 123.456)
 
-// // %g - double
-// TEST_SPRINTF(test_s21_sprintf_g_switch_to_e, "%g", 0.0000123456, double)
-// TEST_SPRINTF(test_s21_sprintf_g_switch_to_f, "%g", 123.456, double)
-// TEST_SPRINTF(test_s21_sprintf_g_switch, "%g", 123456789.0, double)
-// TEST_SPRINTF(test_s21_sprintf_G_switch_to_e, "%G", 0.0000123456, double)
-// TEST_SPRINTF(test_s21_sprintf_G_switch_to_f, "%G", 123.456, double)
-// TEST_SPRINTF(test_s21_sprintf_G_switch, "%G", 123456789.0, double)
+// Специальные значения
+START_TEST(test_s21_sscanf_inf) {
+    float f1, f2;
+    double d1, d2;
+    const char* input = "inf";
+    
+    int res1 = sscanf(input, "%f", &f1);
+    int res2 = s21_sscanf(input, "%f", &f2);
+    ck_assert_int_eq(res1, res2);
+    ck_assert(isinf(f1) && isinf(f2));
+    
+    res1 = sscanf(input, "%lf", &d1);
+    res2 = s21_sscanf(input, "%lf", &d2);
+    ck_assert_int_eq(res1, res2);
+    ck_assert(isinf(d1) && isinf(d2));
+} END_TEST
 
-// // ================================================================
-// // Вещественные типы: NaN и INFINITY
-// // ================================================================
+// ================================================================
+// Особые типы
+// ================================================================
 
-// // %e %E %f %g %G
-// TEST_SPRINTF(test_s21_sprintf_e_nan, "%e", NAN, double)
-// TEST_SPRINTF(test_s21_sprintf_e_inf, "%e", INFINITY, double)
-// TEST_SPRINTF(test_s21_sprintf_e_neg_inf, "%e", -INFINITY, double)
-// TEST_SPRINTF(test_s21_sprintf_E_nan, "%E", NAN, double)
-// TEST_SPRINTF(test_s21_sprintf_E_inf, "%E", INFINITY, double)
-// TEST_SPRINTF(test_s21_sprintf_E_neg_inf, "%E", -INFINITY, double)
-// TEST_SPRINTF(test_s21_sprintf_f_nan, "%f", NAN, double)
-// TEST_SPRINTF(test_s21_sprintf_f_inf, "%f", INFINITY, double)
-// TEST_SPRINTF(test_s21_sprintf_f_neg_inf, "%f", -INFINITY, double)
-// TEST_SPRINTF(test_s21_sprintf_g_nan, "%g", NAN, double)
-// TEST_SPRINTF(test_s21_sprintf_g_inf, "%g", INFINITY, double)
-// TEST_SPRINTF(test_s21_sprintf_g_neg_inf, "%g", -INFINITY, double)
-// TEST_SPRINTF(test_s21_sprintf_G_nan, "%G", NAN, double)
-// TEST_SPRINTF(test_s21_sprintf_G_inf, "%G", INFINITY, double)
-// TEST_SPRINTF(test_s21_sprintf_G_neg_inf, "%G", -INFINITY, double)
-// // %le %lE %lf %lg %lG
-// TEST_SPRINTF(test_s21_sprintf_le_nan, "%le", NAN, double)
-// TEST_SPRINTF(test_s21_sprintf_le_inf, "%le", INFINITY, double)
-// TEST_SPRINTF(test_s21_sprintf_le_neg_inf, "%le", -INFINITY, double)
-// TEST_SPRINTF(test_s21_sprintf_lE_nan, "%lE", NAN, double)
-// TEST_SPRINTF(test_s21_sprintf_lE_inf, "%lE", INFINITY, double)
-// TEST_SPRINTF(test_s21_sprintf_lE_neg_inf, "%lE", -INFINITY, double)
-// TEST_SPRINTF(test_s21_sprintf_lf_nan, "%lf", NAN, double)
-// TEST_SPRINTF(test_s21_sprintf_lf_inf, "%lf", INFINITY, double)
-// TEST_SPRINTF(test_s21_sprintf_lf_neg_inf, "%lf", -INFINITY, double)
-// TEST_SPRINTF(test_s21_sprintf_lg_nan, "%lg", NAN, double)
-// TEST_SPRINTF(test_s21_sprintf_lg_inf, "%lg", INFINITY, double)
-// TEST_SPRINTF(test_s21_sprintf_lg_neg_inf, "%lg", -INFINITY, double)
-// TEST_SPRINTF(test_s21_sprintf_lG_nan, "%lG", NAN, double)
-// TEST_SPRINTF(test_s21_sprintf_lG_inf, "%lG", INFINITY, double)
-// TEST_SPRINTF(test_s21_sprintf_lG_neg_inf, "%lG", -INFINITY, double)
-// // %Le %LE %Lf %Lg %LG
-// TEST_SPRINTF(test_s21_sprintf_Le_nan, "%Le", (long double)NAN,
-//              long double)
-// TEST_SPRINTF(test_s21_sprintf_Le_inf, "%Le", (long double)INFINITY,
-//              long double)
-// TEST_SPRINTF(test_s21_sprintf_Le_neg_inf, "%Le",
-//              (long double)(-INFINITY), long double)
-// TEST_SPRINTF(test_s21_sprintf_LE_nan, "%LE", (long double)NAN,
-//              long double)
-// TEST_SPRINTF(test_s21_sprintf_LE_inf, "%LE", (long double)INFINITY,
-//              long double)
-// TEST_SPRINTF(test_s21_sprintf_LE_neg_inf, "%LE",
-//              (long double)(-INFINITY), long double)
-// TEST_SPRINTF(test_s21_sprintf_Lf_nan, "%Lf", (long double)NAN,
-//              long double)
-// TEST_SPRINTF(test_s21_sprintf_Lf_inf, "%Lf", (long double)INFINITY,
-//              long double)
-// TEST_SPRINTF(test_s21_sprintf_Lf_neg_inf, "%Lf",
-//              (long double)(-INFINITY), long double)
-// TEST_SPRINTF(test_s21_sprintf_Lg_nan, "%Lg", (long double)NAN,
-//              long double)
-// TEST_SPRINTF(test_s21_sprintf_Lg_inf, "%Lg", (long double)INFINITY,
-//              long double)
-// TEST_SPRINTF(test_s21_sprintf_Lg_neg_inf, "%Lg",
-//              (long double)(-INFINITY), long double)
-// TEST_SPRINTF(test_s21_sprintf_LG_nan, "%LG", (long double)NAN,
-//              long double)
-// TEST_SPRINTF(test_s21_sprintf_LG_inf, "%LG", (long double)INFINITY,
-//              long double)
-// TEST_SPRINTF(test_s21_sprintf_LG_neg_inf, "%LG",
-//              (long double)(-INFINITY), long double)
+// %p - pointer
+START_TEST(test_s21_sscanf_p) {
+    void* ptr = NULL;
+    char input_str[50];
+    sprintf(input_str, "%p", &ptr);
+    
+    void *p1 = NULL, *p2 = NULL;
+    int res1 = sscanf(input_str, "%p", &p1);
+    int res2 = s21_sscanf(input_str, "%p", &p2);
+    
+    ck_assert_int_eq(res1, res2);
+    ck_assert_ptr_eq(p1, p2);
+    ck_assert_ptr_eq(p1, &ptr);
+} END_TEST
 
+// %n - количество символов
+START_TEST(test_s21_sscanf_n) {
+    const char* input = "12345";
+    int n1 = 0, n2 = 0;
+    int a1 = 0, a2 = 0;
+    
+    int res1 = sscanf(input, "%d%n", &a1, &n1);
+    int res2 = s21_sscanf(input, "%d%n", &a2, &n2);
+    
+    ck_assert_int_eq(res1, res2);
+    ck_assert_int_eq(a1, a2);
+    ck_assert_int_eq(n1, n2);
+    ck_assert_int_eq(n1, 5);  // 5 символов в "12345"
+} END_TEST
+
+// %% - знак процента
+START_TEST(test_s21_sscanf_percent) {
+    int a1 = 0, a2 = 0;
+    const char* input = "50%";
+    
+    int res1 = sscanf(input, "%d%%", &a1);
+    int res2 = s21_sscanf(input, "%d%%", &a2);
+    
+    ck_assert_int_eq(res1, res2);
+    ck_assert_int_eq(a1, 50);
+    ck_assert_int_eq(a2, 50);
+} END_TEST
+
+
+
+
+
+
+
+// %d - int (обычное значение)
 // ================================================================
 // Test suite
 // ================================================================
@@ -511,257 +276,46 @@ Suite *sscanf_suite(void) {
   Suite *s = suite_create("test_sscanf");
   TCase *tc = tcase_create("Core");
 
-      tcase_add_test(tc, test_s21_sprintf_d);
-    tcase_add_test(tc, test_s21_sprintf_d_min);
-    tcase_add_test(tc, test_s21_sprintf_d_max);
-    tcase_add_test(tc, test_s21_sprintf_i);
-    tcase_add_test(tc, test_s21_sprintf_i_min);
-    tcase_add_test(tc, test_s21_sprintf_i_max);
-    tcase_add_test(tc, test_s21_sprintf_o);
-    tcase_add_test(tc, test_s21_sprintf_o_min);
-    tcase_add_test(tc, test_s21_sprintf_o_max);
-    tcase_add_test(tc, test_s21_sprintf_u);
-    tcase_add_test(tc, test_s21_sprintf_u_min);
-    tcase_add_test(tc, test_s21_sprintf_u_max);
-    tcase_add_test(tc, test_s21_sprintf_x);
-    tcase_add_test(tc, test_s21_sprintf_x_min);
-    tcase_add_test(tc, test_s21_sprintf_x_max);
-    tcase_add_test(tc, test_s21_sprintf_X);
-    tcase_add_test(tc, test_s21_sprintf_X_min);
-    tcase_add_test(tc, test_s21_sprintf_X_max);
-    tcase_add_test(tc, test_s21_sprintf_hd);
-    tcase_add_test(tc, test_s21_sprintf_hd_min);
-    tcase_add_test(tc, test_s21_sprintf_hd_max);
-    tcase_add_test(tc, test_s21_sprintf_hi);
-    tcase_add_test(tc, test_s21_sprintf_hi_min);
-    tcase_add_test(tc, test_s21_sprintf_hi_max);
-    tcase_add_test(tc, test_s21_sprintf_ho);
-    tcase_add_test(tc, test_s21_sprintf_ho_min);
-    tcase_add_test(tc, test_s21_sprintf_ho_max);
-    tcase_add_test(tc, test_s21_sprintf_hu);
-    tcase_add_test(tc, test_s21_sprintf_hu_min);
-    tcase_add_test(tc, test_s21_sprintf_hu_max);
-    tcase_add_test(tc, test_s21_sprintf_hx);
-    tcase_add_test(tc, test_s21_sprintf_hx_min);
-    tcase_add_test(tc, test_s21_sprintf_hx_max);
-    tcase_add_test(tc, test_s21_sprintf_hX);
-    tcase_add_test(tc, test_s21_sprintf_hX_min);
-    tcase_add_test(tc, test_s21_sprintf_hX_max);
-    tcase_add_test(tc, test_s21_sprintf_hhd);
-    tcase_add_test(tc, test_s21_sprintf_hhd_min);
-    tcase_add_test(tc, test_s21_sprintf_hhd_max);
-    tcase_add_test(tc, test_s21_sprintf_hhi);
-    tcase_add_test(tc, test_s21_sprintf_hhi_min);
-    tcase_add_test(tc, test_s21_sprintf_hhi_max);
-    tcase_add_test(tc, test_s21_sprintf_hho);
-    tcase_add_test(tc, test_s21_sprintf_hho_min);
-    tcase_add_test(tc, test_s21_sprintf_hho_max);
-    tcase_add_test(tc, test_s21_sprintf_hhu);
-    tcase_add_test(tc, test_s21_sprintf_hhu_min);
-    tcase_add_test(tc, test_s21_sprintf_hhu_max);
-    tcase_add_test(tc, test_s21_sprintf_hhx);
-    tcase_add_test(tc, test_s21_sprintf_hhx_min);
-    tcase_add_test(tc, test_s21_sprintf_hhx_max);
-    tcase_add_test(tc, test_s21_sprintf_hhX);
-    tcase_add_test(tc, test_s21_sprintf_hhX_min);
-    tcase_add_test(tc, test_s21_sprintf_hhX_max);
-    tcase_add_test(tc, test_s21_sprintf_ld);
-    tcase_add_test(tc, test_s21_sprintf_ld_min);
-    tcase_add_test(tc, test_s21_sprintf_ld_max);
-    tcase_add_test(tc, test_s21_sprintf_li);
-    tcase_add_test(tc, test_s21_sprintf_li_min);
-    tcase_add_test(tc, test_s21_sprintf_li_max);
-    tcase_add_test(tc, test_s21_sprintf_lo);
-    tcase_add_test(tc, test_s21_sprintf_lo_min);
-    tcase_add_test(tc, test_s21_sprintf_lo_max);
-    tcase_add_test(tc, test_s21_sprintf_lu);
-    tcase_add_test(tc, test_s21_sprintf_lu_min);
-    tcase_add_test(tc, test_s21_sprintf_lu_max);
-    tcase_add_test(tc, test_s21_sprintf_lx);
-    tcase_add_test(tc, test_s21_sprintf_lx_min);
-    tcase_add_test(tc, test_s21_sprintf_lx_max);
-    tcase_add_test(tc, test_s21_sprintf_lX);
-    tcase_add_test(tc, test_s21_sprintf_lX_min);
-    tcase_add_test(tc, test_s21_sprintf_lX_max);
-    tcase_add_test(tc, test_s21_sprintf_lld);
-    tcase_add_test(tc, test_s21_sprintf_lld_min);
-    tcase_add_test(tc, test_s21_sprintf_lld_max);
-    tcase_add_test(tc, test_s21_sprintf_lli);
-    tcase_add_test(tc, test_s21_sprintf_lli_min);
-    tcase_add_test(tc, test_s21_sprintf_lli_max);
-    tcase_add_test(tc, test_s21_sprintf_llo);
-    tcase_add_test(tc, test_s21_sprintf_llo_min);
-    tcase_add_test(tc, test_s21_sprintf_llo_max);
-    tcase_add_test(tc, test_s21_sprintf_llu);
-    tcase_add_test(tc, test_s21_sprintf_llu_min);
-    tcase_add_test(tc, test_s21_sprintf_llu_max);
-    tcase_add_test(tc, test_s21_sprintf_llx);
-    tcase_add_test(tc, test_s21_sprintf_llx_min);
-    tcase_add_test(tc, test_s21_sprintf_llx_max);
-    tcase_add_test(tc, test_s21_sprintf_llX);
-    tcase_add_test(tc, test_s21_sprintf_llX_min);
-    tcase_add_test(tc, test_s21_sprintf_llX_max);
-    tcase_add_test(tc, test_s21_sprintf_c);
-    tcase_add_test(tc, test_s21_sprintf_c_min);
-    tcase_add_test(tc, test_s21_sprintf_c_max);
-    tcase_add_test(tc, test_s21_sprintf_c_nonprint);
-    tcase_add_test(tc, test_s21_sprintf_c_zero);
-    tcase_add_test(tc, test_s21_sprintf_c_newline);
-    tcase_add_test(tc, test_s21_sprintf_c_tab);
-    tcase_add_test(tc, test_s21_sprintf_c_null_char);
-    // tcase_add_test(tc, test_s21_sprintf_e_zero);
-    // tcase_add_test(tc, test_s21_sprintf_e_minus_zero);
-    // tcase_add_test(tc, test_s21_sprintf_E_zero);
-    // tcase_add_test(tc, test_s21_sprintf_E_minus_zero);
-    // tcase_add_test(tc, test_s21_sprintf_f_zero);
-    // tcase_add_test(tc, test_s21_sprintf_f_minus_zero);
-    // tcase_add_test(tc, test_s21_sprintf_g_zero);
-    // tcase_add_test(tc, test_s21_sprintf_g_minus_zero);
-    // tcase_add_test(tc, test_s21_sprintf_G_zero);
-    // tcase_add_test(tc, test_s21_sprintf_G_minus_zero);
-    // tcase_add_test(tc, test_s21_sprintf_le_zero);
-    // tcase_add_test(tc, test_s21_sprintf_le_minus_zero);
-    // tcase_add_test(tc, test_s21_sprintf_lE_zero);
-    // tcase_add_test(tc, test_s21_sprintf_lE_minus_zero);
-    // tcase_add_test(tc, test_s21_sprintf_lf_zero);
-    // tcase_add_test(tc, test_s21_sprintf_lf_minus_zero);
-    // tcase_add_test(tc, test_s21_sprintf_lg_zero);
-    // tcase_add_test(tc, test_s21_sprintf_lg_minus_zero);
-    // tcase_add_test(tc, test_s21_sprintf_lG_zero);
-    // tcase_add_test(tc, test_s21_sprintf_lG_minus_zero);
-    // tcase_add_test(tc, test_s21_sprintf_Le_zero);
-    // tcase_add_test(tc, test_s21_sprintf_Le_minus_zero);
-    // tcase_add_test(tc, test_s21_sprintf_LE_zero);
-    // tcase_add_test(tc, test_s21_sprintf_LE_minus_zero);
-    // tcase_add_test(tc, test_s21_sprintf_Lf_zero);
-    // tcase_add_test(tc, test_s21_sprintf_Lf_minus_zero);
-    // tcase_add_test(tc, test_s21_sprintf_Lg_zero);
-    // tcase_add_test(tc, test_s21_sprintf_Lg_minus_zero);
-    // tcase_add_test(tc, test_s21_sprintf_LG_zero);
-    // tcase_add_test(tc, test_s21_sprintf_LG_minus_zero);
-    // tcase_add_test(tc, test_s21_sprintf_e);
-    // tcase_add_test(tc, test_s21_sprintf_e_neg);
-    // tcase_add_test(tc, test_s21_sprintf_e_big);
-    // tcase_add_test(tc, test_s21_sprintf_e_small);
-    // tcase_add_test(tc, test_s21_sprintf_E);
-    // tcase_add_test(tc, test_s21_sprintf_E_neg);
-    // tcase_add_test(tc, test_s21_sprintf_E_big);
-    // tcase_add_test(tc, test_s21_sprintf_E_small);
-    // tcase_add_test(tc, test_s21_sprintf_f);
-    // tcase_add_test(tc, test_s21_sprintf_f2);
-    // tcase_add_test(tc, test_s21_sprintf_f_neg);
-    // tcase_add_test(tc, test_s21_sprintf_f_small);
-    // tcase_add_test(tc, test_s21_sprintf_g);
-    // tcase_add_test(tc, test_s21_sprintf_g2);
-    // tcase_add_test(tc, test_s21_sprintf_g3);
-    // tcase_add_test(tc, test_s21_sprintf_g_neg);
-    // tcase_add_test(tc, test_s21_sprintf_g_big);
-    // tcase_add_test(tc, test_s21_sprintf_g_small);
-    // tcase_add_test(tc, test_s21_sprintf_G);
-    // tcase_add_test(tc, test_s21_sprintf_G2);
-    // tcase_add_test(tc, test_s21_sprintf_G3);
-    // tcase_add_test(tc, test_s21_sprintf_G_neg);
-    // tcase_add_test(tc, test_s21_sprintf_G_big);
-    // tcase_add_test(tc, test_s21_sprintf_G_small);
-    // tcase_add_test(tc, test_s21_sprintf_le);
-    // tcase_add_test(tc, test_s21_sprintf_le_neg);
-    // tcase_add_test(tc, test_s21_sprintf_le_big);
-    // tcase_add_test(tc, test_s21_sprintf_le_small);
-    // tcase_add_test(tc, test_s21_sprintf_lE);
-    // tcase_add_test(tc, test_s21_sprintf_lE_neg);
-    // tcase_add_test(tc, test_s21_sprintf_lE_big);
-    // tcase_add_test(tc, test_s21_sprintf_lE_small);
-    // tcase_add_test(tc, test_s21_sprintf_lf);
-    // tcase_add_test(tc, test_s21_sprintf_lf2);
-    // tcase_add_test(tc, test_s21_sprintf_lf_neg);
-    // tcase_add_test(tc, test_s21_sprintf_lf_small);
-    // tcase_add_test(tc, test_s21_sprintf_lg);
-    // tcase_add_test(tc, test_s21_sprintf_lg2);
-    // tcase_add_test(tc, test_s21_sprintf_lg3);
-    // tcase_add_test(tc, test_s21_sprintf_lg_neg);
-    // tcase_add_test(tc, test_s21_sprintf_lg_big);
-    // tcase_add_test(tc, test_s21_sprintf_lg_small);
-    // tcase_add_test(tc, test_s21_sprintf_lG);
-    // tcase_add_test(tc, test_s21_sprintf_lG2);
-    // tcase_add_test(tc, test_s21_sprintf_lG3);
-    // tcase_add_test(tc, test_s21_sprintf_lG_neg);
-    // tcase_add_test(tc, test_s21_sprintf_lG_big);
-    // tcase_add_test(tc, test_s21_sprintf_lG_small);
-    // tcase_add_test(tc, test_s21_sprintf_Le);
-    // tcase_add_test(tc, test_s21_sprintf_Le_neg);
-    // tcase_add_test(tc, test_s21_sprintf_Le_big);
-    // tcase_add_test(tc, test_s21_sprintf_Le_small);
-    // tcase_add_test(tc, test_s21_sprintf_LE);
-    // tcase_add_test(tc, test_s21_sprintf_LE_neg);
-    // tcase_add_test(tc, test_s21_sprintf_LE_big);
-    // tcase_add_test(tc, test_s21_sprintf_LE_small);
-    // tcase_add_test(tc, test_s21_sprintf_Lf);
-    // tcase_add_test(tc, test_s21_sprintf_Lf2);
-    // tcase_add_test(tc, test_s21_sprintf_Lf_neg);
-    // tcase_add_test(tc, test_s21_sprintf_Lf_small);
-    // tcase_add_test(tc, test_s21_sprintf_Lg);
-    // tcase_add_test(tc, test_s21_sprintf_Lg2);
-    // tcase_add_test(tc, test_s21_sprintf_Lg3);
-    // tcase_add_test(tc, test_s21_sprintf_Lg_neg);
-    // tcase_add_test(tc, test_s21_sprintf_Lg_big);
-    // tcase_add_test(tc, test_s21_sprintf_Lg_small);
-    // tcase_add_test(tc, test_s21_sprintf_LG);
-    // tcase_add_test(tc, test_s21_sprintf_LG2);
-    // tcase_add_test(tc, test_s21_sprintf_LG3);
-    // tcase_add_test(tc, test_s21_sprintf_LG_neg);
-    // tcase_add_test(tc, test_s21_sprintf_LG_big);
-    // tcase_add_test(tc, test_s21_sprintf_LG_small);
-    // tcase_add_test(tc, test_s21_sprintf_g_switch_to_e);
-    // tcase_add_test(tc, test_s21_sprintf_g_switch_to_f);
-    // tcase_add_test(tc, test_s21_sprintf_g_switch);
-    // tcase_add_test(tc, test_s21_sprintf_G_switch_to_e);
-    // tcase_add_test(tc, test_s21_sprintf_G_switch_to_f);
-    // tcase_add_test(tc, test_s21_sprintf_G_switch);
-    // tcase_add_test(tc, test_s21_sprintf_e_nan);
-    // tcase_add_test(tc, test_s21_sprintf_e_inf);
-    // tcase_add_test(tc, test_s21_sprintf_e_neg_inf);
-    // tcase_add_test(tc, test_s21_sprintf_E_nan);
-    // tcase_add_test(tc, test_s21_sprintf_E_inf);
-    // tcase_add_test(tc, test_s21_sprintf_E_neg_inf);
-    // tcase_add_test(tc, test_s21_sprintf_f_nan);
-    // tcase_add_test(tc, test_s21_sprintf_f_inf);
-    // tcase_add_test(tc, test_s21_sprintf_f_neg_inf);
-    // tcase_add_test(tc, test_s21_sprintf_g_nan);
-    // tcase_add_test(tc, test_s21_sprintf_g_inf);
-    // tcase_add_test(tc, test_s21_sprintf_g_neg_inf);
-    // tcase_add_test(tc, test_s21_sprintf_G_nan);
-    // tcase_add_test(tc, test_s21_sprintf_G_inf);
-    // tcase_add_test(tc, test_s21_sprintf_G_neg_inf);
-    // tcase_add_test(tc, test_s21_sprintf_le_nan);
-    // tcase_add_test(tc, test_s21_sprintf_le_inf);
-    // tcase_add_test(tc, test_s21_sprintf_le_neg_inf);
-    // tcase_add_test(tc, test_s21_sprintf_lE_nan);
-    // tcase_add_test(tc, test_s21_sprintf_lE_inf);
-    // tcase_add_test(tc, test_s21_sprintf_lE_neg_inf);
-    // tcase_add_test(tc, test_s21_sprintf_lf_nan);
-    // tcase_add_test(tc, test_s21_sprintf_lf_inf);
-    // tcase_add_test(tc, test_s21_sprintf_lf_neg_inf);
-    // tcase_add_test(tc, test_s21_sprintf_lg_nan);
-    // tcase_add_test(tc, test_s21_sprintf_lg_inf);
-    // tcase_add_test(tc, test_s21_sprintf_lg_neg_inf);
-    // tcase_add_test(tc, test_s21_sprintf_lG_nan);
-    // tcase_add_test(tc, test_s21_sprintf_lG_inf);
-    // tcase_add_test(tc, test_s21_sprintf_lG_neg_inf);
-    // tcase_add_test(tc, test_s21_sprintf_Le_nan);
-    // tcase_add_test(tc, test_s21_sprintf_Le_inf);
-    // tcase_add_test(tc, test_s21_sprintf_Le_neg_inf);
-    // tcase_add_test(tc, test_s21_sprintf_LE_nan);
-    // tcase_add_test(tc, test_s21_sprintf_LE_inf);
-    // tcase_add_test(tc, test_s21_sprintf_LE_neg_inf);
-    // tcase_add_test(tc, test_s21_sprintf_Lf_nan);
-    // tcase_add_test(tc, test_s21_sprintf_Lf_inf);
-    // tcase_add_test(tc, test_s21_sprintf_Lf_neg_inf);
-    // tcase_add_test(tc, test_s21_sprintf_Lg_nan);
-    // tcase_add_test(tc, test_s21_sprintf_Lg_inf);
-    // tcase_add_test(tc, test_s21_sprintf_Lg_neg_inf);
-    // tcase_add_test(tc, test_s21_sprintf_LG_nan);
-    // tcase_add_test(tc, test_s21_sprintf_LG_inf);
-    // tcase_add_test(tc, test_s21_sprintf_LG_neg_inf);
+      tcase_add_test(tc, test_s21_sscanf_d);
+      tcase_add_test(tc, test_s21_sscanf_d_min);
+      tcase_add_test(tc, test_s21_sscanf_d_max);
+      tcase_add_test(tc, test_s21_sscanf_i_hex);
+      tcase_add_test(tc, test_s21_sscanf_i_oct);
+      tcase_add_test(tc, test_s21_sscanf_o);
+      tcase_add_test(tc, test_s21_sscanf_o_max);
+      tcase_add_test(tc, test_s21_sscanf_u);
+      tcase_add_test(tc, test_s21_sscanf_u_max);
+      tcase_add_test(tc, test_s21_sscanf_x);
+      tcase_add_test(tc, test_s21_sscanf_x_max);
+      tcase_add_test(tc, test_s21_sscanf_X);
+      tcase_add_test(tc, test_s21_sscanf_hd);
+      tcase_add_test(tc, test_s21_sscanf_hd_min);
+      tcase_add_test(tc, test_s21_sscanf_hu);
+      tcase_add_test(tc, test_s21_sscanf_hu_max);
+      tcase_add_test(tc, test_s21_sscanf_hhd);
+      tcase_add_test(tc, test_s21_sscanf_hhd_min);
+      tcase_add_test(tc, test_s21_sscanf_hhu);
+      tcase_add_test(tc, test_s21_sscanf_hhu_max);
+      tcase_add_test(tc, test_s21_sscanf_ld);
+      tcase_add_test(tc, test_s21_sscanf_ld_min);
+      tcase_add_test(tc, test_s21_sscanf_lu);
+      tcase_add_test(tc, test_s21_sscanf_lu_max);
+      tcase_add_test(tc, test_s21_sscanf_lld);
+      tcase_add_test(tc, test_s21_sscanf_lld_min);
+      tcase_add_test(tc, test_s21_sscanf_llu);
+      tcase_add_test(tc, test_s21_sscanf_llu_max);
+      tcase_add_test(tc, test_s21_sscanf_c);
+      tcase_add_test(tc, test_s21_sscanf_c_newline);
+      tcase_add_test(tc, test_s21_sscanf_s);
+      tcase_add_test(tc, test_s21_sscanf_s_unicode);
+      tcase_add_test(tc, test_s21_sscanf_f);
+      tcase_add_test(tc, test_s21_sscanf_f_zero);
+      tcase_add_test(tc, test_s21_sscanf_lf);
+      tcase_add_test(tc, test_s21_sscanf_lf_exp);
+      tcase_add_test(tc, test_s21_sscanf_inf);
+      tcase_add_test(tc, test_s21_sscanf_p);
+      tcase_add_test(tc, test_s21_sscanf_n);
+      tcase_add_test(tc, test_s21_sscanf_percent);
   suite_add_tcase(s, tc);
   return s;
 }
