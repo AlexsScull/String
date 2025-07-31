@@ -978,30 +978,20 @@ static void convert_float_to_str(char *str, int *idx, long double dval,
   add_sign(&ch, signbit(dval), params);
   dval = fabsl(dval);
 
-  if (dval == 0.0L) {
-    if (params[PARAM_SPEC_CHAR] == CHAR_G) {
-      if (precision > 0 && params[FLAG_HASH]) precision -= 1;
+  int format_G = CHAR_G;
+  if (params[PARAM_SPEC_CHAR] == CHAR_G) {
+    if (dval == 0.0L) {
+      if (params[FLAG_HASH]) precision -= 1;
       convert_char_to_buffer(buffer, &idx_buffer, '0');
       format_fractional_partG(buffer, &idx_buffer, 0.0L, precision, params);
-    } else if (params[PARAM_SPEC_CHAR] == CHAR_F) {
-      convert_string_to_buffer(buffer, &idx_buffer, "0");
-      format_fractional_part(buffer, &idx_buffer, 0.0L, precision, params);
-    } else if (params[PARAM_SPEC_CHAR] == CHAR_E) {
-      convert_string_to_buffer(buffer, &idx_buffer, "0");
-      format_fractional_part(buffer, &idx_buffer, 0.0L, precision, params);
-      format_exponent(buffer, &idx_buffer, 0, params);
-    }
-  } else {
-    int format_G = CHAR_G;
-    if (params[PARAM_SPEC_CHAR] == CHAR_G) {
+    } else
       format_G = format_g(dval, &precision, params);
-    }
+  }
 
-    if (params[PARAM_SPEC_CHAR] == CHAR_F || format_G == CHAR_F) {
-      format_f(buffer, &idx_buffer, dval, precision, params);
-    } else if (params[PARAM_SPEC_CHAR] == CHAR_E || format_G == CHAR_E) {
-      format_e(buffer, &idx_buffer, dval, precision, params);
-    }
+  if (params[PARAM_SPEC_CHAR] == CHAR_F || format_G == CHAR_F) {
+    format_f(buffer, &idx_buffer, dval, precision, params);
+  } else if (params[PARAM_SPEC_CHAR] == CHAR_E || format_G == CHAR_E) {
+    format_e(buffer, &idx_buffer, dval, precision, params);
   }
 
   if (idx_buffer < MaxBufferSize) {
@@ -1018,7 +1008,6 @@ static int format_g(long double dval, int *precision, int params[]) {
       (dval == 0.0L) ? 0 : (int)floorl(log10l(dval));  // Расчёт экспоненты
   if (exp >= -4 && exp < *precision) {
     *precision = *precision - (exp + 1);
-    // if (*precision < 0 || exp == 0) *precision = 0;
     if (*precision < 0) *precision = 0;
     return CHAR_F;
   } else {
@@ -1045,7 +1034,7 @@ static void format_f(char *buf, int *idx_buf, long double value, int precision,
 static void format_e(char *buf, int *idx_buf, long double value, int precision,
                      int params[]) {
   int exp = 0;
-  exp = (int)floorl(log10l(fabsl(value)));
+  if (value != 0.0L) exp = (int)floorl(log10l(fabsl(value)));
   value *= powl(10.0L, -exp);
 
   long double rounding = 0.5L * powl(10.0L, -precision);
