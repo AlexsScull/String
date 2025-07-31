@@ -147,9 +147,11 @@ static void convert_string_buffer_to_str(char *str, int *idx,
                                          const char *buffer, int params[]);
 static void convert_buffer_to_str(char *buffer, char ch, int num_len, char *str,
                                   int *idx, int params[]);
-static void convert_hash_to_buffer(int params[],int *hash, char *str, int *idx);
-static void convert_float_buffer_to_str(char *buffer, int num_len, char *str,
-                                        int *idx, int params[]);
+static void convert_hash_to_buffer(int params[], int *hash, char *str,
+                                   int *idx);
+static void convert_float_buffer_to_str(char *buffer, char sign_char,
+                                        int num_len, char *str, int *idx,
+                                        int params[]);
 static void convert_char_to_buffer(char *buffer, int *idx_buffer, char c);
 static void convert_string_to_buffer(char *buffer, int *idx_buffer,
                                      const char *s);
@@ -165,6 +167,8 @@ static void format_e(char *buf, int *idx_buf, long double value, int precision,
                      int params[]);
 static void format_fractional_part(char *buf, int *idx_buf, long double frac,
                                    int precision, int params[]);
+static void format_fractional_partG(char *buf, int *idx_buf, long double frac,
+                                    int precision, int params[]);
 static void format_exponent(char *buf, int *idx_buf, int exp, int params[]);
 static void format_float_value(char *buf, int *idx_buf, long double frac_part,
                                int precision, int params[]);
@@ -765,8 +769,8 @@ static void convert_uint_to_str(char *str, int *idx, unsigned long long value,
   convert_buffer_to_str(buffer, LENGTH_NULL, num_len, str, idx, params);
 }
 
-static void convert_buffer_to_str(char *buffer, char sign_char, int num_len, char *str,
-                                  int *idx, int params[]) {
+static void convert_buffer_to_str(char *buffer, char sign_char, int num_len,
+                                  char *str, int *idx, int params[]) {
   int width = params[PARAM_WIDTH_ASTERISK_VALUE];
   bool left_align = (width < 0);
   width = abs(width);
@@ -775,23 +779,23 @@ static void convert_buffer_to_str(char *buffer, char sign_char, int num_len, cha
   precision = (precision > num_len) ? precision - num_len : 0;
 
   int sign_len = (sign_char != 0) ? 1 : 0;
-  
+
   int hash = 0;
   if (params[FLAG_HASH]) {
     if (params[PARAM_SPECIFIER] == 'o') {
       if (precision == 0)
-      hash = 1; // Префикс "0"
+        hash = 1;  // Префикс "0"
       else
-      params[FLAG_ZERO] = true;
-    } else if (params[PARAM_SPECIFIER] == 'x' || params[PARAM_SPECIFIER] == 'X') {
-      hash = 2; // Префикс "0x" или "0X"
+        params[FLAG_ZERO] = true;
+    } else if (params[PARAM_SPECIFIER] == 'x' ||
+               params[PARAM_SPECIFIER] == 'X') {
+      hash = 2;  // Префикс "0x" или "0X"
     }
   }
 
   width = width - (sign_len + num_len + precision + hash);
 
   if (!left_align) {
-    
     if (params[FLAG_ZERO] && precision == 0 && params[PARAM_PRECISION] == -1) {
       if (hash) convert_hash_to_buffer(params, &hash, str, idx);
       if (sign_len) convert_char_to_buffer(str, idx, sign_char);
@@ -807,13 +811,14 @@ static void convert_buffer_to_str(char *buffer, char sign_char, int num_len, cha
   convert_num_len_pad_char_to_str(str, idx, precision, '0');
 
   convert_string_to_buffer(str, idx, buffer);
-  
+
   if (left_align) {
     convert_num_len_pad_char_to_str(str, idx, width, ' ');
   }
 }
 
-static void convert_hash_to_buffer(int params[],int *hash, char *str, int *idx) {
+static void convert_hash_to_buffer(int params[], int *hash, char *str,
+                                   int *idx) {
   if (params[PARAM_SPECIFIER] == 'o') {
     convert_char_to_buffer(str, idx, '0');
   } else {
@@ -861,24 +866,29 @@ static void convert_string_buffer_to_str(char *str, int *idx,
   }
 }
 
-static void convert_float_buffer_to_str(char *buffer, int num_len, char *str,
-                                        int *idx, int params[]) {
+static void convert_float_buffer_to_str(char *buffer, char sign_char,
+                                        int num_len, char *str, int *idx,
+                                        int params[]) {
   int width = params[PARAM_WIDTH_ASTERISK_VALUE];
   int precision = params[PARAM_PRECISION_ASTERISK_VALUE];
+  int sign_len = (sign_char != 0) ? 1 : 0;
 
   bool left_align = (width < 0);
   if (width < 0) width = -width;
 
-  int padding = width - num_len;
+  int padding = width - (num_len + sign_len);
   if (padding < 0) padding = 0;
 
   if (!left_align) {
-    if (params[FLAG_ZERO])
+    if (params[FLAG_ZERO]) {
+      if (sign_len) convert_char_to_buffer(str, idx, sign_char);
       convert_num_len_pad_char_to_str(str, idx, padding, '0');
-    else
+      sign_len = 0;
+    } else
       convert_num_len_pad_char_to_str(str, idx, padding, ' ');
   }
 
+  if (sign_len) convert_char_to_buffer(str, idx, sign_char);
   convert_string_to_buffer(str, idx, buffer);
 
   if (left_align) {
@@ -964,21 +974,34 @@ static void convert_float_to_str(char *str, int *idx, long double dval,
                       ? params[PARAM_PRECISION_ASTERISK_VALUE]
                       : DefaultPrecision;
 
-  idx_buffer += add_sign(buffer, signbit(dval), params);
+  char ch = 0;
+  add_sign(&ch, signbit(dval), params);
   dval = fabsl(dval);
 
-  int format_G = CHAR_G;
-  if (params[PARAM_SPEC_CHAR] == CHAR_G) {
-    if (dval != 0.0L) {
-      format_G = format_g(dval, &precision, params);
-    } else
+  if (dval == 0.0L) {
+    if (params[PARAM_SPEC_CHAR] == CHAR_G) {
+      if (precision > 0 && params[FLAG_HASH]) precision -= 1;
       convert_char_to_buffer(buffer, &idx_buffer, '0');
-  }
+      format_fractional_partG(buffer, &idx_buffer, 0.0L, precision, params);
+    } else if (params[PARAM_SPEC_CHAR] == CHAR_F) {
+      convert_string_to_buffer(buffer, &idx_buffer, "0");
+      format_fractional_part(buffer, &idx_buffer, 0.0L, precision, params);
+    } else if (params[PARAM_SPEC_CHAR] == CHAR_E) {
+      convert_string_to_buffer(buffer, &idx_buffer, "0");
+      format_fractional_part(buffer, &idx_buffer, 0.0L, precision, params);
+      format_exponent(buffer, &idx_buffer, 0, params);
+    }
+  } else {
+    int format_G = CHAR_G;
+    if (params[PARAM_SPEC_CHAR] == CHAR_G) {
+      format_G = format_g(dval, &precision, params);
+    }
 
-  if (params[PARAM_SPEC_CHAR] == CHAR_F || format_G == CHAR_F) {
-    format_f(buffer, &idx_buffer, dval, precision, params);
-  } else if (params[PARAM_SPEC_CHAR] == CHAR_E || format_G == CHAR_E) {
-    format_e(buffer, &idx_buffer, dval, precision, params);
+    if (params[PARAM_SPEC_CHAR] == CHAR_F || format_G == CHAR_F) {
+      format_f(buffer, &idx_buffer, dval, precision, params);
+    } else if (params[PARAM_SPEC_CHAR] == CHAR_E || format_G == CHAR_E) {
+      format_e(buffer, &idx_buffer, dval, precision, params);
+    }
   }
 
   if (idx_buffer < MaxBufferSize) {
@@ -987,7 +1010,7 @@ static void convert_float_to_str(char *str, int *idx, long double dval,
     buffer[MaxBufferSize - 1] = '\0';
   }
 
-  convert_float_buffer_to_str(buffer, idx_buffer, str, idx, params);
+  convert_float_buffer_to_str(buffer, ch, idx_buffer, str, idx, params);
 }
 
 static int format_g(long double dval, int *precision, int params[]) {
@@ -1013,17 +1036,17 @@ static void format_f(char *buf, int *idx_buf, long double value, int precision,
   long double frac_part = modfl(value, &int_part);
   convert_uint_to_buffer(buf, idx_buf, (long long)int_part, params);
 
-  if (precision > 0)
+  if (params[PARAM_SPEC_CHAR] == CHAR_G)
+    format_fractional_partG(buf, idx_buf, frac_part, precision, params);
+  else
     format_fractional_part(buf, idx_buf, frac_part, precision, params);
 }
 
 static void format_e(char *buf, int *idx_buf, long double value, int precision,
                      int params[]) {
   int exp = 0;
-  if (value != 0.0L) {
-    exp = (int)floorl(log10l(fabsl(value)));
-    value *= powl(10.0L, -exp);
-  }
+  exp = (int)floorl(log10l(fabsl(value)));
+  value *= powl(10.0L, -exp);
 
   long double rounding = 0.5L * powl(10.0L, -precision);
   value += rounding;
@@ -1037,38 +1060,59 @@ static void format_e(char *buf, int *idx_buf, long double value, int precision,
   long double frac_part = modfl(value, &int_part);
   convert_uint_to_buffer(buf, idx_buf, (long long)int_part, params);
 
-  if (precision > 0)
+  if (params[PARAM_SPEC_CHAR] == CHAR_G)
+    format_fractional_partG(buf, idx_buf, frac_part, precision, params);
+  else {
     format_fractional_part(buf, idx_buf, frac_part, precision, params);
+  }
 
   format_exponent(buf, idx_buf, exp, params);
 }
 
 static void format_fractional_part(char *buf, int *idx_buf, long double frac,
                                    int precision, int params[]) {
-  char temp[precision + 1];
-  int temp_idx = 0;
+  if (precision > 0) {
+    convert_char_to_buffer(buf, idx_buf, '.');
 
-  for (int i = 0; i < precision; i++) {
-    frac *= 10.0L;
-    int digit = (int)frac;
-    temp[temp_idx++] = '0' + digit;
-    frac -= digit;
-  }
-  temp[temp_idx] = '\0';
-
-  // Удаляем хвостовые нули, если G (только если не установлен флаг #)
-  if (params[PARAM_SPEC_CHAR] == CHAR_G && !params[FLAG_HASH]) {
-    while (temp_idx > 0 && temp[temp_idx - 1] == '0') {
-      temp_idx--;
+    for (int i = 0; i < precision; i++) {
+      frac *= 10.0L;
+      int digit = (int)frac;
+      convert_char_to_buffer(buf, idx_buf, '0' + digit);
+      frac -= digit;
     }
-  }
+  } else if (params[FLAG_HASH])
+    convert_char_to_buffer(buf, idx_buf, '.');
+}
 
-  if (temp_idx > 0) buf[(*idx_buf)++] = '.';
+static void format_fractional_partG(char *buf, int *idx_buf, long double frac,
+                                    int precision, int params[]) {
+  if (precision > 0) {
+    char temp[precision + 1];
+    int temp_idx = 0;
 
-  // Копируем цифры в основной буфер
-  for (int i = 0; i < temp_idx; i++) {
-    buf[(*idx_buf)++] = temp[i];
-  }
+    for (int i = 0; i < precision; i++) {
+      frac *= 10.0L;
+      int digit = (int)frac;
+      temp[temp_idx++] = '0' + digit;
+      frac -= digit;
+    }
+    temp[temp_idx] = '\0';
+
+    // Удаляем хвостовые нули, если G (только если не установлен флаг #)
+    if (!params[FLAG_HASH]) {
+      while (temp_idx > 0 && temp[temp_idx - 1] == '0') {
+        temp_idx--;
+      }
+    }
+
+    if (temp_idx > 0 || params[FLAG_HASH]) buf[(*idx_buf)++] = '.';
+
+    // Копируем цифры в основной буфер
+    for (int i = 0; i < temp_idx; i++) {
+      buf[(*idx_buf)++] = temp[i];
+    }
+  } else if (params[FLAG_HASH])
+    convert_char_to_buffer(buf, idx_buf, '.');
 }
 
 static void format_exponent(char *buf, int *idx_buf, int exp, int params[]) {
