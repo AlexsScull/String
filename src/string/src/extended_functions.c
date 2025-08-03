@@ -104,5 +104,46 @@ void *s21_trim(const char *src, const char *trim_chars) {
 
   Возвращает новую строку (выделяет память).*/
 
-    
+    s21_size_t len_trim_chars = strlen(trim_chars);
+    s21_size_t start = 0;
+    s21_size_t end = strlen(src) - 1;
+
+    char * result = malloc(1);
+    char * new_chars = malloc(len_trim_chars);
+
+    if(len_trim_chars == 0){
+        new_chars[0] = ' ';
+    } else {
+      
+        for(int i = 0; i < len_trim_chars; i++){
+            new_chars[i] = trim_chars[i];
+        }
+        //хз надо тут символ \0 или нет!
+    }
+
+    if(result != NULL){
+        int flag = 1;
+
+        while(flag && start < end){
+            if(strchr(new_chars, (int)src[start])){
+                start++;
+            } else {
+                flag = 0;
+            }
+        }
+
+        flag = 1;
+        while(flag && end > start){
+            if(strchr(new_chars, (int)src[end])){
+                end--;
+            } else {
+                flag = 0;
+            }
+        }
+
+        s21_size_t result_len = end > start ? ((end - start)+ 1) : 0;
+        result = malloc(result_len * sizeof(char));
+        memcpy(result, src + start, result_len);
+        return result;
+    } 
 }
