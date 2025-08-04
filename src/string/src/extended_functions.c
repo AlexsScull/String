@@ -11,7 +11,7 @@ void *s21_to_upper(const char *str) {
 
   Если str = NULL, возвращает NULL.*/
 
-    s21_size_t len = strlen(str);
+    size_t len = strlen(str);
     char *res = (char *)malloc(strlen(str) + 1);
 
     if(res != NULL){
@@ -25,9 +25,9 @@ void *s21_to_upper(const char *str) {
     } else {
         return NULL;
     }
-    
+
     res[len] = '\0';
-    
+
     return res;
 }
 void *s21_to_lower(const char *str) {
@@ -38,7 +38,8 @@ void *s21_to_lower(const char *str) {
   Возвращает новую строку (выделяет память).
 
   Если str = NULL, возвращает NULL.*/
-    s21_size_t len = strlen(str);
+    
+    size_t len = strlen(str);
     char *res = (char *)malloc(strlen(str) + 1);
 
     if(res != NULL){
@@ -52,9 +53,9 @@ void *s21_to_lower(const char *str) {
     } else {
         return NULL;
     }
-    
+
     res[len] = '\0';
-    
+
     return res;
 }
 
@@ -68,17 +69,18 @@ void *s21_insert(const char *src, const char *str, s21_size_t start_index) {
 
   Возвращает новую строку (выделяет память).*/
 
-  int size = strlen(str) + strlen(src) + 1;
+    int size = strlen(str) + strlen(src) + 1;
     char * insert = malloc(size);
+    
     if(start_index > strlen(src)){
         return NULL;
-    } else {
+    } else if(insert != NULL){
+        
         int i = 0;
         for(; i < start_index; i++){
             insert[i] = src[i];
         }
     
-
         for(int j = 0; j < strlen(str); j++){
             insert[i] = str[j];
             i++;
@@ -90,9 +92,9 @@ void *s21_insert(const char *src, const char *str, s21_size_t start_index) {
         }
 
         insert[i] = '\0';
-    }
 
-    return insert;
+        return insert;
+    }
   
 }
 void *s21_trim(const char *src, const char *trim_chars) {
@@ -122,28 +124,36 @@ void *s21_trim(const char *src, const char *trim_chars) {
     }
 
     if(result != NULL){
-        int flag = 1;
-
-        while(flag && start < end){
+        int start_flag = 1;
+        // <= для обработки случая с разницей в 1 последнюю букву
+        while(start_flag && start <= end){
             if(strchr(new_chars, (int)src[start])){
                 start++;
             } else {
-                flag = 0;
+                start_flag = 0;
             }
         }
 
-        flag = 1;
-        while(flag && end > start){
+        int end_flag = 1;
+        while(end_flag && end > start){
             if(strchr(new_chars, (int)src[end])){
                 end--;
             } else {
-                flag = 0;
+                end_flag = 0;
             }
         }
 
-        s21_size_t result_len = end > start ? ((end - start)+ 1) : 0;
+        if(start_flag && end_flag){
+            return NULL;
+        }
+
+        s21_size_t result_len = (end - start) + 1;
         result = malloc(result_len * sizeof(char));
         memcpy(result, src + start, result_len);
+
+        result[result_len] = '\0';
         return result;
     } 
+
 }
+
