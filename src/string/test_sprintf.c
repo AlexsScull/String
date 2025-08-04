@@ -17,8 +17,8 @@
     type val = (value);                                  \
     int res1 = sprintf(str1, format_str, val);           \
     int res2 = s21_sprintf(str2, format_str, val);       \
-    printf("sprintf res = %d\nstr = %s\n", res1, str1);               \
-    printf("s21_sprintf res = %d\nstr = %s\n", res2, str2);               \
+    printf("sprintf res = %d\nstr = \"%s\"\n", res1, str1);               \
+    printf("s21_sprintf res = %d\nstr = \"%s\"\n", res2, str2);               \
     if (res1 == res2 && strcmp(str1, str2) == 0) \
     printf("OK\n\n");               \
     else \
@@ -57,6 +57,10 @@
 
 
 int main() {
+
+  TEST("%10s", 0, char *)
+  TEST( "%.8s", 0, char *)
+  TEST( "%10.8s", 0, char *)
 
 TEST("%+10i", 123,int)
 TEST("% 10i", 123,int)

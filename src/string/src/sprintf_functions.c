@@ -499,9 +499,9 @@ static void handle_char(char *str, int *idx, int params[], va_list args) {
 
 static void handle_string(char *str, int *idx, int params[], va_list args) {
   char *s = va_arg(args, char *);
-  if (!s && params[PARAM_PRECISION] != -1) {
-  } else
-    convert_string_buffer_to_str(str, idx, s ? s : "(null)", params);
+  char null[8] = "(null)";
+  if (params[PARAM_PRECISION] >= strlen(null)) null[0] = '\0';
+    convert_string_buffer_to_str(str, idx, s ? s : &null, params);
 }
 
 static int handle_wchar(char *str, int *idx, int params[], va_list args) {
@@ -662,10 +662,13 @@ static void handle_pointer(char *str, int *idx, int params[], va_list args) {
     buffer[num_len++] = '0';
     buffer[num_len++] = 'x';
 
+
+    char sign_char = 0;
+    add_sign(&sign_char, ptr < 0, params);
     unsigned long long positive = (unsigned long long)ptr;
 
     convert_uint_to_buffer(buffer, &num_len, positive, params);
-    convert_buffer_to_str(buffer, 0, num_len, str, idx, params);
+    convert_buffer_to_str(buffer, sign_char, num_len, str, idx, params);
   }
 }
 
