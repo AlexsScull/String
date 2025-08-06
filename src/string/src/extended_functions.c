@@ -11,25 +11,32 @@ void *s21_to_upper(const char *str) {
 
   Если str = NULL, возвращает NULL.*/
 
-  size_t len = strlen(str);
-  char *res = (char *)malloc(strlen(str) + 1);
-
-  if (res != NULL) {
-    for (int i = 0; i < len; i++) {
-      if (str[i] >= 'a' && str[i] <= 'z') {
-        res[i] = str[i] - 32;
-      } else {
-        res[i] = str[i];
-      }
+    if(str == S21_NULL){
+        return S21_NULL;
     }
-  } else {
-    return NULL;
-  }
+    char * res = S21_NULL;              //объявляем результат поиска как NULL
+    s21_size_t len = strlen(str);
 
-  res[len] = '\0';
+    res = (char *)malloc(strlen(str) + 1);
 
-  return res;
+    if(res == S21_NULL){
+        return S21_NULL;
+    }
+
+    for (int i = 0; i < len; i++) {
+        if (str[i] >= 'a' && str[i] <= 'z') {
+            res[i] = str[i] - 32;
+        } else {
+                res[i] = str[i];
+        }
+    }
+
+
+    res[len] = '\0';
+    
+    return res;
 }
+
 void *s21_to_lower(const char *str) {
   /*Задача:
   Преобразовать строку в нижний регистр.
