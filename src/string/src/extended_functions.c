@@ -1,6 +1,6 @@
 #include "../include/s21_string.h"
 
-//! Надо память освободить и сделать проверку пустой строки !
+//! Надо память освободить и разобраться с s21_size_t !
 
 void *s21_to_upper(const char *str) {
   /*Задача:
@@ -120,49 +120,71 @@ void *s21_trim(const char *src, const char *trim_chars) {
   Удалить начальные и конечные символы из trim_chars из строки src.
   Обратить внимание:
 
-  Если trim_chars = NULL, удалять пробельные символы.
+  Если trim_chars = NULL, удалять пробельные символы, *нужно вернуть NULL*
+  
 
   Возвращает новую строку (выделяет память).*/
 
-  s21_size_t len_trim_chars = strlen(trim_chars);
-  s21_size_t start = 0;
-  s21_size_t end = strlen(src) - 1;
+    //s21_size_t len_trim_chars = strlen(trim_chars);
 
-  char *result = malloc(1);
-  char *new_chars = malloc(len_trim_chars);
-
-  if (len_trim_chars == 0) {
-    new_chars[0] = ' ';
-  } else {
-    for (int i = 0; i < len_trim_chars; i++) {
-      new_chars[i] = trim_chars[i];
+    if(src == S21_NULL){     // NULL исходная строка нужно до выделения памяти
+        return S21_NULL;
     }
-    // хз надо тут символ \0 или нет!
-  }
 
-  if (result != NULL) {
+    s21_size_t start = 0;
+    s21_size_t end = strlen(src) - 1;
+
+    char *result = malloc(1);
+
+    if(result == S21_NULL || src == S21_NULL){     // NULL исходная строка или не выделилась память
+        return S21_NULL;
+    }
+
+    if(src[0] == '\0'){             // Пустая исходная строка
+        result[0] = src[0];
+        return result;
+    }
+
+    if(trim_chars == S21_NULL){     // NULL trim chars или пустые символы для обрезки
+        result = malloc(strlen(src) * sizeof(char));
+        strcpy(result, src);
+        return result;
+    }                               
+
+    //char *new_chars = malloc(len_trim_chars);
+
+    // if (len_trim_chars == 0) {
+    //     new_chars[0] = ' ';
+    // } else {
+    //     for (int i = 0; i < len_trim_chars; i++) {
+    //         new_chars[i] = trim_chars[i];
+    //     }
+    //     // хз надо тут символ \0 или нет!
+    // }
+
+   
     int start_flag = 1;
     // <= для обработки случая с разницей в 1 последнюю букву
     while (start_flag && start <= end) {
-      if (strchr(new_chars, (int)src[start])) {
-        start++;
-      } else {
-        start_flag = 0;
-      }
+        if (strchr(trim_chars, (int)src[start])) {
+            start++;
+        } else {
+            start_flag = 0;
+        }
     }
 
     int end_flag = 1;
     while (end_flag && end > start) {
-      if (strchr(new_chars, (int)src[end])) {
-        end--;
-      } else {
-        end_flag = 0;
-      }
+        if (strchr(trim_chars, (int)src[end])) {
+            end--;
+        } else {
+            end_flag = 0;
+        }
     }
 
-    if (start_flag && end_flag) {
-      return NULL;
-    }
+    // if (start_flag && end_flag) {       //Полная обрезка всей строки должна вернуть result
+    //     return S21_NULL;
+    // }
 
     s21_size_t result_len = (end - start) + 1;
     result = malloc(result_len * sizeof(char));
@@ -170,5 +192,5 @@ void *s21_trim(const char *src, const char *trim_chars) {
 
     result[result_len] = '\0';
     return result;
-  }
+    
 }
