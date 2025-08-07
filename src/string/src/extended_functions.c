@@ -11,30 +11,29 @@ void *s21_to_upper(const char *str) {
 
   Если str = NULL, возвращает NULL.*/
 
-    if(str == S21_NULL){
-        return S21_NULL;
+  if (str == S21_NULL) {
+    return S21_NULL;
+  }
+  char *res = S21_NULL;  // объявляем результат поиска как NULL
+  s21_size_t len = strlen(str);
+
+  res = (char *)malloc(strlen(str) + 1);
+
+  if (res == S21_NULL) {
+    return S21_NULL;
+  }
+
+  for (int i = 0; i < len; i++) {
+    if (str[i] >= 'a' && str[i] <= 'z') {
+      res[i] = str[i] - 32;
+    } else {
+      res[i] = str[i];
     }
-    char * res = S21_NULL;              //объявляем результат поиска как NULL
-    s21_size_t len = strlen(str);
+  }
 
-    res = (char *)malloc(strlen(str) + 1);
+  res[len] = '\0';
 
-    if(res == S21_NULL){
-        return S21_NULL;
-    }
-
-    for (int i = 0; i < len; i++) {
-        if (str[i] >= 'a' && str[i] <= 'z') {
-            res[i] = str[i] - 32;
-        } else {
-                res[i] = str[i];
-        }
-    }
-
-
-    res[len] = '\0';
-    
-    return res;
+  return res;
 }
 
 void *s21_to_lower(const char *str) {
@@ -46,24 +45,32 @@ void *s21_to_lower(const char *str) {
 
   Если str = NULL, возвращает NULL.*/
 
-  size_t len = strlen(str);
-  char *res = (char *)malloc(strlen(str) + 1);
-
-  if (res != NULL) {
-    for (int i = 0; i < len; i++) {
-      if (str[i] >= 'A' && str[i] <= 'Z') {
-        res[i] = str[i] + 32;
-      } else {
-        res[i] = str[i];
-      }
+    if (str == S21_NULL) {
+        return S21_NULL;
     }
-  } else {
-    return NULL;
-  }
 
-  res[len] = '\0';
+    char *res = S21_NULL;
+    size_t len = strlen(str);
 
-  return res;
+    res = (char *)malloc(strlen(str) + 1);
+
+    if (res == S21_NULL) {
+        return S21_NULL;
+    }
+
+    for (int i = 0; i < len; i++) {
+        if (str[i] >= 'A' && str[i] <= 'Z') {
+            res[i] = str[i] + 32;
+        } else {
+            res[i] = str[i];
+        }
+    }
+
+
+    res[len] = '\0';
+
+    return res;
+
 }
 
 void *s21_insert(const char *src, const char *str, s21_size_t start_index) {
