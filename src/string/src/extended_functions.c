@@ -82,32 +82,39 @@ void *s21_insert(const char *src, const char *str, s21_size_t start_index) {
 
   Возвращает новую строку (выделяет память).*/
 
-  int size = strlen(str) + strlen(src) + 1;
-  char *insert = malloc(size);
-
-  if (start_index > strlen(src)) {
-    return NULL;
-  } else if (insert != NULL) {
-    int i = 0;
-    for (; i < start_index; i++) {
-      insert[i] = src[i];
+    if(src == S21_NULL || str == S21_NULL || start_index > strlen(src)){
+        return S21_NULL;
     }
 
-    for (int j = 0; j < strlen(str); j++) {
-      insert[i] = str[j];
-      i++;
+    int size = strlen(str) + strlen(src) + 1;
+    char *insert = malloc(size);
+
+    
+    if (insert != S21_NULL) {
+        int i = 0;
+
+        for (; i < start_index; i++) {
+            insert[i] = src[i];
+        }
+
+        for (int j = 0; j < strlen(str); j++) {
+            insert[i] = str[j];
+            i++;
+        }
+
+        for (; i < size - 1; i++) {
+            insert[i] = src[start_index];
+            start_index++;
+        }
+
+        insert[i] = '\0';
+
+        return insert;
+    } else {
+        return S21_NULL;
     }
-
-    for (; i < size - 1; i++) {
-      insert[i] = src[start_index];
-      start_index++;
-    }
-
-    insert[i] = '\0';
-
-    return insert;
-  }
 }
+
 void *s21_trim(const char *src, const char *trim_chars) {
   /*Задача:
   Удалить начальные и конечные символы из trim_chars из строки src.
