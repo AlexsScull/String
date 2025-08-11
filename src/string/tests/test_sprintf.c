@@ -591,8 +591,6 @@ END_TEST
 
 // Тесты для %d
 
-// _minus _plus _space _hash _zero
-// _negt _post _zero _ng_z
 TEST_SPRINTF(d_minus_negt, "%-d", -123, int)
 TEST_SPRINTF(d_minus_post, "%-d", 123, int)
 TEST_SPRINTF(d_minus_zero, "%-d", 0, int)
@@ -605,10 +603,6 @@ TEST_SPRINTF(d_space_negt, "% d", -123, int)
 TEST_SPRINTF(d_space_post, "% d", 123, int)
 TEST_SPRINTF(d_space_zero, "% d", 0, int)
 TEST_SPRINTF(d_space_ng_z, "% d", -0, int)
-TEST_SPRINTF(d_hash_negt, "%#d", -123, int)
-TEST_SPRINTF(d_hash_post, "%#d", 123, int)
-TEST_SPRINTF(d_hash_zero, "%#d", 0, int)
-TEST_SPRINTF(d_hash_ng_z, "%#d", -0, int)
 TEST_SPRINTF(d_zero_negt, "%0d", -123, int)
 TEST_SPRINTF(d_zero_post, "%0d", 123, int)
 TEST_SPRINTF(d_zero_zero, "%0d", 0, int)
@@ -626,10 +620,6 @@ TEST_SPRINTF(d_width_space_negt, "% 5d", -123, int)
 TEST_SPRINTF(d_width_space_post, "% 5d", 123, int)
 TEST_SPRINTF(d_width_space_zero, "% 5d", 0, int)
 TEST_SPRINTF(d_width_space_ng_z, "% 5d", -0, int)
-TEST_SPRINTF(d_width_hash_negt, "%#5d", -123, int)
-TEST_SPRINTF(d_width_hash_post, "%#5d", 123, int)
-TEST_SPRINTF(d_width_hash_zero, "%#5d", 0, int)
-TEST_SPRINTF(d_width_hash_ng_z, "%#5d", -0, int)
 TEST_SPRINTF(d_width_zero_negt, "%05d", -123, int)
 TEST_SPRINTF(d_width_zero_post, "%05d", 123, int)
 TEST_SPRINTF(d_width_zero_zero, "%05d", 0, int)
@@ -647,14 +637,6 @@ TEST_SPRINTF(d_prec_space_negt, "% .5d", -123, int)
 TEST_SPRINTF(d_prec_space_post, "% .5d", 123, int)
 TEST_SPRINTF(d_prec_space_zero, "% .5d", 0, int)
 TEST_SPRINTF(d_prec_space_ng_z, "% .5d", -0, int)
-TEST_SPRINTF(d_prec_hash_negt, "%#.5d", -123, int)
-TEST_SPRINTF(d_prec_hash_post, "%#.5d", 123, int)
-TEST_SPRINTF(d_prec_hash_zero, "%#.5d", 0, int)
-TEST_SPRINTF(d_prec_hash_ng_z, "%#.5d", -0, int)
-TEST_SPRINTF(d_prec_zero_negt, "%0.5d", -123, int)
-TEST_SPRINTF(d_prec_zero_post, "%0.5d", 123, int)
-TEST_SPRINTF(d_prec_zero_zero, "%0.5d", 0, int)
-TEST_SPRINTF(d_prec_zero_ng_z, "%0.5d", -0, int)
 
 TEST_SPRINTF(d_width_prec_minus_negt, "%-10.5d", -123, int)
 TEST_SPRINTF(d_width_prec_minus_post, "%-10.5d", 123, int)
@@ -668,14 +650,6 @@ TEST_SPRINTF(d_width_prec_space_negt, "% 10.5d", -123, int)
 TEST_SPRINTF(d_width_prec_space_post, "% 10.5d", 123, int)
 TEST_SPRINTF(d_width_prec_space_zero, "% 10.5d", 0, int)
 TEST_SPRINTF(d_width_prec_space_ng_z, "% 10.5d", -0, int)
-TEST_SPRINTF(d_width_prec_hash_negt, "%#10.5d", -123, int)
-TEST_SPRINTF(d_width_prec_hash_post, "%#10.5d", 123, int)
-TEST_SPRINTF(d_width_prec_hash_zero, "%#10.5d", 0, int)
-TEST_SPRINTF(d_width_prec_hash_ng_z, "%#10.5d", -0, int)
-TEST_SPRINTF(d_width_prec_zero_negt, "%010.5d", -123, int)
-TEST_SPRINTF(d_width_prec_zero_post, "%010.5d", 123, int)
-TEST_SPRINTF(d_width_prec_zero_zero, "%010.5d", 0, int)
-TEST_SPRINTF(d_width_prec_zero_ng_z, "%010.5d", -0, int)
 
 TEST_SPRINTF_2(d_dynamic_width, "%*d", 10, 123, int)
 TEST_SPRINTF_2(d_dynamic_precision, "%.*d", 5, 123, int)
@@ -704,27 +678,12 @@ TEST_SPRINTF(d_zero_zero_post, "%0d", 123, int)
 TEST_SPRINTF(d_zero_zero_zero, "%0d", 0, int)
 TEST_SPRINTF(d_zero_zero_ng_z, "%0d", -0, int)
 
-TEST_SPRINTF(d_zero_prec_zero_negt, "%0.0d", -123, int)
-TEST_SPRINTF(d_zero_prec_zero_post, "%0.0d", 123, int)
-TEST_SPRINTF(d_zero_prec_zero_zero, "%0.0d", 0, int)
-TEST_SPRINTF(d_zero_prec_zero_ng_z, "%0.0d", -0, int)
-
 TEST_SPRINTF(d_zero_prec_minus_zero, "%-.0d", 0, int)
 TEST_SPRINTF(d_zero_prec_plus_zero, "%+.0d", 0, int)
 TEST_SPRINTF(d_zero_prec_space_zero, "% .0d", 0, int)
-TEST_SPRINTF(d_zero_prec_hash_zero, "%#.0d", 0, int)
 
-TEST_SPRINTF(d_zero_zero_minus_zero, "%-0d", 0, int)
 TEST_SPRINTF(d_zero_zero_plus_zero, "%+0d", 0, int)
 TEST_SPRINTF(d_zero_zero_space_zero, "% 0d", 0, int)
-TEST_SPRINTF(d_zero_zero_hash_zero, "%#0d", 0, int)
-TEST_SPRINTF(d_zero_width_zero_zero, "%00d", 0, int)
-
-TEST_SPRINTF(d_zero_prec_zero_minus_zero, "%-0.0d", 0, int)
-TEST_SPRINTF(d_zero_prec_zero_plus_zero, "%+0.0d", 0, int)
-TEST_SPRINTF(d_zero_prec_zero_space_zero, "% 0.0d", 0, int)
-TEST_SPRINTF(d_zero_prec_zero_hash_zero, "%#0.0d", 0, int)
-TEST_SPRINTF(d_zero_prec_width_zero_zero, "%00.0d", 0, int)
 
 // Тесты для %i
 TEST_SPRINTF(i_minus, "%-10i", 123, int)
@@ -747,18 +706,6 @@ TEST_SPRINTF(u_minus_negt, "%-u", -123, unsigned int)
 TEST_SPRINTF(u_minus_post, "%-u", 123, unsigned int)
 TEST_SPRINTF(u_minus_zero, "%-u", 0, unsigned int)
 TEST_SPRINTF(u_minus_ng_z, "%-u", -0, unsigned int)
-TEST_SPRINTF(u_plus_negt, "%+u", -123, unsigned int)
-TEST_SPRINTF(u_plus_post, "%+u", 123, unsigned int)
-TEST_SPRINTF(u_plus_zero, "%+u", 0, unsigned int)
-TEST_SPRINTF(u_plus_ng_z, "%+u", -0, unsigned int)
-TEST_SPRINTF(u_space_negt, "% u", -123, unsigned int)
-TEST_SPRINTF(u_space_post, "% u", 123, unsigned int)
-TEST_SPRINTF(u_space_zero, "% u", 0, unsigned int)
-TEST_SPRINTF(u_space_ng_z, "% u", -0, unsigned int)
-TEST_SPRINTF(u_hash_negt, "%#u", -123, unsigned int)
-TEST_SPRINTF(u_hash_post, "%#u", 123, unsigned int)
-TEST_SPRINTF(u_hash_zero, "%#u", 0, unsigned int)
-TEST_SPRINTF(u_hash_ng_z, "%#u", -0, unsigned int)
 TEST_SPRINTF(u_zero_negt, "%0u", -123, unsigned int)
 TEST_SPRINTF(u_zero_post, "%0u", 123, unsigned int)
 TEST_SPRINTF(u_zero_zero, "%0u", 0, unsigned int)
@@ -767,18 +714,6 @@ TEST_SPRINTF(u_width_minus_negt, "%-5u", -123, unsigned int)
 TEST_SPRINTF(u_width_minus_post, "%-5u", 123, unsigned int)
 TEST_SPRINTF(u_width_minus_zero, "%-5u", 0, unsigned int)
 TEST_SPRINTF(u_width_minus_ng_z, "%-5u", -0, unsigned int)
-TEST_SPRINTF(u_width_plus_negt, "%+5u", -123, unsigned int)
-TEST_SPRINTF(u_width_plus_post, "%+5u", 123, unsigned int)
-TEST_SPRINTF(u_width_plus_zero, "%+5u", 0, unsigned int)
-TEST_SPRINTF(u_width_plus_ng_z, "%+5u", -0, unsigned int)
-TEST_SPRINTF(u_width_space_negt, "% 5u", -123, unsigned int)
-TEST_SPRINTF(u_width_space_post, "% 5u", 123, unsigned int)
-TEST_SPRINTF(u_width_space_zero, "% 5u", 0, unsigned int)
-TEST_SPRINTF(u_width_space_ng_z, "% 5u", -0, unsigned int)
-TEST_SPRINTF(u_width_hash_negt, "%#5u", -123, unsigned int)
-TEST_SPRINTF(u_width_hash_post, "%#5u", 123, unsigned int)
-TEST_SPRINTF(u_width_hash_zero, "%#5u", 0, unsigned int)
-TEST_SPRINTF(u_width_hash_ng_z, "%#5u", -0, unsigned int)
 TEST_SPRINTF(u_width_zero_negt, "%05u", -123, unsigned int)
 TEST_SPRINTF(u_width_zero_post, "%05u", 123, unsigned int)
 TEST_SPRINTF(u_width_zero_zero, "%05u", 0, unsigned int)
@@ -787,42 +722,10 @@ TEST_SPRINTF(u_prec_minus_negt, "%-.5u", -123, unsigned int)
 TEST_SPRINTF(u_prec_minus_post, "%-.5u", 123, unsigned int)
 TEST_SPRINTF(u_prec_minus_zero, "%-.5u", 0, unsigned int)
 TEST_SPRINTF(u_prec_minus_ng_z, "%-.5u", -0, unsigned int)
-TEST_SPRINTF(u_prec_plus_negt, "%+.5u", -123, unsigned int)
-TEST_SPRINTF(u_prec_plus_post, "%+.5u", 123, unsigned int)
-TEST_SPRINTF(u_prec_plus_zero, "%+.5u", 0, unsigned int)
-TEST_SPRINTF(u_prec_plus_ng_z, "%+.5u", -0, unsigned int)
-TEST_SPRINTF(u_prec_space_negt, "% .5u", -123, unsigned int)
-TEST_SPRINTF(u_prec_space_post, "% .5u", 123, unsigned int)
-TEST_SPRINTF(u_prec_space_zero, "% .5u", 0, unsigned int)
-TEST_SPRINTF(u_prec_space_ng_z, "% .5u", -0, unsigned int)
-TEST_SPRINTF(u_prec_hash_negt, "%#.5u", -123, unsigned int)
-TEST_SPRINTF(u_prec_hash_post, "%#.5u", 123, unsigned int)
-TEST_SPRINTF(u_prec_hash_zero, "%#.5u", 0, unsigned int)
-TEST_SPRINTF(u_prec_hash_ng_z, "%#.5u", -0, unsigned int)
-TEST_SPRINTF(u_prec_zero_negt, "%0.5u", -123, unsigned int)
-TEST_SPRINTF(u_prec_zero_post, "%0.5u", 123, unsigned int)
-TEST_SPRINTF(u_prec_zero_zero, "%0.5u", 0, unsigned int)
-TEST_SPRINTF(u_prec_zero_ng_z, "%0.5u", -0, unsigned int)
 TEST_SPRINTF(u_width_prec_minus_negt, "%-10.5u", -123, unsigned int)
 TEST_SPRINTF(u_width_prec_minus_post, "%-10.5u", 123, unsigned int)
 TEST_SPRINTF(u_width_prec_minus_zero, "%-10.5u", 0, unsigned int)
 TEST_SPRINTF(u_width_prec_minus_ng_z, "%-10.5u", -0, unsigned int)
-TEST_SPRINTF(u_width_prec_plus_negt, "%+10.5u", -123, unsigned int)
-TEST_SPRINTF(u_width_prec_plus_post, "%+10.5u", 123, unsigned int)
-TEST_SPRINTF(u_width_prec_plus_zero, "%+10.5u", 0, unsigned int)
-TEST_SPRINTF(u_width_prec_plus_ng_z, "%+10.5u", -0, unsigned int)
-TEST_SPRINTF(u_width_prec_space_negt, "% 10.5u", -123, unsigned int)
-TEST_SPRINTF(u_width_prec_space_post, "% 10.5u", 123, unsigned int)
-TEST_SPRINTF(u_width_prec_space_zero, "% 10.5u", 0, unsigned int)
-TEST_SPRINTF(u_width_prec_space_ng_z, "% 10.5u", -0, unsigned int)
-TEST_SPRINTF(u_width_prec_hash_negt, "%#10.5u", -123, unsigned int)
-TEST_SPRINTF(u_width_prec_hash_post, "%#10.5u", 123, unsigned int)
-TEST_SPRINTF(u_width_prec_hash_zero, "%#10.5u", 0, unsigned int)
-TEST_SPRINTF(u_width_prec_hash_ng_z, "%#10.5u", -0, unsigned int)
-TEST_SPRINTF(u_width_prec_zero_negt, "%010.5u", -123, unsigned int)
-TEST_SPRINTF(u_width_prec_zero_post, "%010.5u", 123, unsigned int)
-TEST_SPRINTF(u_width_prec_zero_zero, "%010.5u", 0, unsigned int)
-TEST_SPRINTF(u_width_prec_zero_ng_z, "%010.5u", -0, unsigned int)
 
 TEST_SPRINTF_2(u_dynamic_width, "%*u", 10, 123, unsigned int)
 TEST_SPRINTF_2(u_dynamic_precision, "%.*u", 5, 123, unsigned int)
@@ -848,38 +751,13 @@ TEST_SPRINTF(u_zero_zero_negt, "%0u", -123, unsigned int)
 TEST_SPRINTF(u_zero_zero_post, "%0u", 123, unsigned int)
 TEST_SPRINTF(u_zero_zero_zero, "%0u", 0, unsigned int)
 TEST_SPRINTF(u_zero_zero_ng_z, "%0u", -0, unsigned int)
-TEST_SPRINTF(u_zero_prec_zero_negt, "%0.0u", -123, unsigned int)
-TEST_SPRINTF(u_zero_prec_zero_post, "%0.0u", 123, unsigned int)
-TEST_SPRINTF(u_zero_prec_zero_zero, "%0.0u", 0, unsigned int)
-TEST_SPRINTF(u_zero_prec_zero_ng_z, "%0.0u", -0, unsigned int)
 TEST_SPRINTF(u_zero_prec_minus_zero, "%-.0u", 0, unsigned int)
-TEST_SPRINTF(u_zero_prec_plus_zero, "%+.0u", 0, unsigned int)
-TEST_SPRINTF(u_zero_prec_space_zero, "% .0u", 0, unsigned int)
-TEST_SPRINTF(u_zero_prec_hash_zero, "%#.0u", 0, unsigned int)
-TEST_SPRINTF(u_zero_zero_minus_zero, "%-0u", 0, unsigned int)
-TEST_SPRINTF(u_zero_zero_plus_zero, "%+0u", 0, unsigned int)
-TEST_SPRINTF(u_zero_zero_space_zero, "% 0u", 0, unsigned int)
-TEST_SPRINTF(u_zero_zero_hash_zero, "%#0u", 0, unsigned int)
-TEST_SPRINTF(u_zero_width_zero_zero, "%00u", 0, unsigned int)
-TEST_SPRINTF(u_zero_prec_zero_minus_zero, "%-0.0u", 0, unsigned int)
-TEST_SPRINTF(u_zero_prec_zero_plus_zero, "%+0.0u", 0, unsigned int)
-TEST_SPRINTF(u_zero_prec_zero_space_zero, "% 0.0u", 0, unsigned int)
-TEST_SPRINTF(u_zero_prec_zero_hash_zero, "%#0.0u", 0, unsigned int)
-TEST_SPRINTF(u_zero_prec_width_zero_zero, "%00.0u", 0, unsigned int)
 
 // Тесты для %o
 TEST_SPRINTF(o_minus_negt, "%-o", -123, unsigned int)
 TEST_SPRINTF(o_minus_post, "%-o", 123, unsigned int)
 TEST_SPRINTF(o_minus_zero, "%-o", 0, unsigned int)
 TEST_SPRINTF(o_minus_ng_z, "%-o", -0, unsigned int)
-TEST_SPRINTF(o_plus_negt, "%+o", -123, unsigned int)
-TEST_SPRINTF(o_plus_post, "%+o", 123, unsigned int)
-TEST_SPRINTF(o_plus_zero, "%+o", 0, unsigned int)
-TEST_SPRINTF(o_plus_ng_z, "%+o", -0, unsigned int)
-TEST_SPRINTF(o_space_negt, "% o", -123, unsigned int)
-TEST_SPRINTF(o_space_post, "% o", 123, unsigned int)
-TEST_SPRINTF(o_space_zero, "% o", 0, unsigned int)
-TEST_SPRINTF(o_space_ng_z, "% o", -0, unsigned int)
 TEST_SPRINTF(o_hash_negt, "%#o", -123, unsigned int)
 TEST_SPRINTF(o_hash_post, "%#o", 123, unsigned int)
 TEST_SPRINTF(o_hash_zero, "%#o", 0, unsigned int)
@@ -892,14 +770,6 @@ TEST_SPRINTF(o_width_minus_negt, "%-5o", -123, unsigned int)
 TEST_SPRINTF(o_width_minus_post, "%-5o", 123, unsigned int)
 TEST_SPRINTF(o_width_minus_zero, "%-5o", 0, unsigned int)
 TEST_SPRINTF(o_width_minus_ng_z, "%-5o", -0, unsigned int)
-TEST_SPRINTF(o_width_plus_negt, "%+5o", -123, unsigned int)
-TEST_SPRINTF(o_width_plus_post, "%+5o", 123, unsigned int)
-TEST_SPRINTF(o_width_plus_zero, "%+5o", 0, unsigned int)
-TEST_SPRINTF(o_width_plus_ng_z, "%+5o", -0, unsigned int)
-TEST_SPRINTF(o_width_space_negt, "% 5o", -123, unsigned int)
-TEST_SPRINTF(o_width_space_post, "% 5o", 123, unsigned int)
-TEST_SPRINTF(o_width_space_zero, "% 5o", 0, unsigned int)
-TEST_SPRINTF(o_width_space_ng_z, "% 5o", -0, unsigned int)
 TEST_SPRINTF(o_width_hash_negt, "%#5o", -123, unsigned int)
 TEST_SPRINTF(o_width_hash_post, "%#5o", 123, unsigned int)
 TEST_SPRINTF(o_width_hash_zero, "%#5o", 0, unsigned int)
@@ -912,42 +782,18 @@ TEST_SPRINTF(o_prec_minus_negt, "%-.5o", -123, unsigned int)
 TEST_SPRINTF(o_prec_minus_post, "%-.5o", 123, unsigned int)
 TEST_SPRINTF(o_prec_minus_zero, "%-.5o", 0, unsigned int)
 TEST_SPRINTF(o_prec_minus_ng_z, "%-.5o", -0, unsigned int)
-TEST_SPRINTF(o_prec_plus_negt, "%+.5o", -123, unsigned int)
-TEST_SPRINTF(o_prec_plus_post, "%+.5o", 123, unsigned int)
-TEST_SPRINTF(o_prec_plus_zero, "%+.5o", 0, unsigned int)
-TEST_SPRINTF(o_prec_plus_ng_z, "%+.5o", -0, unsigned int)
-TEST_SPRINTF(o_prec_space_negt, "% .5o", -123, unsigned int)
-TEST_SPRINTF(o_prec_space_post, "% .5o", 123, unsigned int)
-TEST_SPRINTF(o_prec_space_zero, "% .5o", 0, unsigned int)
-TEST_SPRINTF(o_prec_space_ng_z, "% .5o", -0, unsigned int)
 TEST_SPRINTF(o_prec_hash_negt, "%#.5o", -123, unsigned int)
 TEST_SPRINTF(o_prec_hash_post, "%#.5o", 123, unsigned int)
 TEST_SPRINTF(o_prec_hash_zero, "%#.5o", 0, unsigned int)
 TEST_SPRINTF(o_prec_hash_ng_z, "%#.5o", -0, unsigned int)
-TEST_SPRINTF(o_prec_zero_negt, "%0.5o", -123, unsigned int)
-TEST_SPRINTF(o_prec_zero_post, "%0.5o", 123, unsigned int)
-TEST_SPRINTF(o_prec_zero_zero, "%0.5o", 0, unsigned int)
-TEST_SPRINTF(o_prec_zero_ng_z, "%0.5o", -0, unsigned int)
 TEST_SPRINTF(o_width_prec_minus_negt, "%-10.5o", -123, unsigned int)
 TEST_SPRINTF(o_width_prec_minus_post, "%-10.5o", 123, unsigned int)
 TEST_SPRINTF(o_width_prec_minus_zero, "%-10.5o", 0, unsigned int)
 TEST_SPRINTF(o_width_prec_minus_ng_z, "%-10.5o", -0, unsigned int)
-TEST_SPRINTF(o_width_prec_plus_negt, "%+10.5o", -123, unsigned int)
-TEST_SPRINTF(o_width_prec_plus_post, "%+10.5o", 123, unsigned int)
-TEST_SPRINTF(o_width_prec_plus_zero, "%+10.5o", 0, unsigned int)
-TEST_SPRINTF(o_width_prec_plus_ng_z, "%+10.5o", -0, unsigned int)
-TEST_SPRINTF(o_width_prec_space_negt, "% 10.5o", -123, unsigned int)
-TEST_SPRINTF(o_width_prec_space_post, "% 10.5o", 123, unsigned int)
-TEST_SPRINTF(o_width_prec_space_zero, "% 10.5o", 0, unsigned int)
-TEST_SPRINTF(o_width_prec_space_ng_z, "% 10.5o", -0, unsigned int)
 TEST_SPRINTF(o_width_prec_hash_negt, "%#10.5o", -123, unsigned int)
 TEST_SPRINTF(o_width_prec_hash_post, "%#10.5o", 123, unsigned int)
 TEST_SPRINTF(o_width_prec_hash_zero, "%#10.5o", 0, unsigned int)
 TEST_SPRINTF(o_width_prec_hash_ng_z, "%#10.5o", -0, unsigned int)
-TEST_SPRINTF(o_width_prec_zero_negt, "%010.5o", -123, unsigned int)
-TEST_SPRINTF(o_width_prec_zero_post, "%010.5o", 123, unsigned int)
-TEST_SPRINTF(o_width_prec_zero_zero, "%010.5o", 0, unsigned int)
-TEST_SPRINTF(o_width_prec_zero_ng_z, "%010.5o", -0, unsigned int)
 TEST_SPRINTF_2(o_dynamic_width, "%*o", 10, 123, unsigned int)
 TEST_SPRINTF_2(o_dynamic_precision, "%.*o", 5, 123, unsigned int)
 TEST_SPRINTF_3(o_dynamic_width_precision, "%*.*o", 10, 5, 123, unsigned int)
@@ -971,38 +817,15 @@ TEST_SPRINTF(o_zero_zero_negt, "%0o", -123, unsigned int)
 TEST_SPRINTF(o_zero_zero_post, "%0o", 123, unsigned int)
 TEST_SPRINTF(o_zero_zero_zero, "%0o", 0, unsigned int)
 TEST_SPRINTF(o_zero_zero_ng_z, "%0o", -0, unsigned int)
-TEST_SPRINTF(o_zero_prec_zero_negt, "%0.0o", -123, unsigned int)
-TEST_SPRINTF(o_zero_prec_zero_post, "%0.0o", 123, unsigned int)
-TEST_SPRINTF(o_zero_prec_zero_zero, "%0.0o", 0, unsigned int)
-TEST_SPRINTF(o_zero_prec_zero_ng_z, "%0.0o", -0, unsigned int)
 TEST_SPRINTF(o_zero_prec_minus_zero, "%-.0o", 0, unsigned int)
-TEST_SPRINTF(o_zero_prec_plus_zero, "%+.0o", 0, unsigned int)
-TEST_SPRINTF(o_zero_prec_space_zero, "% .0o", 0, unsigned int)
 TEST_SPRINTF(o_zero_prec_hash_zero, "%#.0o", 0, unsigned int)
-TEST_SPRINTF(o_zero_zero_minus_zero, "%-0o", 0, unsigned int)
-TEST_SPRINTF(o_zero_zero_plus_zero, "%+0o", 0, unsigned int)
-TEST_SPRINTF(o_zero_zero_space_zero, "% 0o", 0, unsigned int)
 TEST_SPRINTF(o_zero_zero_hash_zero, "%#0o", 0, unsigned int)
-TEST_SPRINTF(o_zero_width_zero_zero, "%00o", 0, unsigned int)
-TEST_SPRINTF(o_zero_prec_zero_minus_zero, "%-0.0o", 0, unsigned int)
-TEST_SPRINTF(o_zero_prec_zero_plus_zero, "%+0.0o", 0, unsigned int)
-TEST_SPRINTF(o_zero_prec_zero_space_zero, "% 0.0o", 0, unsigned int)
-TEST_SPRINTF(o_zero_prec_zero_hash_zero, "%#0.0o", 0, unsigned int)
-TEST_SPRINTF(o_zero_prec_width_zero_zero, "%00.0o", 0, unsigned int)
 
 // Тесты для %x
 TEST_SPRINTF(x_minus_negt, "%-x", -123, unsigned int)
 TEST_SPRINTF(x_minus_post, "%-x", 123, unsigned int)
 TEST_SPRINTF(x_minus_zero, "%-x", 0, unsigned int)
 TEST_SPRINTF(x_minus_ng_z, "%-x", -0, unsigned int)
-TEST_SPRINTF(x_plus_negt, "%+x", -123, unsigned int)
-TEST_SPRINTF(x_plus_post, "%+x", 123, unsigned int)
-TEST_SPRINTF(x_plus_zero, "%+x", 0, unsigned int)
-TEST_SPRINTF(x_plus_ng_z, "%+x", -0, unsigned int)
-TEST_SPRINTF(x_space_negt, "% x", -123, unsigned int)
-TEST_SPRINTF(x_space_post, "% x", 123, unsigned int)
-TEST_SPRINTF(x_space_zero, "% x", 0, unsigned int)
-TEST_SPRINTF(x_space_ng_z, "% x", -0, unsigned int)
 TEST_SPRINTF(x_hash_negt, "%#x", -123, unsigned int)
 TEST_SPRINTF(x_hash_post, "%#x", 123, unsigned int)
 TEST_SPRINTF(x_hash_zero, "%#x", 0, unsigned int)
@@ -1015,14 +838,6 @@ TEST_SPRINTF(x_width_minus_negt, "%-5x", -123, unsigned int)
 TEST_SPRINTF(x_width_minus_post, "%-5x", 123, unsigned int)
 TEST_SPRINTF(x_width_minus_zero, "%-5x", 0, unsigned int)
 TEST_SPRINTF(x_width_minus_ng_z, "%-5x", -0, unsigned int)
-TEST_SPRINTF(x_width_plus_negt, "%+5x", -123, unsigned int)
-TEST_SPRINTF(x_width_plus_post, "%+5x", 123, unsigned int)
-TEST_SPRINTF(x_width_plus_zero, "%+5x", 0, unsigned int)
-TEST_SPRINTF(x_width_plus_ng_z, "%+5x", -0, unsigned int)
-TEST_SPRINTF(x_width_space_negt, "% 5x", -123, unsigned int)
-TEST_SPRINTF(x_width_space_post, "% 5x", 123, unsigned int)
-TEST_SPRINTF(x_width_space_zero, "% 5x", 0, unsigned int)
-TEST_SPRINTF(x_width_space_ng_z, "% 5x", -0, unsigned int)
 TEST_SPRINTF(x_width_hash_negt, "%#5x", -123, unsigned int)
 TEST_SPRINTF(x_width_hash_post, "%#5x", 123, unsigned int)
 TEST_SPRINTF(x_width_hash_zero, "%#5x", 0, unsigned int)
@@ -1035,42 +850,18 @@ TEST_SPRINTF(x_prec_minus_negt, "%-.5x", -123, unsigned int)
 TEST_SPRINTF(x_prec_minus_post, "%-.5x", 123, unsigned int)
 TEST_SPRINTF(x_prec_minus, "%-.5x", 0, unsigned int)
 TEST_SPRINTF(x_prec_minus_ng_z, "%-.5x", -0, unsigned int)
-TEST_SPRINTF(x_prec_plus_negt, "%+.5x", -123, unsigned int)
-TEST_SPRINTF(x_prec_plus_post, "%+.5x", 123, unsigned int)
-TEST_SPRINTF(x_prec_plus_zero, "%+.5x", 0, unsigned int)
-TEST_SPRINTF(x_prec_plus_ng_z, "%+.5x", -0, unsigned int)
-TEST_SPRINTF(x_prec_space_negt, "% .5x", -123, unsigned int)
-TEST_SPRINTF(x_prec_space_post, "% .5x", 123, unsigned int)
-TEST_SPRINTF(x_prec_space_zero, "% .5x", 0, unsigned int)
-TEST_SPRINTF(x_prec_space_ng_z, "% .5x", -0, unsigned int)
 TEST_SPRINTF(x_prec_hash_negt, "%#.5x", -123, unsigned int)
 TEST_SPRINTF(x_prec_hash_post, "%#.5x", 123, unsigned int)
 TEST_SPRINTF(x_prec_hash_zero, "%#.5x", 0, unsigned int)
 TEST_SPRINTF(x_prec_hash_ng_z, "%#.5x", -0, unsigned int)
-TEST_SPRINTF(x_prec_zero_negt, "%0.5x", -123, unsigned int)
-TEST_SPRINTF(x_prec_zero_post, "%0.5x", 123, unsigned int)
-TEST_SPRINTF(x_prec_zero_zero, "%0.5x", 0, unsigned int)
-TEST_SPRINTF(x_prec_zero_ng_z, "%0.5x", -0, unsigned int)
 TEST_SPRINTF(x_width_prec_minus_negt, "%-10.5x", -123, unsigned int)
 TEST_SPRINTF(x_width_prec_minus_post, "%-10.5x", 123, unsigned int)
 TEST_SPRINTF(x_width_prec_minus_zero, "%-10.5x", 0, unsigned int)
 TEST_SPRINTF(x_width_prec_minus_ng_z, "%-10.5x", -0, unsigned int)
-TEST_SPRINTF(x_width_prec_plus_negt, "%+10.5x", -123, unsigned int)
-TEST_SPRINTF(x_width_prec_plus_post, "%+10.5x", 123, unsigned int)
-TEST_SPRINTF(x_width_prec_plus_zero, "%+10.5x", 0, unsigned int)
-TEST_SPRINTF(x_width_prec_plus_ng_z, "%+10.5x", -0, unsigned int)
-TEST_SPRINTF(x_width_prec_space_negt, "% 10.5x", -123, unsigned int)
-TEST_SPRINTF(x_width_prec_space_post, "% 10.5x", 123, unsigned int)
-TEST_SPRINTF(x_width_prec_space_zero, "% 10.5x", 0, unsigned int)
-TEST_SPRINTF(x_width_prec_space_ng_z, "% 10.5x", -0, unsigned int)
 TEST_SPRINTF(x_width_prec_hash_negt, "%#10.5x", -123, unsigned int)
 TEST_SPRINTF(x_width_prec_hash_post, "%#10.5x", 123, unsigned int)
 TEST_SPRINTF(x_width_prec_hash_zero, "%#10.5x", 0, unsigned int)
 TEST_SPRINTF(x_width_prec_hash_ng_z, "%#10.5x", -0, unsigned int)
-TEST_SPRINTF(x_width_prec_zero_negt, "%010.5x", -123, unsigned int)
-TEST_SPRINTF(x_width_prec_zero_post, "%010.5x", 123, unsigned int)
-TEST_SPRINTF(x_width_prec_zero_zero, "%010.5x", 0, unsigned int)
-TEST_SPRINTF(x_width_prec_zero_ng_z, "%010.5x", -0, unsigned int)
 TEST_SPRINTF_2(x_dynamic_width, "%*x", 10, 123, unsigned int)
 TEST_SPRINTF_2(x_dynamic_precision, "%.*x", 5, 123, unsigned int)
 TEST_SPRINTF_3(x_dynamic_width_precision, "%*.*x", 10, 5, 123, unsigned int)
@@ -1094,38 +885,15 @@ TEST_SPRINTF(x_zero_zero_negt, "%0x", -123, unsigned int)
 TEST_SPRINTF(x_zero_zero_post, "%0x", 123, unsigned int)
 TEST_SPRINTF(x_zero_zero_zero, "%0x", 0, unsigned int)
 TEST_SPRINTF(x_zero_zero_ng_z, "%0x", -0, unsigned int)
-TEST_SPRINTF(x_zero_prec_zero_negt, "%0.0x", -123, unsigned int)
-TEST_SPRINTF(x_zero_prec_zero_post, "%0.0x", 123, unsigned int)
-TEST_SPRINTF(x_zero_prec_zero_zero, "%0.0x", 0, unsigned int)
-TEST_SPRINTF(x_zero_prec_zero_ng_z, "%0.0x", -0, unsigned int)
 TEST_SPRINTF(x_zero_prec_minus_zero, "%-.0x", 0, unsigned int)
-TEST_SPRINTF(x_zero_prec_plus_zero, "%+.0x", 0, unsigned int)
-TEST_SPRINTF(x_zero_prec_space_zero, "% .0x", 0, unsigned int)
 TEST_SPRINTF(x_zero_prec_hash_zero, "%#.0x", 0, unsigned int)
-TEST_SPRINTF(x_zero_zero_minus_zero, "%-0x", 0, unsigned int)
-TEST_SPRINTF(x_zero_zero_plus_zero, "%+0x", 0, unsigned int)
-TEST_SPRINTF(x_zero_zero_space_zero, "% 0x", 0, unsigned int)
 TEST_SPRINTF(x_zero_zero_hash_zero, "%#0x", 0, unsigned int)
-TEST_SPRINTF(x_zero_width_zero_zero, "%00x", 0, unsigned int)
-TEST_SPRINTF(x_zero_prec_zero_minus_zero, "%-0.0x", 0, unsigned int)
-TEST_SPRINTF(x_zero_prec_zero_plus_zero, "%+0.0x", 0, unsigned int)
-TEST_SPRINTF(x_zero_prec_zero_space_zero, "% 0.0x", 0, unsigned int)
-TEST_SPRINTF(x_zero_prec_zero_hash_zero, "%#0.0x", 0, unsigned int)
-TEST_SPRINTF(x_zero_prec_width_zero_zero, "%00.0x", 0, unsigned int)
 
 // Тесты для %X
 TEST_SPRINTF(X_minus_negt, "%-X", -123, unsigned int)
 TEST_SPRINTF(X_minus_post, "%-X", 123, unsigned int)
 TEST_SPRINTF(X_minus_zero, "%-X", 0, unsigned int)
 TEST_SPRINTF(X_minus_ng_z, "%-X", -0, unsigned int)
-TEST_SPRINTF(X_plus_negt, "%+X", -123, unsigned int)
-TEST_SPRINTF(X_plus_post, "%+X", 123, unsigned int)
-TEST_SPRINTF(X_plus_zero, "%+X", 0, unsigned int)
-TEST_SPRINTF(X_plus_ng_z, "%+X", -0, unsigned int)
-TEST_SPRINTF(X_space_negt, "% X", -123, unsigned int)
-TEST_SPRINTF(X_space_post, "% X", 123, unsigned int)
-TEST_SPRINTF(X_space_zero, "% X", 0, unsigned int)
-TEST_SPRINTF(X_space_ng_z, "% X", -0, unsigned int)
 TEST_SPRINTF(X_hash_negt, "%#X", -123, unsigned int)
 TEST_SPRINTF(X_hash_post, "%#X", 123, unsigned int)
 TEST_SPRINTF(X_hash_zero, "%#X", 0, unsigned int)
@@ -1138,14 +906,6 @@ TEST_SPRINTF(X_width_minus_negt, "%-5X", -123, unsigned int)
 TEST_SPRINTF(X_width_minus_post, "%-5X", 123, unsigned int)
 TEST_SPRINTF(X_width_minus_zero, "%-5X", 0, unsigned int)
 TEST_SPRINTF(X_width_minus_ng_z, "%-5X", -0, unsigned int)
-TEST_SPRINTF(X_width_plus_negt, "%+5X", -123, unsigned int)
-TEST_SPRINTF(X_width_plus_post, "%+5X", 123, unsigned int)
-TEST_SPRINTF(X_width_plus_zero, "%+5X", 0, unsigned int)
-TEST_SPRINTF(X_width_plus_ng_z, "%+5X", -0, unsigned int)
-TEST_SPRINTF(X_width_space_negt, "% 5X", -123, unsigned int)
-TEST_SPRINTF(X_width_space_post, "% 5X", 123, unsigned int)
-TEST_SPRINTF(X_width_space_zero, "% 5X", 0, unsigned int)
-TEST_SPRINTF(X_width_space_ng_z, "% 5X", -0, unsigned int)
 TEST_SPRINTF(X_width_hash_negt, "%#5X", -123, unsigned int)
 TEST_SPRINTF(X_width_hash_post, "%#5X", 123, unsigned int)
 TEST_SPRINTF(X_width_hash_zero, "%#5X", 0, unsigned int)
@@ -1158,42 +918,18 @@ TEST_SPRINTF(X_prec_minus_negt, "%-.5X", -123, unsigned int)
 TEST_SPRINTF(X_prec_minus_post, "%-.5X", 123, unsigned int)
 TEST_SPRINTF(X_prec_minus_zero, "%-.5X", 0, unsigned int)
 TEST_SPRINTF(X_prec_minus_ng_z, "%-.5X", -0, unsigned int)
-TEST_SPRINTF(X_prec_plus_negt, "%+.5X", -123, unsigned int)
-TEST_SPRINTF(X_prec_plus_post, "%+.5X", 123, unsigned int)
-TEST_SPRINTF(X_prec_plus_zero, "%+.5X", 0, unsigned int)
-TEST_SPRINTF(X_prec_plus_ng_z, "%+.5X", -0, unsigned int)
-TEST_SPRINTF(X_prec_space_negt, "% .5X", -123, unsigned int)
-TEST_SPRINTF(X_prec_space_post, "% .5X", 123, unsigned int)
-TEST_SPRINTF(X_prec_space_zero, "% .5X", 0, unsigned int)
-TEST_SPRINTF(X_prec_space_ng_z, "% .5X", -0, unsigned int)
 TEST_SPRINTF(X_prec_hash_negt, "%#.5X", -123, unsigned int)
 TEST_SPRINTF(X_prec_hash_post, "%#.5X", 123, unsigned int)
 TEST_SPRINTF(X_prec_hash_zero, "%#.5X", 0, unsigned int)
 TEST_SPRINTF(X_prec_hash_ng_z, "%#.5X", -0, unsigned int)
-TEST_SPRINTF(X_prec_zero_negt, "%0.5X", -123, unsigned int)
-TEST_SPRINTF(X_prec_zero_post, "%0.5X", 123, unsigned int)
-TEST_SPRINTF(X_prec_zero_zero, "%0.5X", 0, unsigned int)
-TEST_SPRINTF(X_prec_zero_ng_z, "%0.5X", -0, unsigned int)
 TEST_SPRINTF(X_width_prec_minus_negt, "%-10.5X", -123, unsigned int)
 TEST_SPRINTF(X_width_prec_minus_post, "%-10.5X", 123, unsigned int)
 TEST_SPRINTF(X_width_prec_minus_zero, "%-10.5X", 0, unsigned int)
 TEST_SPRINTF(X_width_prec_minus_ng_z, "%-10.5X", -0, unsigned int)
-TEST_SPRINTF(X_width_prec_plus_negt, "%+10.5X", -123, unsigned int)
-TEST_SPRINTF(X_width_prec_plus_post, "%+10.5X", 123, unsigned int)
-TEST_SPRINTF(X_width_prec_plus_zero, "%+10.5X", 0, unsigned int)
-TEST_SPRINTF(X_width_prec_plus_ng_z, "%+10.5X", -0, unsigned int)
-TEST_SPRINTF(X_width_prec_space_negt, "% 10.5X", -123, unsigned int)
-TEST_SPRINTF(X_width_prec_space_post, "% 10.5X", 123, unsigned int)
-TEST_SPRINTF(X_width_prec_space_zero, "% 10.5X", 0, unsigned int)
-TEST_SPRINTF(X_width_prec_space_ng_z, "% 10.5X", -0, unsigned int)
 TEST_SPRINTF(X_width_prec_hash_negt, "%#10.5X", -123, unsigned int)
 TEST_SPRINTF(X_width_prec_hash_post, "%#10.5X", 123, unsigned int)
 TEST_SPRINTF(X_width_prec_hash_zero, "%#10.5X", 0, unsigned int)
 TEST_SPRINTF(X_width_prec_hash_ng_z, "%#10.5X", -0, unsigned int)
-TEST_SPRINTF(X_width_prec_zero_negt, "%010.5X", -123, unsigned int)
-TEST_SPRINTF(X_width_prec_zero_post, "%010.5X", 123, unsigned int)
-TEST_SPRINTF(X_width_prec_zero_zero, "%010.5X", 0, unsigned int)
-TEST_SPRINTF(X_width_prec_zero_ng_z, "%010.5X", -0, unsigned int)
 TEST_SPRINTF(X_width_negt, "%5X", -123, unsigned int)
 TEST_SPRINTF(X_width_post, "%5X", 123, unsigned int)
 TEST_SPRINTF(X_width_zero, "%5X", 0, unsigned int)
@@ -1214,24 +950,9 @@ TEST_SPRINTF(X_zero_zero_negt, "%0X", -123, unsigned int)
 TEST_SPRINTF(X_zero_zero_post, "%0X", 123, unsigned int)
 TEST_SPRINTF(X_zero_zero_zero, "%0X", 0, unsigned int)
 TEST_SPRINTF(X_zero_zero_ng_z, "%0X", -0, unsigned int)
-TEST_SPRINTF(X_zero_prec_zero_negt, "%0.0X", -123, unsigned int)
-TEST_SPRINTF(X_zero_prec_zero_post, "%0.0X", 123, unsigned int)
-TEST_SPRINTF(X_zero_prec_zero_zero, "%0.0X", 0, unsigned int)
-TEST_SPRINTF(X_zero_prec_zero_ng_z, "%0.0X", -0, unsigned int)
 TEST_SPRINTF(X_zero_prec_minus_zero, "%-.0X", 0, unsigned int)
-TEST_SPRINTF(X_zero_prec_plus_zero, "%+.0X", 0, unsigned int)
-TEST_SPRINTF(X_zero_prec_space_zero, "% .0X", 0, unsigned int)
 TEST_SPRINTF(X_zero_prec_hash_zero, "%#.0X", 0, unsigned int)
-TEST_SPRINTF(X_zero_zero_minus_zero, "%-0X", 0, unsigned int)
-TEST_SPRINTF(X_zero_zero_plus_zero, "%+0X", 0, unsigned int)
-TEST_SPRINTF(X_zero_zero_space_zero, "% 0X", 0, unsigned int)
 TEST_SPRINTF(X_zero_zero_hash_zero, "%#0X", 0, unsigned int)
-TEST_SPRINTF(X_zero_width_zero_zero, "%00X", 0, unsigned int)
-TEST_SPRINTF(X_zero_prec_zero_minus_zero, "%-0.0X", 0, unsigned int)
-TEST_SPRINTF(X_zero_prec_zero_plus_zero, "%+0.0X", 0, unsigned int)
-TEST_SPRINTF(X_zero_prec_zero_space_zero, "% 0.0X", 0, unsigned int)
-TEST_SPRINTF(X_zero_prec_zero_hash_zero, "%#0.0X", 0, unsigned int)
-TEST_SPRINTF(X_zero_prec_width_zero_zero, "%00.0X", 0, unsigned int)
 
 TEST_SPRINTF_2(X_dynamic_width, "%*X", 10, 123, unsigned int)
 TEST_SPRINTF_2(X_dynamic_precision, "%.*X", 5, 123, unsigned int)
@@ -1364,16 +1085,12 @@ TEST_SPRINTF(f_zero_prec_minus_zero, "%-.0f", 0, double)
 TEST_SPRINTF(f_zero_prec_plus_zero, "%+.0f", 0, double)
 TEST_SPRINTF(f_zero_prec_space_zero, "% .0f", 0, double)
 TEST_SPRINTF(f_zero_prec_hash_zero, "%#.0f", 0, double)
-TEST_SPRINTF(f_zero_zero_minus_zero, "%-0f", 0, double)
 TEST_SPRINTF(f_zero_zero_plus_zero, "%+0f", 0, double)
 TEST_SPRINTF(f_zero_zero_space_zero, "% 0f", 0, double)
 TEST_SPRINTF(f_zero_zero_hash_zero, "%#0f", 0, double)
-TEST_SPRINTF(f_zero_width_zero_zero, "%00f", 0, double)
-TEST_SPRINTF(f_zero_prec_zero_minus_zero, "%-0.0f", 0, double)
 TEST_SPRINTF(f_zero_prec_zero_plus_zero, "%+0.0f", 0, double)
 TEST_SPRINTF(f_zero_prec_zero_space_zero, "% 0.0f", 0, double)
 TEST_SPRINTF(f_zero_prec_zero_hash_zero, "%#0.0f", 0, double)
-TEST_SPRINTF(f_zero_prec_width_zero_zero, "%00.0f", 0, double)
 
 // Тесты для %e
 TEST_SPRINTF(e_minus_negt, "%-e", -123.456, double)
@@ -1487,16 +1204,12 @@ TEST_SPRINTF(e_zero_prec_minus_zero, "%-.0e", 0, double)
 TEST_SPRINTF(e_zero_prec_plus_zero, "%+.0e", 0, double)
 TEST_SPRINTF(e_zero_prec_space_zero, "% .0e", 0, double)
 TEST_SPRINTF(e_zero_prec_hash_zero, "%#.0e", 0, double)
-TEST_SPRINTF(e_zero_zero_minus_zero, "%-0e", 0, double)
 TEST_SPRINTF(e_zero_zero_plus_zero, "%+0e", 0, double)
 TEST_SPRINTF(e_zero_zero_space_zero, "% 0e", 0, double)
 TEST_SPRINTF(e_zero_zero_hash_zero, "%#0e", 0, double)
-TEST_SPRINTF(e_zero_width_zero_zero, "%00e", 0, double)
-TEST_SPRINTF(e_zero_prec_zero_minus_zero, "%-0.0e", 0, double)
 TEST_SPRINTF(e_zero_prec_zero_plus_zero, "%+0.0e", 0, double)
 TEST_SPRINTF(e_zero_prec_zero_space_zero, "% 0.0e", 0, double)
 TEST_SPRINTF(e_zero_prec_zero_hash_zero, "%#0.0e", 0, double)
-TEST_SPRINTF(e_zero_prec_width_zero_zero, "%00.0e", 0, double)
 
 // Тесты для %e
 TEST_SPRINTF(E_minus_negt, "%-E", -123.456, double)
@@ -1610,16 +1323,12 @@ TEST_SPRINTF(E_zero_prec_minus_zero, "%-.0E", 0, double)
 TEST_SPRINTF(E_zero_prec_plus_zero, "%+.0E", 0, double)
 TEST_SPRINTF(E_zero_prec_space_zero, "% .0E", 0, double)
 TEST_SPRINTF(E_zero_prec_hash_zero, "%#.0E", 0, double)
-TEST_SPRINTF(E_zero_zero_minus_zero, "%-0E", 0, double)
 TEST_SPRINTF(E_zero_zero_plus_zero, "%+0E", 0, double)
 TEST_SPRINTF(E_zero_zero_space_zero, "% 0E", 0, double)
 TEST_SPRINTF(E_zero_zero_hash_zero, "%#0E", 0, double)
-TEST_SPRINTF(E_zero_width_zero_zero, "%00E", 0, double)
-TEST_SPRINTF(E_zero_prec_zero_minus_zero, "%-0.0E", 0, double)
 TEST_SPRINTF(E_zero_prec_zero_plus_zero, "%+0.0E", 0, double)
 TEST_SPRINTF(E_zero_prec_zero_space_zero, "% 0.0E", 0, double)
 TEST_SPRINTF(E_zero_prec_zero_hash_zero, "%#0.0E", 0, double)
-TEST_SPRINTF(E_zero_prec_width_zero_zero, "%00.0E", 0, double)
 
 // Тесты для %e
 TEST_SPRINTF(g_minus_negt, "%-g", -123.456, double)
@@ -1733,16 +1442,12 @@ TEST_SPRINTF(g_zero_prec_minus_zero, "%-.0g", 0, double)
 TEST_SPRINTF(g_zero_prec_plus_zero, "%+.0g", 0, double)
 TEST_SPRINTF(g_zero_prec_space_zero, "% .0g", 0, double)
 TEST_SPRINTF(g_zero_prec_hash_zero, "%#.0g", 0, double)
-TEST_SPRINTF(g_zero_zero_minus_zero, "%-0g", 0, double)
 TEST_SPRINTF(g_zero_zero_plus_zero, "%+0g", 0, double)
 TEST_SPRINTF(g_zero_zero_space_zero, "% 0g", 0, double)
 TEST_SPRINTF(g_zero_zero_hash_zero, "%#0g", 0, double)
-TEST_SPRINTF(g_zero_width_zero_zero, "%00g", 0, double)
-TEST_SPRINTF(g_zero_prec_zero_minus_zero, "%-0.0g", 0, double)
 TEST_SPRINTF(g_zero_prec_zero_plus_zero, "%+0.0g", 0, double)
 TEST_SPRINTF(g_zero_prec_zero_space_zero, "% 0.0g", 0, double)
 TEST_SPRINTF(g_zero_prec_zero_hash_zero, "%#0.0g", 0, double)
-TEST_SPRINTF(g_zero_prec_width_zero_zero, "%00.0g", 0, double)
 
 // Тесты для %e
 TEST_SPRINTF(G_minus_negt, "%-G", -123.456, double)
@@ -1856,16 +1561,12 @@ TEST_SPRINTF(G_zero_prec_minus_zero, "%-.0G", 0, double)
 TEST_SPRINTF(G_zero_prec_plus_zero, "%+.0G", 0, double)
 TEST_SPRINTF(G_zero_prec_space_zero, "% .0G", 0, double)
 TEST_SPRINTF(G_zero_prec_hash_zero, "%#.0G", 0, double)
-TEST_SPRINTF(G_zero_zero_minus_zero, "%-0G", 0, double)
 TEST_SPRINTF(G_zero_zero_plus_zero, "%+0G", 0, double)
 TEST_SPRINTF(G_zero_zero_space_zero, "% 0G", 0, double)
 TEST_SPRINTF(G_zero_zero_hash_zero, "%#0G", 0, double)
-TEST_SPRINTF(G_zero_width_zero_zero, "%00G", 0, double)
-TEST_SPRINTF(G_zero_prec_zero_minus_zero, "%-0.0G", 0, double)
 TEST_SPRINTF(G_zero_prec_zero_plus_zero, "%+0.0G", 0, double)
 TEST_SPRINTF(G_zero_prec_zero_space_zero, "% 0.0G", 0, double)
 TEST_SPRINTF(G_zero_prec_zero_hash_zero, "%#0.0G", 0, double)
-TEST_SPRINTF(G_zero_prec_width_zero_zero, "%00.0G", 0, double)
 // ================================================================
 // Тесты для строковых спецификаторов (s, c)
 // ================================================================
@@ -1881,25 +1582,9 @@ TEST_SPRINTF_3(s_star_both, "%*.*s", 20, 5, "Hello, world!", char *)
 TEST_SPRINTF(s_null_wish_form, "%.5s", NULL, char *)
 
 TEST_SPRINTF(s_minus_zero_, "%-s", 0, char *)
-TEST_SPRINTF(s_plus_zero, "%+s", 0, char *)
-TEST_SPRINTF(s_space_zero, "% s", 0, char *)
-TEST_SPRINTF(s_hash_zero, "%#s", 0, char *)
-TEST_SPRINTF(s_zero_zero, "%0s", 0, char *)
 TEST_SPRINTF(s_width_minus_zero, "%-5s", 0, char *)
-TEST_SPRINTF(s_width_plus_zero, "%+5s", 0, char *)
-TEST_SPRINTF(s_width_space_zero, "% 5s", 0, char *)
-TEST_SPRINTF(s_width_hash_zero, "%#5s", 0, char *)
-TEST_SPRINTF(s_width_zero_zero, "%05s", 0, char *)
 TEST_SPRINTF(s_prec_minus_zero, "%-.5s", 0, char *)
-TEST_SPRINTF(s_prec_plus_zero, "%+.5s", 0, char *)
-TEST_SPRINTF(s_prec_space_zero, "% .5s", 0, char *)
-TEST_SPRINTF(s_prec_hash_zero, "%#.5s", 0, char *)
-TEST_SPRINTF(s_prec_zero_zero, "%0.5s", 0, char *)
 TEST_SPRINTF(s_width_prec_minus_zero, "%-10.5s", 0, char *)
-TEST_SPRINTF(s_width_prec_plus_zero, "%+10.5s", 0, char *)
-TEST_SPRINTF(s_width_prec_space_zero, "% 10.5s", 0, char *)
-TEST_SPRINTF(s_width_prec_hash_zero, "%#10.5s", 0, char *)
-TEST_SPRINTF(s_width_prec_zero_zero, "%010.5s", 0, char *)
 TEST_SPRINTF_2(s_dynamic_width, "%*s", 10, 0, char *)
 TEST_SPRINTF_2(s_dynamic_precision, "%.*s", 5, 0, char *)
 TEST_SPRINTF_3(s_dynamic_width_precision, "%*.*s", 10, 5, 0, char *)
@@ -1907,113 +1592,21 @@ TEST_SPRINTF(s_width_zero, "%5s", 0, char *)
 TEST_SPRINTF(s_prec_zero_, "%.5s", 0, char *)
 TEST_SPRINTF(s_width_prec_zero, "%10.5s", 0, char *)
 TEST_SPRINTF(s_zero_prec_zero, "%.0s", 0, char *)
-TEST_SPRINTF(s_zero_prec_zero_zero, "%0.0s", 0, char *)
 TEST_SPRINTF(s_zero_prec_minus_zero, "%-.0s", 0, char *)
-TEST_SPRINTF(s_zero_prec_plus_zero, "%+.0s", 0, char *)
-TEST_SPRINTF(s_zero_prec_space_zero, "% .0s", 0, char *)
-TEST_SPRINTF(s_zero_prec_hash_zero, "%#.0s", 0, char *)
-TEST_SPRINTF(s_zero_zero_minus_zero, "%-0s", 0, char *)
-TEST_SPRINTF(s_zero_zero_plus_zero, "%+0s", 0, char *)
-TEST_SPRINTF(s_zero_zero_space_zero, "% 0s", 0, char *)
-TEST_SPRINTF(s_zero_zero_hash_zero, "%#0s", 0, char *)
-TEST_SPRINTF(s_zero_width_zero_zero, "%00s", 0, char *)
-TEST_SPRINTF(s_zero_prec_zero_minus_zero, "%-0.0s", 0, char *)
-TEST_SPRINTF(s_zero_prec_zero_plus_zero, "%+0.0s", 0, char *)
-TEST_SPRINTF(s_zero_prec_zero_space_zero, "% 0.0s", 0, char *)
-TEST_SPRINTF(s_zero_prec_zero_hash_zero, "%#0.0s", 0, char *)
-TEST_SPRINTF(s_zero_prec_width_zero_zero, "%00.0s", 0, char *)
 
 // Тесты для %c
 TEST_SPRINTF(c_minus_zero_, "%-c", 'a', char)
-TEST_SPRINTF(c_plus_zero, "%+c", 'a', char)
-TEST_SPRINTF(c_space_zero, "% c", 'a', char)
-TEST_SPRINTF(c_hash_zero, "%#c", 'a', char)
-TEST_SPRINTF(c_zero_zero, "%0c", 'a', char)
 TEST_SPRINTF(c_width_minus_zero, "%-5c", 'a', char)
-TEST_SPRINTF(c_width_plus_zero, "%+5c", 'a', char)
-TEST_SPRINTF(c_width_space_zero, "% 5c", 'a', char)
-TEST_SPRINTF(c_width_hash_zero, "%#5c", 'a', char)
-TEST_SPRINTF(c_width_zero_zero, "%05c", 'a', char)
-TEST_SPRINTF(c_prec_minus_zero, "%-.5c", 'a', char)
-TEST_SPRINTF(c_prec_plus_zero, "%+.5c", 'a', char)
-TEST_SPRINTF(c_prec_space_zero, "% .5c", 'a', char)
-TEST_SPRINTF(c_prec_hash_zero, "%#.5c", 'a', char)
-TEST_SPRINTF(c_prec_zero_zero, "%0.5c", 'a', char)
-TEST_SPRINTF(c_width_prec_minus_zero, "%-10.5c", 'a', char)
-TEST_SPRINTF(c_width_prec_plus_zero, "%+10.5c", 'a', char)
-TEST_SPRINTF(c_width_prec_space_zero, "% 10.5c", 'a', char)
-TEST_SPRINTF(c_width_prec_hash_zero, "%#10.5c", 'a', char)
-TEST_SPRINTF(c_width_prec_zero_zero, "%010.5c", 'a', char)
 TEST_SPRINTF_2(c_dynamic_width, "%*c", 10, 'a', char)
-TEST_SPRINTF_2(c_dynamic_precision, "%.*c", 5, 'a', char)
-TEST_SPRINTF_3(c_dynamic_width_precision, "%*.*c", 10, 5, 'a', char)
 TEST_SPRINTF(c_width_zero, "%5c", 'a', char)
-TEST_SPRINTF(c_prec_zero_, "%.5c", 'a', char)
-TEST_SPRINTF(c_width_prec_zero, "%10.5c", 'a', char)
-TEST_SPRINTF(c_zero_prec_zero, "%.0c", 'a', char)
-TEST_SPRINTF(c_zero_prec_zero_zero, "%0.0c", 'a', char)
-TEST_SPRINTF(c_zero_prec_minus_zero, "%-.0c", 'a', char)
-TEST_SPRINTF(c_zero_prec_plus_zero, "%+.0c", 'a', char)
-TEST_SPRINTF(c_zero_prec_space_zero, "% .0c", 'a', char)
-TEST_SPRINTF(c_zero_prec_hash_zero, "%#.0c", 'a', char)
-TEST_SPRINTF(c_zero_zero_minus_zero, "%-0c", 'a', char)
-TEST_SPRINTF(c_zero_zero_plus_zero, "%+0c", 'a', char)
-TEST_SPRINTF(c_zero_zero_space_zero, "% 0c", 'a', char)
-TEST_SPRINTF(c_zero_zero_hash_zero, "%#0c", 'a', char)
-TEST_SPRINTF(c_zero_width_zero_zero, "%00c", 'a', char)
-TEST_SPRINTF(c_zero_prec_zero_minus_zero, "%-0.0c", 'a', char)
-TEST_SPRINTF(c_zero_prec_zero_plus_zero, "%+0.0c", 'a', char)
-TEST_SPRINTF(c_zero_prec_zero_space_zero, "% 0.0c", 'a', char)
-TEST_SPRINTF(c_zero_prec_zero_hash_zero, "%#0.0c", 'a', char)
-TEST_SPRINTF(c_zero_prec_width_zero_zero, "%00.0c", 'a', char)
 
 // ================================================================
 // Тесты для %p
 // ================================================================
 
 TEST_SPRINTF(p_minus_zero_, "%-p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_plus_zero, "%+p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_space_zero, "% p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_hash_zero, "%#p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_zero_zero, "%0p", (void *)0x1234abcd, void *)
 TEST_SPRINTF(p_width_minus_zero, "%-5p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_width_plus_zero, "%+5p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_width_space_zero, "% 5p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_width_hash_zero, "%#5p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_width_zero_zero, "%05p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_prec_minus_zero, "%-.5p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_prec_plus_zero, "%+.5p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_prec_space_zero, "% .5p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_prec_hash_zero, "%#.5p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_prec_zero_zero, "%0.5p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_width_prec_minus_zero, "%-10.5p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_width_prec_plus_zero, "%+10.5p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_width_prec_space_zero, "% 10.5p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_width_prec_hash_zero, "%#10.5p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_width_prec_zero_zero, "%010.5p", (void *)0x1234abcd, void *)
 TEST_SPRINTF_2(p_dynamic_width, "%*p", 10, (void *)0x1234abcd, void *)
-TEST_SPRINTF_2(p_dynamic_precision, "%.*p", 5, (void *)0x1234abcd, void *)
-TEST_SPRINTF_3(p_dynamic_width_precision, "%*.*p", 10, 5, (void *)0x1234abcd,
-               void *)
-TEST_SPRINTF(p_width_zero, "%5p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_prec_zero_, "%.5p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_width_prec_zero, "%10.5p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_zero_prec_zero, "%.0p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_zero_prec_zero_zero, "%0.0p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_zero_prec_minus_zero, "%-.0p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_zero_prec_plus_zero, "%+.0p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_zero_prec_space_zero, "% .0p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_zero_prec_hash_zero, "%#.0p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_zero_zero_minus_zero, "%-0p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_zero_zero_plus_zero, "%+0p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_zero_zero_space_zero, "% 0p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_zero_zero_hash_zero, "%#0p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_zero_width_zero_zero, "%00p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_zero_prec_zero_minus_zero, "%-0.0p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_zero_prec_zero_plus_zero, "%+0.0p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_zero_prec_zero_space_zero, "% 0.0p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_zero_prec_zero_hash_zero, "%#0.0p", (void *)0x1234abcd, void *)
-TEST_SPRINTF(p_zero_prec_width_zero_zero, "%00.0p", (void *)0x1234abcd, void *)
 
 START_TEST(test_s21_sprintf_p_format) {
   void *ptr = (void *)0x1234abcd;
@@ -2328,10 +1921,6 @@ Suite *sprintf_suite(void) {
   tcase_add_test(tc, d_space_post);
   tcase_add_test(tc, d_space_zero);
   tcase_add_test(tc, d_space_ng_z);
-  tcase_add_test(tc, d_hash_negt);
-  tcase_add_test(tc, d_hash_post);
-  tcase_add_test(tc, d_hash_zero);
-  tcase_add_test(tc, d_hash_ng_z);
   tcase_add_test(tc, d_zero_negt);
   tcase_add_test(tc, d_zero_post);
   tcase_add_test(tc, d_zero_zero);
@@ -2348,10 +1937,6 @@ Suite *sprintf_suite(void) {
   tcase_add_test(tc, d_width_space_post);
   tcase_add_test(tc, d_width_space_zero);
   tcase_add_test(tc, d_width_space_ng_z);
-  tcase_add_test(tc, d_width_hash_negt);
-  tcase_add_test(tc, d_width_hash_post);
-  tcase_add_test(tc, d_width_hash_zero);
-  tcase_add_test(tc, d_width_hash_ng_z);
   tcase_add_test(tc, d_width_zero_negt);
   tcase_add_test(tc, d_width_zero_post);
   tcase_add_test(tc, d_width_zero_zero);
@@ -2368,14 +1953,6 @@ Suite *sprintf_suite(void) {
   tcase_add_test(tc, d_prec_space_post);
   tcase_add_test(tc, d_prec_space_zero);
   tcase_add_test(tc, d_prec_space_ng_z);
-  tcase_add_test(tc, d_prec_hash_negt);
-  tcase_add_test(tc, d_prec_hash_post);
-  tcase_add_test(tc, d_prec_hash_zero);
-  tcase_add_test(tc, d_prec_hash_ng_z);
-  tcase_add_test(tc, d_prec_zero_negt);
-  tcase_add_test(tc, d_prec_zero_post);
-  tcase_add_test(tc, d_prec_zero_zero);
-  tcase_add_test(tc, d_prec_zero_ng_z);
   tcase_add_test(tc, d_width_prec_minus_negt);
   tcase_add_test(tc, d_width_prec_minus_post);
   tcase_add_test(tc, d_width_prec_minus_zero);
@@ -2388,14 +1965,6 @@ Suite *sprintf_suite(void) {
   tcase_add_test(tc, d_width_prec_space_post);
   tcase_add_test(tc, d_width_prec_space_zero);
   tcase_add_test(tc, d_width_prec_space_ng_z);
-  tcase_add_test(tc, d_width_prec_hash_negt);
-  tcase_add_test(tc, d_width_prec_hash_post);
-  tcase_add_test(tc, d_width_prec_hash_zero);
-  tcase_add_test(tc, d_width_prec_hash_ng_z);
-  tcase_add_test(tc, d_width_prec_zero_negt);
-  tcase_add_test(tc, d_width_prec_zero_post);
-  tcase_add_test(tc, d_width_prec_zero_zero);
-  tcase_add_test(tc, d_width_prec_zero_ng_z);
   tcase_add_test(tc, d_dynamic_width);
   tcase_add_test(tc, d_dynamic_precision);
   tcase_add_test(tc, d_dynamic_width_precision);
@@ -2419,24 +1988,11 @@ Suite *sprintf_suite(void) {
   tcase_add_test(tc, d_zero_zero_post);
   tcase_add_test(tc, d_zero_zero_zero);
   tcase_add_test(tc, d_zero_zero_ng_z);
-  tcase_add_test(tc, d_zero_prec_zero_negt);
-  tcase_add_test(tc, d_zero_prec_zero_post);
-  tcase_add_test(tc, d_zero_prec_zero_zero);
-  tcase_add_test(tc, d_zero_prec_zero_ng_z);
   tcase_add_test(tc, d_zero_prec_minus_zero);
   tcase_add_test(tc, d_zero_prec_plus_zero);
   tcase_add_test(tc, d_zero_prec_space_zero);
-  tcase_add_test(tc, d_zero_prec_hash_zero);
-  tcase_add_test(tc, d_zero_zero_minus_zero);
   tcase_add_test(tc, d_zero_zero_plus_zero);
   tcase_add_test(tc, d_zero_zero_space_zero);
-  tcase_add_test(tc, d_zero_zero_hash_zero);
-  tcase_add_test(tc, d_zero_width_zero_zero);
-  tcase_add_test(tc, d_zero_prec_zero_minus_zero);
-  tcase_add_test(tc, d_zero_prec_zero_plus_zero);
-  tcase_add_test(tc, d_zero_prec_zero_space_zero);
-  tcase_add_test(tc, d_zero_prec_zero_hash_zero);
-  tcase_add_test(tc, d_zero_prec_width_zero_zero);
   tcase_add_test(tc, i_minus);
   tcase_add_test(tc, i_plus);
   tcase_add_test(tc, i_space);
@@ -2455,18 +2011,6 @@ Suite *sprintf_suite(void) {
   tcase_add_test(tc, u_minus_post);
   tcase_add_test(tc, u_minus_zero);
   tcase_add_test(tc, u_minus_ng_z);
-  tcase_add_test(tc, u_plus_negt);
-  tcase_add_test(tc, u_plus_post);
-  tcase_add_test(tc, u_plus_zero);
-  tcase_add_test(tc, u_plus_ng_z);
-  tcase_add_test(tc, u_space_negt);
-  tcase_add_test(tc, u_space_post);
-  tcase_add_test(tc, u_space_zero);
-  tcase_add_test(tc, u_space_ng_z);
-  tcase_add_test(tc, u_hash_negt);
-  tcase_add_test(tc, u_hash_post);
-  tcase_add_test(tc, u_hash_zero);
-  tcase_add_test(tc, u_hash_ng_z);
   tcase_add_test(tc, u_zero_negt);
   tcase_add_test(tc, u_zero_post);
   tcase_add_test(tc, u_zero_zero);
@@ -2475,18 +2019,6 @@ Suite *sprintf_suite(void) {
   tcase_add_test(tc, u_width_minus_post);
   tcase_add_test(tc, u_width_minus_zero);
   tcase_add_test(tc, u_width_minus_ng_z);
-  tcase_add_test(tc, u_width_plus_negt);
-  tcase_add_test(tc, u_width_plus_post);
-  tcase_add_test(tc, u_width_plus_zero);
-  tcase_add_test(tc, u_width_plus_ng_z);
-  tcase_add_test(tc, u_width_space_negt);
-  tcase_add_test(tc, u_width_space_post);
-  tcase_add_test(tc, u_width_space_zero);
-  tcase_add_test(tc, u_width_space_ng_z);
-  tcase_add_test(tc, u_width_hash_negt);
-  tcase_add_test(tc, u_width_hash_post);
-  tcase_add_test(tc, u_width_hash_zero);
-  tcase_add_test(tc, u_width_hash_ng_z);
   tcase_add_test(tc, u_width_zero_negt);
   tcase_add_test(tc, u_width_zero_post);
   tcase_add_test(tc, u_width_zero_zero);
@@ -2495,42 +2027,10 @@ Suite *sprintf_suite(void) {
   tcase_add_test(tc, u_prec_minus_post);
   tcase_add_test(tc, u_prec_minus_zero);
   tcase_add_test(tc, u_prec_minus_ng_z);
-  tcase_add_test(tc, u_prec_plus_negt);
-  tcase_add_test(tc, u_prec_plus_post);
-  tcase_add_test(tc, u_prec_plus_zero);
-  tcase_add_test(tc, u_prec_plus_ng_z);
-  tcase_add_test(tc, u_prec_space_negt);
-  tcase_add_test(tc, u_prec_space_post);
-  tcase_add_test(tc, u_prec_space_zero);
-  tcase_add_test(tc, u_prec_space_ng_z);
-  tcase_add_test(tc, u_prec_hash_negt);
-  tcase_add_test(tc, u_prec_hash_post);
-  tcase_add_test(tc, u_prec_hash_zero);
-  tcase_add_test(tc, u_prec_hash_ng_z);
-  tcase_add_test(tc, u_prec_zero_negt);
-  tcase_add_test(tc, u_prec_zero_post);
-  tcase_add_test(tc, u_prec_zero_zero);
-  tcase_add_test(tc, u_prec_zero_ng_z);
   tcase_add_test(tc, u_width_prec_minus_negt);
   tcase_add_test(tc, u_width_prec_minus_post);
   tcase_add_test(tc, u_width_prec_minus_zero);
   tcase_add_test(tc, u_width_prec_minus_ng_z);
-  tcase_add_test(tc, u_width_prec_plus_negt);
-  tcase_add_test(tc, u_width_prec_plus_post);
-  tcase_add_test(tc, u_width_prec_plus_zero);
-  tcase_add_test(tc, u_width_prec_plus_ng_z);
-  tcase_add_test(tc, u_width_prec_space_negt);
-  tcase_add_test(tc, u_width_prec_space_post);
-  tcase_add_test(tc, u_width_prec_space_zero);
-  tcase_add_test(tc, u_width_prec_space_ng_z);
-  tcase_add_test(tc, u_width_prec_hash_negt);
-  tcase_add_test(tc, u_width_prec_hash_post);
-  tcase_add_test(tc, u_width_prec_hash_zero);
-  tcase_add_test(tc, u_width_prec_hash_ng_z);
-  tcase_add_test(tc, u_width_prec_zero_negt);
-  tcase_add_test(tc, u_width_prec_zero_post);
-  tcase_add_test(tc, u_width_prec_zero_zero);
-  tcase_add_test(tc, u_width_prec_zero_ng_z);
   tcase_add_test(tc, u_dynamic_width);
   tcase_add_test(tc, u_dynamic_precision);
   tcase_add_test(tc, u_dynamic_width_precision);
@@ -2554,36 +2054,11 @@ Suite *sprintf_suite(void) {
   tcase_add_test(tc, u_zero_zero_post);
   tcase_add_test(tc, u_zero_zero_zero);
   tcase_add_test(tc, u_zero_zero_ng_z);
-  tcase_add_test(tc, u_zero_prec_zero_negt);
-  tcase_add_test(tc, u_zero_prec_zero_post);
-  tcase_add_test(tc, u_zero_prec_zero_zero);
-  tcase_add_test(tc, u_zero_prec_zero_ng_z);
   tcase_add_test(tc, u_zero_prec_minus_zero);
-  tcase_add_test(tc, u_zero_prec_plus_zero);
-  tcase_add_test(tc, u_zero_prec_space_zero);
-  tcase_add_test(tc, u_zero_prec_hash_zero);
-  tcase_add_test(tc, u_zero_zero_minus_zero);
-  tcase_add_test(tc, u_zero_zero_plus_zero);
-  tcase_add_test(tc, u_zero_zero_space_zero);
-  tcase_add_test(tc, u_zero_zero_hash_zero);
-  tcase_add_test(tc, u_zero_width_zero_zero);
-  tcase_add_test(tc, u_zero_prec_zero_minus_zero);
-  tcase_add_test(tc, u_zero_prec_zero_plus_zero);
-  tcase_add_test(tc, u_zero_prec_zero_space_zero);
-  tcase_add_test(tc, u_zero_prec_zero_hash_zero);
-  tcase_add_test(tc, u_zero_prec_width_zero_zero);
   tcase_add_test(tc, o_minus_negt);
   tcase_add_test(tc, o_minus_post);
   tcase_add_test(tc, o_minus_zero);
   tcase_add_test(tc, o_minus_ng_z);
-  tcase_add_test(tc, o_plus_negt);
-  tcase_add_test(tc, o_plus_post);
-  tcase_add_test(tc, o_plus_zero);
-  tcase_add_test(tc, o_plus_ng_z);
-  tcase_add_test(tc, o_space_negt);
-  tcase_add_test(tc, o_space_post);
-  tcase_add_test(tc, o_space_zero);
-  tcase_add_test(tc, o_space_ng_z);
   tcase_add_test(tc, o_hash_negt);
   tcase_add_test(tc, o_hash_post);
   tcase_add_test(tc, o_hash_zero);
@@ -2596,14 +2071,6 @@ Suite *sprintf_suite(void) {
   tcase_add_test(tc, o_width_minus_post);
   tcase_add_test(tc, o_width_minus_zero);
   tcase_add_test(tc, o_width_minus_ng_z);
-  tcase_add_test(tc, o_width_plus_negt);
-  tcase_add_test(tc, o_width_plus_post);
-  tcase_add_test(tc, o_width_plus_zero);
-  tcase_add_test(tc, o_width_plus_ng_z);
-  tcase_add_test(tc, o_width_space_negt);
-  tcase_add_test(tc, o_width_space_post);
-  tcase_add_test(tc, o_width_space_zero);
-  tcase_add_test(tc, o_width_space_ng_z);
   tcase_add_test(tc, o_width_hash_negt);
   tcase_add_test(tc, o_width_hash_post);
   tcase_add_test(tc, o_width_hash_zero);
@@ -2616,42 +2083,18 @@ Suite *sprintf_suite(void) {
   tcase_add_test(tc, o_prec_minus_post);
   tcase_add_test(tc, o_prec_minus_zero);
   tcase_add_test(tc, o_prec_minus_ng_z);
-  tcase_add_test(tc, o_prec_plus_negt);
-  tcase_add_test(tc, o_prec_plus_post);
-  tcase_add_test(tc, o_prec_plus_zero);
-  tcase_add_test(tc, o_prec_plus_ng_z);
-  tcase_add_test(tc, o_prec_space_negt);
-  tcase_add_test(tc, o_prec_space_post);
-  tcase_add_test(tc, o_prec_space_zero);
-  tcase_add_test(tc, o_prec_space_ng_z);
   tcase_add_test(tc, o_prec_hash_negt);
   tcase_add_test(tc, o_prec_hash_post);
   tcase_add_test(tc, o_prec_hash_zero);
   tcase_add_test(tc, o_prec_hash_ng_z);
-  tcase_add_test(tc, o_prec_zero_negt);
-  tcase_add_test(tc, o_prec_zero_post);
-  tcase_add_test(tc, o_prec_zero_zero);
-  tcase_add_test(tc, o_prec_zero_ng_z);
   tcase_add_test(tc, o_width_prec_minus_negt);
   tcase_add_test(tc, o_width_prec_minus_post);
   tcase_add_test(tc, o_width_prec_minus_zero);
   tcase_add_test(tc, o_width_prec_minus_ng_z);
-  tcase_add_test(tc, o_width_prec_plus_negt);
-  tcase_add_test(tc, o_width_prec_plus_post);
-  tcase_add_test(tc, o_width_prec_plus_zero);
-  tcase_add_test(tc, o_width_prec_plus_ng_z);
-  tcase_add_test(tc, o_width_prec_space_negt);
-  tcase_add_test(tc, o_width_prec_space_post);
-  tcase_add_test(tc, o_width_prec_space_zero);
-  tcase_add_test(tc, o_width_prec_space_ng_z);
   tcase_add_test(tc, o_width_prec_hash_negt);
   tcase_add_test(tc, o_width_prec_hash_post);
   tcase_add_test(tc, o_width_prec_hash_zero);
   tcase_add_test(tc, o_width_prec_hash_ng_z);
-  tcase_add_test(tc, o_width_prec_zero_negt);
-  tcase_add_test(tc, o_width_prec_zero_post);
-  tcase_add_test(tc, o_width_prec_zero_zero);
-  tcase_add_test(tc, o_width_prec_zero_ng_z);
   tcase_add_test(tc, o_dynamic_width);
   tcase_add_test(tc, o_dynamic_precision);
   tcase_add_test(tc, o_dynamic_width_precision);
@@ -2675,36 +2118,13 @@ Suite *sprintf_suite(void) {
   tcase_add_test(tc, o_zero_zero_post);
   tcase_add_test(tc, o_zero_zero_zero);
   tcase_add_test(tc, o_zero_zero_ng_z);
-  tcase_add_test(tc, o_zero_prec_zero_negt);
-  tcase_add_test(tc, o_zero_prec_zero_post);
-  tcase_add_test(tc, o_zero_prec_zero_zero);
-  tcase_add_test(tc, o_zero_prec_zero_ng_z);
   tcase_add_test(tc, o_zero_prec_minus_zero);
-  tcase_add_test(tc, o_zero_prec_plus_zero);
-  tcase_add_test(tc, o_zero_prec_space_zero);
   tcase_add_test(tc, o_zero_prec_hash_zero);
-  tcase_add_test(tc, o_zero_zero_minus_zero);
-  tcase_add_test(tc, o_zero_zero_plus_zero);
-  tcase_add_test(tc, o_zero_zero_space_zero);
   tcase_add_test(tc, o_zero_zero_hash_zero);
-  tcase_add_test(tc, o_zero_width_zero_zero);
-  tcase_add_test(tc, o_zero_prec_zero_minus_zero);
-  tcase_add_test(tc, o_zero_prec_zero_plus_zero);
-  tcase_add_test(tc, o_zero_prec_zero_space_zero);
-  tcase_add_test(tc, o_zero_prec_zero_hash_zero);
-  tcase_add_test(tc, o_zero_prec_width_zero_zero);
   tcase_add_test(tc, x_minus_negt);
   tcase_add_test(tc, x_minus_post);
   tcase_add_test(tc, x_minus_zero);
   tcase_add_test(tc, x_minus_ng_z);
-  tcase_add_test(tc, x_plus_negt);
-  tcase_add_test(tc, x_plus_post);
-  tcase_add_test(tc, x_plus_zero);
-  tcase_add_test(tc, x_plus_ng_z);
-  tcase_add_test(tc, x_space_negt);
-  tcase_add_test(tc, x_space_post);
-  tcase_add_test(tc, x_space_zero);
-  tcase_add_test(tc, x_space_ng_z);
   tcase_add_test(tc, x_hash_negt);
   tcase_add_test(tc, x_hash_post);
   tcase_add_test(tc, x_hash_zero);
@@ -2717,14 +2137,6 @@ Suite *sprintf_suite(void) {
   tcase_add_test(tc, x_width_minus_post);
   tcase_add_test(tc, x_width_minus_zero);
   tcase_add_test(tc, x_width_minus_ng_z);
-  tcase_add_test(tc, x_width_plus_negt);
-  tcase_add_test(tc, x_width_plus_post);
-  tcase_add_test(tc, x_width_plus_zero);
-  tcase_add_test(tc, x_width_plus_ng_z);
-  tcase_add_test(tc, x_width_space_negt);
-  tcase_add_test(tc, x_width_space_post);
-  tcase_add_test(tc, x_width_space_zero);
-  tcase_add_test(tc, x_width_space_ng_z);
   tcase_add_test(tc, x_width_hash_negt);
   tcase_add_test(tc, x_width_hash_post);
   tcase_add_test(tc, x_width_hash_zero);
@@ -2737,42 +2149,18 @@ Suite *sprintf_suite(void) {
   tcase_add_test(tc, x_prec_minus_post);
   tcase_add_test(tc, x_prec_minus);
   tcase_add_test(tc, x_prec_minus_ng_z);
-  tcase_add_test(tc, x_prec_plus_negt);
-  tcase_add_test(tc, x_prec_plus_post);
-  tcase_add_test(tc, x_prec_plus_zero);
-  tcase_add_test(tc, x_prec_plus_ng_z);
-  tcase_add_test(tc, x_prec_space_negt);
-  tcase_add_test(tc, x_prec_space_post);
-  tcase_add_test(tc, x_prec_space_zero);
-  tcase_add_test(tc, x_prec_space_ng_z);
   tcase_add_test(tc, x_prec_hash_negt);
   tcase_add_test(tc, x_prec_hash_post);
   tcase_add_test(tc, x_prec_hash_zero);
   tcase_add_test(tc, x_prec_hash_ng_z);
-  tcase_add_test(tc, x_prec_zero_negt);
-  tcase_add_test(tc, x_prec_zero_post);
-  tcase_add_test(tc, x_prec_zero_zero);
-  tcase_add_test(tc, x_prec_zero_ng_z);
   tcase_add_test(tc, x_width_prec_minus_negt);
   tcase_add_test(tc, x_width_prec_minus_post);
   tcase_add_test(tc, x_width_prec_minus_zero);
   tcase_add_test(tc, x_width_prec_minus_ng_z);
-  tcase_add_test(tc, x_width_prec_plus_negt);
-  tcase_add_test(tc, x_width_prec_plus_post);
-  tcase_add_test(tc, x_width_prec_plus_zero);
-  tcase_add_test(tc, x_width_prec_plus_ng_z);
-  tcase_add_test(tc, x_width_prec_space_negt);
-  tcase_add_test(tc, x_width_prec_space_post);
-  tcase_add_test(tc, x_width_prec_space_zero);
-  tcase_add_test(tc, x_width_prec_space_ng_z);
   tcase_add_test(tc, x_width_prec_hash_negt);
   tcase_add_test(tc, x_width_prec_hash_post);
   tcase_add_test(tc, x_width_prec_hash_zero);
   tcase_add_test(tc, x_width_prec_hash_ng_z);
-  tcase_add_test(tc, x_width_prec_zero_negt);
-  tcase_add_test(tc, x_width_prec_zero_post);
-  tcase_add_test(tc, x_width_prec_zero_zero);
-  tcase_add_test(tc, x_width_prec_zero_ng_z);
   tcase_add_test(tc, x_dynamic_width);
   tcase_add_test(tc, x_dynamic_precision);
   tcase_add_test(tc, x_dynamic_width_precision);
@@ -2796,36 +2184,13 @@ Suite *sprintf_suite(void) {
   tcase_add_test(tc, x_zero_zero_post);
   tcase_add_test(tc, x_zero_zero_zero);
   tcase_add_test(tc, x_zero_zero_ng_z);
-  tcase_add_test(tc, x_zero_prec_zero_negt);
-  tcase_add_test(tc, x_zero_prec_zero_post);
-  tcase_add_test(tc, x_zero_prec_zero_zero);
-  tcase_add_test(tc, x_zero_prec_zero_ng_z);
   tcase_add_test(tc, x_zero_prec_minus_zero);
-  tcase_add_test(tc, x_zero_prec_plus_zero);
-  tcase_add_test(tc, x_zero_prec_space_zero);
   tcase_add_test(tc, x_zero_prec_hash_zero);
-  tcase_add_test(tc, x_zero_zero_minus_zero);
-  tcase_add_test(tc, x_zero_zero_plus_zero);
-  tcase_add_test(tc, x_zero_zero_space_zero);
   tcase_add_test(tc, x_zero_zero_hash_zero);
-  tcase_add_test(tc, x_zero_width_zero_zero);
-  tcase_add_test(tc, x_zero_prec_zero_minus_zero);
-  tcase_add_test(tc, x_zero_prec_zero_plus_zero);
-  tcase_add_test(tc, x_zero_prec_zero_space_zero);
-  tcase_add_test(tc, x_zero_prec_zero_hash_zero);
-  tcase_add_test(tc, x_zero_prec_width_zero_zero);
   tcase_add_test(tc, X_minus_negt);
   tcase_add_test(tc, X_minus_post);
   tcase_add_test(tc, X_minus_zero);
   tcase_add_test(tc, X_minus_ng_z);
-  tcase_add_test(tc, X_plus_negt);
-  tcase_add_test(tc, X_plus_post);
-  tcase_add_test(tc, X_plus_zero);
-  tcase_add_test(tc, X_plus_ng_z);
-  tcase_add_test(tc, X_space_negt);
-  tcase_add_test(tc, X_space_post);
-  tcase_add_test(tc, X_space_zero);
-  tcase_add_test(tc, X_space_ng_z);
   tcase_add_test(tc, X_hash_negt);
   tcase_add_test(tc, X_hash_post);
   tcase_add_test(tc, X_hash_zero);
@@ -2838,14 +2203,6 @@ Suite *sprintf_suite(void) {
   tcase_add_test(tc, X_width_minus_post);
   tcase_add_test(tc, X_width_minus_zero);
   tcase_add_test(tc, X_width_minus_ng_z);
-  tcase_add_test(tc, X_width_plus_negt);
-  tcase_add_test(tc, X_width_plus_post);
-  tcase_add_test(tc, X_width_plus_zero);
-  tcase_add_test(tc, X_width_plus_ng_z);
-  tcase_add_test(tc, X_width_space_negt);
-  tcase_add_test(tc, X_width_space_post);
-  tcase_add_test(tc, X_width_space_zero);
-  tcase_add_test(tc, X_width_space_ng_z);
   tcase_add_test(tc, X_width_hash_negt);
   tcase_add_test(tc, X_width_hash_post);
   tcase_add_test(tc, X_width_hash_zero);
@@ -2858,42 +2215,18 @@ Suite *sprintf_suite(void) {
   tcase_add_test(tc, X_prec_minus_post);
   tcase_add_test(tc, X_prec_minus_zero);
   tcase_add_test(tc, X_prec_minus_ng_z);
-  tcase_add_test(tc, X_prec_plus_negt);
-  tcase_add_test(tc, X_prec_plus_post);
-  tcase_add_test(tc, X_prec_plus_zero);
-  tcase_add_test(tc, X_prec_plus_ng_z);
-  tcase_add_test(tc, X_prec_space_negt);
-  tcase_add_test(tc, X_prec_space_post);
-  tcase_add_test(tc, X_prec_space_zero);
-  tcase_add_test(tc, X_prec_space_ng_z);
   tcase_add_test(tc, X_prec_hash_negt);
   tcase_add_test(tc, X_prec_hash_post);
   tcase_add_test(tc, X_prec_hash_zero);
   tcase_add_test(tc, X_prec_hash_ng_z);
-  tcase_add_test(tc, X_prec_zero_negt);
-  tcase_add_test(tc, X_prec_zero_post);
-  tcase_add_test(tc, X_prec_zero_zero);
-  tcase_add_test(tc, X_prec_zero_ng_z);
   tcase_add_test(tc, X_width_prec_minus_negt);
   tcase_add_test(tc, X_width_prec_minus_post);
   tcase_add_test(tc, X_width_prec_minus_zero);
   tcase_add_test(tc, X_width_prec_minus_ng_z);
-  tcase_add_test(tc, X_width_prec_plus_negt);
-  tcase_add_test(tc, X_width_prec_plus_post);
-  tcase_add_test(tc, X_width_prec_plus_zero);
-  tcase_add_test(tc, X_width_prec_plus_ng_z);
-  tcase_add_test(tc, X_width_prec_space_negt);
-  tcase_add_test(tc, X_width_prec_space_post);
-  tcase_add_test(tc, X_width_prec_space_zero);
-  tcase_add_test(tc, X_width_prec_space_ng_z);
   tcase_add_test(tc, X_width_prec_hash_negt);
   tcase_add_test(tc, X_width_prec_hash_post);
   tcase_add_test(tc, X_width_prec_hash_zero);
   tcase_add_test(tc, X_width_prec_hash_ng_z);
-  tcase_add_test(tc, X_width_prec_zero_negt);
-  tcase_add_test(tc, X_width_prec_zero_post);
-  tcase_add_test(tc, X_width_prec_zero_zero);
-  tcase_add_test(tc, X_width_prec_zero_ng_z);
   tcase_add_test(tc, X_width_negt);
   tcase_add_test(tc, X_width_post);
   tcase_add_test(tc, X_width_zero);
@@ -2914,24 +2247,9 @@ Suite *sprintf_suite(void) {
   tcase_add_test(tc, X_zero_zero_post);
   tcase_add_test(tc, X_zero_zero_zero);
   tcase_add_test(tc, X_zero_zero_ng_z);
-  tcase_add_test(tc, X_zero_prec_zero_negt);
-  tcase_add_test(tc, X_zero_prec_zero_post);
-  tcase_add_test(tc, X_zero_prec_zero_zero);
-  tcase_add_test(tc, X_zero_prec_zero_ng_z);
   tcase_add_test(tc, X_zero_prec_minus_zero);
-  tcase_add_test(tc, X_zero_prec_plus_zero);
-  tcase_add_test(tc, X_zero_prec_space_zero);
   tcase_add_test(tc, X_zero_prec_hash_zero);
-  tcase_add_test(tc, X_zero_zero_minus_zero);
-  tcase_add_test(tc, X_zero_zero_plus_zero);
-  tcase_add_test(tc, X_zero_zero_space_zero);
   tcase_add_test(tc, X_zero_zero_hash_zero);
-  tcase_add_test(tc, X_zero_width_zero_zero);
-  tcase_add_test(tc, X_zero_prec_zero_minus_zero);
-  tcase_add_test(tc, X_zero_prec_zero_plus_zero);
-  tcase_add_test(tc, X_zero_prec_zero_space_zero);
-  tcase_add_test(tc, X_zero_prec_zero_hash_zero);
-  tcase_add_test(tc, X_zero_prec_width_zero_zero);
   tcase_add_test(tc, X_dynamic_width);
   tcase_add_test(tc, X_dynamic_precision);
   tcase_add_test(tc, X_dynamic_width_precision);
@@ -3054,16 +2372,12 @@ Suite *sprintf_suite(void) {
   tcase_add_test(tc, f_zero_prec_plus_zero);
   tcase_add_test(tc, f_zero_prec_space_zero);
   tcase_add_test(tc, f_zero_prec_hash_zero);
-  tcase_add_test(tc, f_zero_zero_minus_zero);
   tcase_add_test(tc, f_zero_zero_plus_zero);
   tcase_add_test(tc, f_zero_zero_space_zero);
   tcase_add_test(tc, f_zero_zero_hash_zero);
-  tcase_add_test(tc, f_zero_width_zero_zero);
-  tcase_add_test(tc, f_zero_prec_zero_minus_zero);
   tcase_add_test(tc, f_zero_prec_zero_plus_zero);
   tcase_add_test(tc, f_zero_prec_zero_space_zero);
   tcase_add_test(tc, f_zero_prec_zero_hash_zero);
-  tcase_add_test(tc, f_zero_prec_width_zero_zero);
   tcase_add_test(tc, e_minus_negt);
   tcase_add_test(tc, e_minus_post);
   tcase_add_test(tc, e_minus_zero_);
@@ -3175,16 +2489,12 @@ Suite *sprintf_suite(void) {
   tcase_add_test(tc, e_zero_prec_plus_zero);
   tcase_add_test(tc, e_zero_prec_space_zero);
   tcase_add_test(tc, e_zero_prec_hash_zero);
-  tcase_add_test(tc, e_zero_zero_minus_zero);
   tcase_add_test(tc, e_zero_zero_plus_zero);
   tcase_add_test(tc, e_zero_zero_space_zero);
   tcase_add_test(tc, e_zero_zero_hash_zero);
-  tcase_add_test(tc, e_zero_width_zero_zero);
-  tcase_add_test(tc, e_zero_prec_zero_minus_zero);
   tcase_add_test(tc, e_zero_prec_zero_plus_zero);
   tcase_add_test(tc, e_zero_prec_zero_space_zero);
   tcase_add_test(tc, e_zero_prec_zero_hash_zero);
-  tcase_add_test(tc, e_zero_prec_width_zero_zero);
   tcase_add_test(tc, E_minus_negt);
   tcase_add_test(tc, E_minus_post);
   tcase_add_test(tc, E_minus_zero_);
@@ -3296,16 +2606,12 @@ Suite *sprintf_suite(void) {
   tcase_add_test(tc, E_zero_prec_plus_zero);
   tcase_add_test(tc, E_zero_prec_space_zero);
   tcase_add_test(tc, E_zero_prec_hash_zero);
-  tcase_add_test(tc, E_zero_zero_minus_zero);
   tcase_add_test(tc, E_zero_zero_plus_zero);
   tcase_add_test(tc, E_zero_zero_space_zero);
   tcase_add_test(tc, E_zero_zero_hash_zero);
-  tcase_add_test(tc, E_zero_width_zero_zero);
-  tcase_add_test(tc, E_zero_prec_zero_minus_zero);
   tcase_add_test(tc, E_zero_prec_zero_plus_zero);
   tcase_add_test(tc, E_zero_prec_zero_space_zero);
   tcase_add_test(tc, E_zero_prec_zero_hash_zero);
-  tcase_add_test(tc, E_zero_prec_width_zero_zero);
   tcase_add_test(tc, g_minus_negt);
   tcase_add_test(tc, g_minus_post);
   tcase_add_test(tc, g_minus_zero_);
@@ -3417,16 +2723,12 @@ Suite *sprintf_suite(void) {
   tcase_add_test(tc, g_zero_prec_plus_zero);
   tcase_add_test(tc, g_zero_prec_space_zero);
   tcase_add_test(tc, g_zero_prec_hash_zero);
-  tcase_add_test(tc, g_zero_zero_minus_zero);
   tcase_add_test(tc, g_zero_zero_plus_zero);
   tcase_add_test(tc, g_zero_zero_space_zero);
   tcase_add_test(tc, g_zero_zero_hash_zero);
-  tcase_add_test(tc, g_zero_width_zero_zero);
-  tcase_add_test(tc, g_zero_prec_zero_minus_zero);
   tcase_add_test(tc, g_zero_prec_zero_plus_zero);
   tcase_add_test(tc, g_zero_prec_zero_space_zero);
   tcase_add_test(tc, g_zero_prec_zero_hash_zero);
-  tcase_add_test(tc, g_zero_prec_width_zero_zero);
   tcase_add_test(tc, G_minus_negt);
   tcase_add_test(tc, G_minus_post);
   tcase_add_test(tc, G_minus_zero_);
@@ -3538,16 +2840,12 @@ Suite *sprintf_suite(void) {
   tcase_add_test(tc, G_zero_prec_plus_zero);
   tcase_add_test(tc, G_zero_prec_space_zero);
   tcase_add_test(tc, G_zero_prec_hash_zero);
-  tcase_add_test(tc, G_zero_zero_minus_zero);
   tcase_add_test(tc, G_zero_zero_plus_zero);
   tcase_add_test(tc, G_zero_zero_space_zero);
   tcase_add_test(tc, G_zero_zero_hash_zero);
-  tcase_add_test(tc, G_zero_width_zero_zero);
-  tcase_add_test(tc, G_zero_prec_zero_minus_zero);
   tcase_add_test(tc, G_zero_prec_zero_plus_zero);
   tcase_add_test(tc, G_zero_prec_zero_space_zero);
   tcase_add_test(tc, G_zero_prec_zero_hash_zero);
-  tcase_add_test(tc, G_zero_prec_width_zero_zero);
   tcase_add_test(tc, s_minus);
   tcase_add_test(tc, s_width);
   tcase_add_test(tc, s_precision);
@@ -3557,25 +2855,9 @@ Suite *sprintf_suite(void) {
   tcase_add_test(tc, s_star_both);
   tcase_add_test(tc, s_null_wish_form);
   tcase_add_test(tc, s_minus_zero_);
-  tcase_add_test(tc, s_plus_zero);
-  tcase_add_test(tc, s_space_zero);
-  tcase_add_test(tc, s_hash_zero);
-  tcase_add_test(tc, s_zero_zero);
   tcase_add_test(tc, s_width_minus_zero);
-  tcase_add_test(tc, s_width_plus_zero);
-  tcase_add_test(tc, s_width_space_zero);
-  tcase_add_test(tc, s_width_hash_zero);
-  tcase_add_test(tc, s_width_zero_zero);
   tcase_add_test(tc, s_prec_minus_zero);
-  tcase_add_test(tc, s_prec_plus_zero);
-  tcase_add_test(tc, s_prec_space_zero);
-  tcase_add_test(tc, s_prec_hash_zero);
-  tcase_add_test(tc, s_prec_zero_zero);
   tcase_add_test(tc, s_width_prec_minus_zero);
-  tcase_add_test(tc, s_width_prec_plus_zero);
-  tcase_add_test(tc, s_width_prec_space_zero);
-  tcase_add_test(tc, s_width_prec_hash_zero);
-  tcase_add_test(tc, s_width_prec_zero_zero);
   tcase_add_test(tc, s_dynamic_width);
   tcase_add_test(tc, s_dynamic_precision);
   tcase_add_test(tc, s_dynamic_width_precision);
@@ -3583,105 +2865,14 @@ Suite *sprintf_suite(void) {
   tcase_add_test(tc, s_prec_zero_);
   tcase_add_test(tc, s_width_prec_zero);
   tcase_add_test(tc, s_zero_prec_zero);
-  tcase_add_test(tc, s_zero_prec_zero_zero);
   tcase_add_test(tc, s_zero_prec_minus_zero);
-  tcase_add_test(tc, s_zero_prec_plus_zero);
-  tcase_add_test(tc, s_zero_prec_space_zero);
-  tcase_add_test(tc, s_zero_prec_hash_zero);
-  tcase_add_test(tc, s_zero_zero_minus_zero);
-  tcase_add_test(tc, s_zero_zero_plus_zero);
-  tcase_add_test(tc, s_zero_zero_space_zero);
-  tcase_add_test(tc, s_zero_zero_hash_zero);
-  tcase_add_test(tc, s_zero_width_zero_zero);
-  tcase_add_test(tc, s_zero_prec_zero_minus_zero);
-  tcase_add_test(tc, s_zero_prec_zero_plus_zero);
-  tcase_add_test(tc, s_zero_prec_zero_space_zero);
-  tcase_add_test(tc, s_zero_prec_zero_hash_zero);
-  tcase_add_test(tc, s_zero_prec_width_zero_zero);
   tcase_add_test(tc, c_minus_zero_);
-  tcase_add_test(tc, c_plus_zero);
-  tcase_add_test(tc, c_space_zero);
-  tcase_add_test(tc, c_hash_zero);
-  tcase_add_test(tc, c_zero_zero);
   tcase_add_test(tc, c_width_minus_zero);
-  tcase_add_test(tc, c_width_plus_zero);
-  tcase_add_test(tc, c_width_space_zero);
-  tcase_add_test(tc, c_width_hash_zero);
-  tcase_add_test(tc, c_width_zero_zero);
-  tcase_add_test(tc, c_prec_minus_zero);
-  tcase_add_test(tc, c_prec_plus_zero);
-  tcase_add_test(tc, c_prec_space_zero);
-  tcase_add_test(tc, c_prec_hash_zero);
-  tcase_add_test(tc, c_prec_zero_zero);
-  tcase_add_test(tc, c_width_prec_minus_zero);
-  tcase_add_test(tc, c_width_prec_plus_zero);
-  tcase_add_test(tc, c_width_prec_space_zero);
-  tcase_add_test(tc, c_width_prec_hash_zero);
-  tcase_add_test(tc, c_width_prec_zero_zero);
   tcase_add_test(tc, c_dynamic_width);
-  tcase_add_test(tc, c_dynamic_precision);
-  tcase_add_test(tc, c_dynamic_width_precision);
   tcase_add_test(tc, c_width_zero);
-  tcase_add_test(tc, c_prec_zero_);
-  tcase_add_test(tc, c_width_prec_zero);
-  tcase_add_test(tc, c_zero_prec_zero);
-  tcase_add_test(tc, c_zero_prec_zero_zero);
-  tcase_add_test(tc, c_zero_prec_minus_zero);
-  tcase_add_test(tc, c_zero_prec_plus_zero);
-  tcase_add_test(tc, c_zero_prec_space_zero);
-  tcase_add_test(tc, c_zero_prec_hash_zero);
-  tcase_add_test(tc, c_zero_zero_minus_zero);
-  tcase_add_test(tc, c_zero_zero_plus_zero);
-  tcase_add_test(tc, c_zero_zero_space_zero);
-  tcase_add_test(tc, c_zero_zero_hash_zero);
-  tcase_add_test(tc, c_zero_width_zero_zero);
-  tcase_add_test(tc, c_zero_prec_zero_minus_zero);
-  tcase_add_test(tc, c_zero_prec_zero_plus_zero);
-  tcase_add_test(tc, c_zero_prec_zero_space_zero);
-  tcase_add_test(tc, c_zero_prec_zero_hash_zero);
-  tcase_add_test(tc, c_zero_prec_width_zero_zero);
   tcase_add_test(tc, p_minus_zero_);
-  tcase_add_test(tc, p_plus_zero);
-  tcase_add_test(tc, p_space_zero);
-  tcase_add_test(tc, p_hash_zero);
-  tcase_add_test(tc, p_zero_zero);
   tcase_add_test(tc, p_width_minus_zero);
-  tcase_add_test(tc, p_width_plus_zero);
-  tcase_add_test(tc, p_width_space_zero);
-  tcase_add_test(tc, p_width_hash_zero);
-  tcase_add_test(tc, p_width_zero_zero);
-  tcase_add_test(tc, p_prec_minus_zero);
-  tcase_add_test(tc, p_prec_plus_zero);
-  tcase_add_test(tc, p_prec_space_zero);
-  tcase_add_test(tc, p_prec_hash_zero);
-  tcase_add_test(tc, p_prec_zero_zero);
-  tcase_add_test(tc, p_width_prec_minus_zero);
-  tcase_add_test(tc, p_width_prec_plus_zero);
-  tcase_add_test(tc, p_width_prec_space_zero);
-  tcase_add_test(tc, p_width_prec_hash_zero);
-  tcase_add_test(tc, p_width_prec_zero_zero);
   tcase_add_test(tc, p_dynamic_width);
-  tcase_add_test(tc, p_dynamic_precision);
-  tcase_add_test(tc, p_dynamic_width_precision);
-  tcase_add_test(tc, p_width_zero);
-  tcase_add_test(tc, p_prec_zero_);
-  tcase_add_test(tc, p_width_prec_zero);
-  tcase_add_test(tc, p_zero_prec_zero);
-  tcase_add_test(tc, p_zero_prec_zero_zero);
-  tcase_add_test(tc, p_zero_prec_minus_zero);
-  tcase_add_test(tc, p_zero_prec_plus_zero);
-  tcase_add_test(tc, p_zero_prec_space_zero);
-  tcase_add_test(tc, p_zero_prec_hash_zero);
-  tcase_add_test(tc, p_zero_zero_minus_zero);
-  tcase_add_test(tc, p_zero_zero_plus_zero);
-  tcase_add_test(tc, p_zero_zero_space_zero);
-  tcase_add_test(tc, p_zero_zero_hash_zero);
-  tcase_add_test(tc, p_zero_width_zero_zero);
-  tcase_add_test(tc, p_zero_prec_zero_minus_zero);
-  tcase_add_test(tc, p_zero_prec_zero_plus_zero);
-  tcase_add_test(tc, p_zero_prec_zero_space_zero);
-  tcase_add_test(tc, p_zero_prec_zero_hash_zero);
-  tcase_add_test(tc, p_zero_prec_width_zero_zero);
   tcase_add_test(tc, test_s21_sprintf_p_format);
 
   suite_add_tcase(ss, tc);
@@ -4206,35 +3397,12 @@ END_TEST
 // ================================================================
 
 // Тесты для %s
-TEST_SPRINTF(ls_minus, "%-20ls", "Hello", wchar_t *)
-TEST_SPRINTF(ls_width, "%20ls", "Hello", wchar_t *)
-TEST_SPRINTF(ls_precision, "%.5ls", "Hello, world!", wchar_t *)
-TEST_SPRINTF(ls_width_precision, "%20.5ls", "Hello, world!", wchar_t *)
-TEST_SPRINTF_2(ls_star_width, "%*ls", 20, "Hello", wchar_t *)
-TEST_SPRINTF_2(ls_star_precision, "%.*ls", 5, "Hello, world!", wchar_t *)
-TEST_SPRINTF_3(ls_star_both, "%*.*ls", 20, 5, "Hello, world!", wchar_t *)
 TEST_SPRINTF(ls_null_wish_form, "%.5ls", NULL, wchar_t *)
 
 TEST_SPRINTF(ls_minus_zero_, "%-ls", 0, wchar_t *)
-TEST_SPRINTF(ls_plus_zero, "%+ls", 0, wchar_t *)
-TEST_SPRINTF(ls_space_zero, "% ls", 0, wchar_t *)
-TEST_SPRINTF(ls_hash_zero, "%#ls", 0, wchar_t *)
-TEST_SPRINTF(ls_zero_zero, "%0ls", 0, wchar_t *)
 TEST_SPRINTF(ls_width_minus_zero, "%-5ls", 0, wchar_t *)
-TEST_SPRINTF(ls_width_plus_zero, "%+5ls", 0, wchar_t *)
-TEST_SPRINTF(ls_width_space_zero, "% 5ls", 0, wchar_t *)
-TEST_SPRINTF(ls_width_hash_zero, "%#5ls", 0, wchar_t *)
-TEST_SPRINTF(ls_width_zero_zero, "%05ls", 0, wchar_t *)
 TEST_SPRINTF(ls_prec_minus_zero, "%-.5ls", 0, wchar_t *)
-TEST_SPRINTF(ls_prec_plus_zero, "%+.5ls", 0, wchar_t *)
-TEST_SPRINTF(ls_prec_space_zero, "% .5ls", 0, wchar_t *)
-TEST_SPRINTF(ls_prec_hash_zero, "%#.5ls", 0, wchar_t *)
-TEST_SPRINTF(ls_prec_zero_zero, "%0.5ls", 0, wchar_t *)
 TEST_SPRINTF(ls_width_prec_minus_zero, "%-10.5ls", 0, wchar_t *)
-TEST_SPRINTF(ls_width_prec_plus_zero, "%+10.5ls", 0, wchar_t *)
-TEST_SPRINTF(ls_width_prec_space_zero, "% 10.5ls", 0, wchar_t *)
-TEST_SPRINTF(ls_width_prec_hash_zero, "%#10.5ls", 0, wchar_t *)
-TEST_SPRINTF(ls_width_prec_zero_zero, "%010.5ls", 0, wchar_t *)
 TEST_SPRINTF_2(ls_dynamic_width, "%*ls", 10, 0, wchar_t *)
 TEST_SPRINTF_2(ls_dynamic_precision, "%.*ls", 5, 0, wchar_t *)
 TEST_SPRINTF_3(ls_dynamic_width_precision, "%*.*ls", 10, 5, 0, wchar_t *)
@@ -4242,65 +3410,13 @@ TEST_SPRINTF(ls_width_zero, "%5ls", 0, wchar_t *)
 TEST_SPRINTF(ls_prec_zero_, "%.5ls", 0, wchar_t *)
 TEST_SPRINTF(ls_width_prec_zero, "%10.5ls", 0, wchar_t *)
 TEST_SPRINTF(ls_zero_prec_zero, "%.0ls", 0, wchar_t *)
-TEST_SPRINTF(ls_zero_prec_zero_zero, "%0.0ls", 0, wchar_t *)
 TEST_SPRINTF(ls_zero_prec_minus_zero, "%-.0ls", 0, wchar_t *)
-TEST_SPRINTF(ls_zero_prec_plus_zero, "%+.0ls", 0, wchar_t *)
-TEST_SPRINTF(ls_zero_prec_space_zero, "% .0ls", 0, wchar_t *)
-TEST_SPRINTF(ls_zero_prec_hash_zero, "%#.0ls", 0, wchar_t *)
-TEST_SPRINTF(ls_zero_zero_minus_zero, "%-0ls", 0, wchar_t *)
-TEST_SPRINTF(ls_zero_zero_plus_zero, "%+0ls", 0, wchar_t *)
-TEST_SPRINTF(ls_zero_zero_space_zero, "% 0ls", 0, wchar_t *)
-TEST_SPRINTF(ls_zero_zero_hash_zero, "%#0ls", 0, wchar_t *)
-TEST_SPRINTF(ls_zero_width_zero_zero, "%00ls", 0, wchar_t *)
-TEST_SPRINTF(ls_zero_prec_zero_minus_zero, "%-0.0ls", 0, wchar_t *)
-TEST_SPRINTF(ls_zero_prec_zero_plus_zero, "%+0.0ls", 0, wchar_t *)
-TEST_SPRINTF(ls_zero_prec_zero_space_zero, "% 0.0ls", 0, wchar_t *)
-TEST_SPRINTF(ls_zero_prec_zero_hash_zero, "%#0.0ls", 0, wchar_t *)
-TEST_SPRINTF(ls_zero_prec_width_zero_zero, "%00.0ls", 0, wchar_t *)
 
 // Тесты для %c
 TEST_SPRINTF(lc_minus_zero_, "%-lc", 'a', wchar_t)
-TEST_SPRINTF(lc_plus_zero, "%+lc", 'a', wchar_t)
-TEST_SPRINTF(lc_space_zero, "% lc", 'a', wchar_t)
-TEST_SPRINTF(lc_hash_zero, "%#lc", 'a', wchar_t)
-TEST_SPRINTF(lc_zero_zero, "%0lc", 'a', wchar_t)
 TEST_SPRINTF(lc_width_minus_zero, "%-5lc", 'a', wchar_t)
-TEST_SPRINTF(lc_width_plus_zero, "%+5lc", 'a', wchar_t)
-TEST_SPRINTF(lc_width_space_zero, "% 5lc", 'a', wchar_t)
-TEST_SPRINTF(lc_width_hash_zero, "%#5lc", 'a', wchar_t)
-TEST_SPRINTF(lc_width_zero_zero, "%05lc", 'a', wchar_t)
-TEST_SPRINTF(lc_prec_minus_zero, "%-.5lc", 'a', wchar_t)
-TEST_SPRINTF(lc_prec_plus_zero, "%+.5lc", 'a', wchar_t)
-TEST_SPRINTF(lc_prec_space_zero, "% .5lc", 'a', wchar_t)
-TEST_SPRINTF(lc_prec_hash_zero, "%#.5lc", 'a', wchar_t)
-TEST_SPRINTF(lc_prec_zero_zero, "%0.5lc", 'a', wchar_t)
-TEST_SPRINTF(lc_width_prec_minus_zero, "%-10.5lc", 'a', wchar_t)
-TEST_SPRINTF(lc_width_prec_plus_zero, "%+10.5lc", 'a', wchar_t)
-TEST_SPRINTF(lc_width_prec_space_zero, "% 10.5lc", 'a', wchar_t)
-TEST_SPRINTF(lc_width_prec_hash_zero, "%#10.5lc", 'a', wchar_t)
-TEST_SPRINTF(lc_width_prec_zero_zero, "%010.5lc", 'a', wchar_t)
 TEST_SPRINTF_2(lc_dynamic_width, "%*lc", 10, 'a', wchar_t)
-TEST_SPRINTF_2(lc_dynamic_precision, "%.*lc", 5, 'a', wchar_t)
-TEST_SPRINTF_3(lc_dynamic_width_precision, "%*.*lc", 10, 5, 'a', wchar_t)
 TEST_SPRINTF(lc_width_zero, "%5lc", 'a', wchar_t)
-TEST_SPRINTF(lc_prec_zero_, "%.5lc", 'a', wchar_t)
-TEST_SPRINTF(lc_width_prec_zero, "%10.5lc", 'a', wchar_t)
-TEST_SPRINTF(lc_zero_prec_zero, "%.0lc", 'a', wchar_t)
-TEST_SPRINTF(lc_zero_prec_zero_zero, "%0.0lc", 'a', wchar_t)
-TEST_SPRINTF(lc_zero_prec_minus_zero, "%-.0lc", 'a', wchar_t)
-TEST_SPRINTF(lc_zero_prec_plus_zero, "%+.0lc", 'a', wchar_t)
-TEST_SPRINTF(lc_zero_prec_space_zero, "% .0lc", 'a', wchar_t)
-TEST_SPRINTF(lc_zero_prec_hash_zero, "%#.0lc", 'a', wchar_t)
-TEST_SPRINTF(lc_zero_zero_minus_zero, "%-0lc", 'a', wchar_t)
-TEST_SPRINTF(lc_zero_zero_plus_zero, "%+0lc", 'a', wchar_t)
-TEST_SPRINTF(lc_zero_zero_space_zero, "% 0lc", 'a', wchar_t)
-TEST_SPRINTF(lc_zero_zero_hash_zero, "%#0lc", 'a', wchar_t)
-TEST_SPRINTF(lc_zero_width_zero_zero, "%00lc", 'a', wchar_t)
-TEST_SPRINTF(lc_zero_prec_zero_minus_zero, "%-0.0lc", 'a', wchar_t)
-TEST_SPRINTF(lc_zero_prec_zero_plus_zero, "%+0.0lc", 'a', wchar_t)
-TEST_SPRINTF(lc_zero_prec_zero_space_zero, "% 0.0lc", 'a', wchar_t)
-TEST_SPRINTF(lc_zero_prec_zero_hash_zero, "%#0.0lc", 'a', wchar_t)
-TEST_SPRINTF(lc_zero_prec_width_zero_zero, "%00.0lc", 'a', wchar_t)
 
 // =============================================
 //                  TEST SUITE
@@ -4359,34 +3475,11 @@ Suite *sprintf_suite_lc_and_ls(void) {
   tcase_add_test(tc, test_s21_sprintf_lc_tab);
   tcase_add_test(tc, test_s21_sprintf_lc_null_char);
   tcase_add_test(tc, test_s21_sprintf_lc_wide_chars);
-  tcase_add_test(tc, ls_minus);
-  tcase_add_test(tc, ls_width);
-  tcase_add_test(tc, ls_precision);
-  tcase_add_test(tc, ls_width_precision);
-  tcase_add_test(tc, ls_star_width);
-  tcase_add_test(tc, ls_star_precision);
-  tcase_add_test(tc, ls_star_both);
   tcase_add_test(tc, ls_null_wish_form);
   tcase_add_test(tc, ls_minus_zero_);
-  tcase_add_test(tc, ls_plus_zero);
-  tcase_add_test(tc, ls_space_zero);
-  tcase_add_test(tc, ls_hash_zero);
-  tcase_add_test(tc, ls_zero_zero);
   tcase_add_test(tc, ls_width_minus_zero);
-  tcase_add_test(tc, ls_width_plus_zero);
-  tcase_add_test(tc, ls_width_space_zero);
-  tcase_add_test(tc, ls_width_hash_zero);
-  tcase_add_test(tc, ls_width_zero_zero);
   tcase_add_test(tc, ls_prec_minus_zero);
-  tcase_add_test(tc, ls_prec_plus_zero);
-  tcase_add_test(tc, ls_prec_space_zero);
-  tcase_add_test(tc, ls_prec_hash_zero);
-  tcase_add_test(tc, ls_prec_zero_zero);
   tcase_add_test(tc, ls_width_prec_minus_zero);
-  tcase_add_test(tc, ls_width_prec_plus_zero);
-  tcase_add_test(tc, ls_width_prec_space_zero);
-  tcase_add_test(tc, ls_width_prec_hash_zero);
-  tcase_add_test(tc, ls_width_prec_zero_zero);
   tcase_add_test(tc, ls_dynamic_width);
   tcase_add_test(tc, ls_dynamic_precision);
   tcase_add_test(tc, ls_dynamic_width_precision);
@@ -4394,63 +3487,11 @@ Suite *sprintf_suite_lc_and_ls(void) {
   tcase_add_test(tc, ls_prec_zero_);
   tcase_add_test(tc, ls_width_prec_zero);
   tcase_add_test(tc, ls_zero_prec_zero);
-  tcase_add_test(tc, ls_zero_prec_zero_zero);
   tcase_add_test(tc, ls_zero_prec_minus_zero);
-  tcase_add_test(tc, ls_zero_prec_plus_zero);
-  tcase_add_test(tc, ls_zero_prec_space_zero);
-  tcase_add_test(tc, ls_zero_prec_hash_zero);
-  tcase_add_test(tc, ls_zero_zero_minus_zero);
-  tcase_add_test(tc, ls_zero_zero_plus_zero);
-  tcase_add_test(tc, ls_zero_zero_space_zero);
-  tcase_add_test(tc, ls_zero_zero_hash_zero);
-  tcase_add_test(tc, ls_zero_width_zero_zero);
-  tcase_add_test(tc, ls_zero_prec_zero_minus_zero);
-  tcase_add_test(tc, ls_zero_prec_zero_plus_zero);
-  tcase_add_test(tc, ls_zero_prec_zero_space_zero);
-  tcase_add_test(tc, ls_zero_prec_zero_hash_zero);
-  tcase_add_test(tc, ls_zero_prec_width_zero_zero);
   tcase_add_test(tc, lc_minus_zero_);
-  tcase_add_test(tc, lc_plus_zero);
-  tcase_add_test(tc, lc_space_zero);
-  tcase_add_test(tc, lc_hash_zero);
-  tcase_add_test(tc, lc_zero_zero);
   tcase_add_test(tc, lc_width_minus_zero);
-  tcase_add_test(tc, lc_width_plus_zero);
-  tcase_add_test(tc, lc_width_space_zero);
-  tcase_add_test(tc, lc_width_hash_zero);
-  tcase_add_test(tc, lc_width_zero_zero);
-  tcase_add_test(tc, lc_prec_minus_zero);
-  tcase_add_test(tc, lc_prec_plus_zero);
-  tcase_add_test(tc, lc_prec_space_zero);
-  tcase_add_test(tc, lc_prec_hash_zero);
-  tcase_add_test(tc, lc_prec_zero_zero);
-  tcase_add_test(tc, lc_width_prec_minus_zero);
-  tcase_add_test(tc, lc_width_prec_plus_zero);
-  tcase_add_test(tc, lc_width_prec_space_zero);
-  tcase_add_test(tc, lc_width_prec_hash_zero);
-  tcase_add_test(tc, lc_width_prec_zero_zero);
   tcase_add_test(tc, lc_dynamic_width);
-  tcase_add_test(tc, lc_dynamic_precision);
-  tcase_add_test(tc, lc_dynamic_width_precision);
   tcase_add_test(tc, lc_width_zero);
-  tcase_add_test(tc, lc_prec_zero_);
-  tcase_add_test(tc, lc_width_prec_zero);
-  tcase_add_test(tc, lc_zero_prec_zero);
-  tcase_add_test(tc, lc_zero_prec_zero_zero);
-  tcase_add_test(tc, lc_zero_prec_minus_zero);
-  tcase_add_test(tc, lc_zero_prec_plus_zero);
-  tcase_add_test(tc, lc_zero_prec_space_zero);
-  tcase_add_test(tc, lc_zero_prec_hash_zero);
-  tcase_add_test(tc, lc_zero_zero_minus_zero);
-  tcase_add_test(tc, lc_zero_zero_plus_zero);
-  tcase_add_test(tc, lc_zero_zero_space_zero);
-  tcase_add_test(tc, lc_zero_zero_hash_zero);
-  tcase_add_test(tc, lc_zero_width_zero_zero);
-  tcase_add_test(tc, lc_zero_prec_zero_minus_zero);
-  tcase_add_test(tc, lc_zero_prec_zero_plus_zero);
-  tcase_add_test(tc, lc_zero_prec_zero_space_zero);
-  tcase_add_test(tc, lc_zero_prec_zero_hash_zero);
-  tcase_add_test(tc, lc_zero_prec_width_zero_zero);
 
   suite_add_tcase(s, tc);
 

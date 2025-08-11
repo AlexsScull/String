@@ -5,6 +5,7 @@
 #include <stddef.h>  // Для типа size_t и NULL
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 typedef unsigned long s21_size_t;
 
