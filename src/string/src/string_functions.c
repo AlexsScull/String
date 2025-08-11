@@ -1,4 +1,5 @@
 #include "../include/s21_string.h"
+// #include <wchar.h>
 
 char *s21_strncat(char *dest, const char *src, s21_size_t n) {
   /*Задача:
@@ -40,32 +41,38 @@ char *s21_strchr(const char *str, int c) {
   Возвращает указатель на найденный символ или NULL.
 
   Если c = '\0', возвращает указатель на конец строки.*/
-  
+
   char *ptr;
   int flag = 0;
   int i = 0;
   int len = 0;
-  unsigned char uc = (unsigned char)c;
-  if (str != NULL) {
-    while (flag == 0 && str[i] != '\0') {
-      if (str[i] == uc) {
-        ptr = &str[i];
-        flag = 1;
-      }
-      i++;
-      len++;
-    }
+
+  if (str == NULL) {
+    return NULL;
   }
+
+  unsigned char uc = (unsigned char)c;
+
+  while (flag == 0 && str[i] != '\0') {
+    if (str[i] == uc) {
+      ptr = (char *)&str[i];
+      flag = 1;
+    }
+    i++;
+    len++;
+  }
+
   if (flag == 0) {
     ptr = NULL;
   }
   if (uc == '\0') {
-    ptr = &str[len];
+    ptr = (char *)&str[len];
   }
   return ptr;
 
   /* Unicode!! */
 }
+
 int s21_strncmp(const char *str1, const char *str2, s21_size_t n) {
   /*Задача:
   Сравнить первые n символов строк str1 и str2.
@@ -92,9 +99,10 @@ int s21_strncmp(const char *str1, const char *str2, s21_size_t n) {
       i++;
     }
   } else {
-    result = NULL;
+    result = 0;
   }
-  return result;
+    return result;
+    /*ТУТ ЧТО-ТО СТРАННОЕ ПОСМОТРЕТЬ ЕЩЁ РАЗ*/
 }
 char *s21_strncpy(char *dest, const char *src, s21_size_t n) {
   /*Задача:
@@ -130,13 +138,14 @@ s21_size_t s21_strcspn(const char *str1, const char *str2) {
 
   Если совпадений нет, возвращает strlen(str1).*/
 
+  s21_size_t result = 0;
   if (str1 == NULL || str2 == NULL) {
-    return NULL;
+    return result;
   }
 
   int i = 0;
   int j = 0;
-  s21_size_t result = 0;
+
   int flag = 0;
   while (str1[i] != '\0' && flag == 0) {
     while (str2[j] != '\0' && flag == 0) {
@@ -165,10 +174,11 @@ s21_size_t s21_strlen(const char *str) {
   Если строка не завершена нулевым символом, то её поведение не определено.
   Если str = NULL, поведение не определено.*/
 
-  if (str == NULL) {
-    return NULL;
-  }
   s21_size_t len = 0;
+  if (str == NULL) {
+    return len;
+  }
+
   while (str[len] != '\0') {
     len++;
   }
@@ -192,7 +202,7 @@ char *s21_strpbrk(const char *str1, const char *str2) {
   while (str1[i] != '\0' && flag == 0) {
     while (str2[j] != '\0' && flag == 0) {
       if (str1[i] == str2[j]) {
-        ptr = &str1[i];
+        ptr = (char *)&str1[i];
         flag = 1;
       }
       j++;
@@ -226,7 +236,7 @@ char *s21_strrchr(const char *str, int c) {
 
   while (str[i] != '\0') {
     if (str[i] == uc) {
-      ptr = &str[i];
+      ptr = (char *)&str[i];
       flag = 1;
     }
     i++;
@@ -237,7 +247,7 @@ char *s21_strrchr(const char *str, int c) {
     ptr = NULL;
   }
   if (uc == '\0') {
-    ptr = &str[len];
+    ptr = (char *)&str[len];
   }
   return ptr;
 }
@@ -250,22 +260,21 @@ char *s21_strstr(const char *haystack, const char *needle) {
 
   Чувствителен к регистру.*/
 
-  if (haystack == NULL){
+  if (haystack == NULL) {
     return NULL;
   }
 
   char *ptr = NULL;
-  if (*needle == '\0' | needle == NULL){
-    ptr = &haystack[0];
-  }
-  else{
+  if (*needle == '\0' | needle == NULL) {
+    ptr = (char *)&haystack[0];
+  } else {
     int i = 0;
     int j = 0;
     int flag = 0;
     int flag2 = 0;
     while (haystack[i] != '\0' && flag == 0) {
       if (haystack[i] == needle[j]) {
-        ptr = &haystack[i];
+        ptr = (char *)&haystack[i];
         flag = 1;
       }
       if (flag == 1) {
@@ -283,11 +292,12 @@ char *s21_strstr(const char *haystack, const char *needle) {
         }
       }
       i++;
-    
+    }
   }
-}
 
   return ptr;
+
+  /* ВЛОЖЕННОСТЬ ЕПТ ТВОЮ МАТЬ*/
 }
 char *s21_strtok(char *str, const char *delim) {
   /*Задача:
@@ -300,30 +310,47 @@ char *s21_strtok(char *str, const char *delim) {
 
   Модифицирует исходную строку (заменяет разделители на \0).*/
 
-  static char* last_pos = NULL;
-  if (str != NULL){
-    last_pos = str;
+  static char *last_pos = NULL;  // объявляем все штучки что нужны
+  char *token_start = NULL;
+  char *token_end = NULL;
+
+  if (str != NULL) {  // первый вызов
+    token_start = str;
+    token_end = s21_strpbrk(token_start, delim);
+    // while(token_start == token_end){
+    //  token_start++;
+    //  token_end = strpbrk(token_start, delim);
+    // }
+    // if (i != 0){
+    //   token_end = token_end + i;
+    // }
+    if (token_end != NULL) {
+      last_pos = token_end + 1;
+      *token_end = '\0';
+    }
+    // else {                                       // пока думаем что здесь
+    // делать
+    //   token_start = NULL;
+    // }
   }
-  
-  if (str == NULL){
-    str = last_pos;
-    if (str == NULL){
-      return NULL;
+
+  if (last_pos != NULL && *last_pos != '\0') {
+    if (str == NULL) {
+      token_start = last_pos;
+      token_end = s21_strpbrk(token_start, delim);
+      while (token_start == token_end) {
+        token_start++;
+        token_end = s21_strpbrk(token_start, delim);
+      }
+      if (token_end != NULL) {
+        last_pos = token_end + 1;
+        *token_end = '\0';
+      } else {  // пока думаем что здесь делать
+        token_start = last_pos;
+        last_pos = NULL;
+      }
     }
   }
 
-  // s21_size_t len_token = s21_strcspn(str, delim);
-
-  
-  char *token_end = s21_strpbrk(str, delim);
-
-  if (token_end != NULL){
-    *token_end = '\0';
-    last_pos = token_end + 1;
-  }
-  else{
-    last_pos = NULL;
-  }
-
-  return str;
+  return token_start;
 }
