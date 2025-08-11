@@ -67,15 +67,8 @@ enum SpecifierType {
 
 /** Индексы параметров форматирования */
 enum ParamIndex {
-  FLAG_MINUS,                  ///< '-' (left-justify)
-  FLAG_PLUS,                   ///< '+' (show plus sign)
-  FLAG_SPACE,                  ///< ' ' (space for positive numbers)
-  FLAG_HASH,                   ///< '#' (alternate form)
-  FLAG_ZERO,                   ///< '0' (zero-padding)
   PARAM_WIDTH,                 ///< Тип ширины
-  PARAM_PRECISION,             ///< Тип точности
   PARAM_WIDTH_ASTERISK_VALUE,  ///< Значение ширины для '*'
-  PARAM_PRECISION_ASTERISK_VALUE,  ///< Значение точности для '.*'
   PARAM_MODIFIER,                  ///< Модификатор длины
   PARAM_SPECIFIER,                 ///< Спецификатор типа
   TYPE,                            ///< Тип данных
@@ -103,17 +96,14 @@ enum FormatChar {
 ////////////////////////////////////////////////////////////
 
 static int parse_number(const char *format, int *i);
-static void parse_flag(const char *format, int *i, int params[]);
 static void parse_width(const char *format, int *i, int params[],
                         va_list args);
-static void parse_precision(const char *format, int *i, int params[],
-                            va_list args);
 static void parse_modifier(const char *format, int *i, int *modifier) ;
 static void parse_specifier(const char *format, int *i, int params[]) ;
 static void parse_integer_specifier(int params[]);
 static void parse_unsigned_specifier(int params[], char specifier) ;
 static void parse_float_specifier(int params[], char specifier);
-static int convert_format(char *str, int *str_idx, int params[], va_list args);
+static int convert_format(const char *str, int *str_idx, int params[], va_list args);
 static void handle_integer(const char *str, int *idx, int params[], va_list args);
 static void handle_unsigned(const char *str, int *idx, int params[], va_list args);
 static void handle_float(const char *str, int *idx, int params[], va_list args);
@@ -124,6 +114,9 @@ static int handle_wstring(const char *str, int *idx, int params[], va_list args)
 static void handle_pointer(const char *str, int *idx, int params[], va_list args);
 static void handle_count(const char *str, int *idx, int params[], va_list args) ;
 static void handle_percent(const char *str, int *idx, va_list args);
+
+static int convert_str_to_int(const char *str, int *idx, long long *val, int params[]);
+
 
 ////////////////////////////////////////////////////////////
 //                Основная функция sprintf                //
@@ -144,15 +137,9 @@ int s21_sscanf(const char *str, const char *format, ...){
       i++;
       if (format[i] == '\0') break;
 
-      int params[PARAM_COUNT] = {[FLAG_MINUS] = false,
-                                 [FLAG_PLUS] = false,
-                                 [FLAG_SPACE] = false,
-                                 [FLAG_HASH] = false,
-                                 [FLAG_ZERO] = false,
+      int params[PARAM_COUNT] = {
                                  [PARAM_WIDTH] = -1,
-                                 [PARAM_PRECISION] = -1,
                                  [PARAM_WIDTH_ASTERISK_VALUE] = 0,
-                                 [PARAM_PRECISION_ASTERISK_VALUE] = 0,
                                  [PARAM_MODIFIER] = LENGTH_NULL,
                                  [PARAM_SPECIFIER] = -1,
                                  [TYPE] = -1,
@@ -160,9 +147,7 @@ int s21_sscanf(const char *str, const char *format, ...){
                                  [PARAM_BASE] = BaseDecimal,
                                  [PARAM_SPEC_CHAR] = -1};
 
-      parse_flag(format, &i, params);
       parse_width(format, &i, params, args);
-      parse_precision(format, &i, params, args);
       parse_modifier(format, &i, &params[PARAM_MODIFIER]);
       parse_specifier(format, &i, params);
 
@@ -191,28 +176,6 @@ static int parse_number(const char *format, int *i) {
   return num;
 }
 
-static void parse_flag(const char *format, int *i, int params[]) {
-  bool b = true;
-  while (b) {
-    if (format[*i] == '-' && !params[FLAG_MINUS]) {
-      params[FLAG_MINUS] = true;
-      (*i)++;
-    } else if (format[*i] == '+' && !params[FLAG_PLUS]) {
-      params[FLAG_PLUS] = true;
-      (*i)++;
-    } else if (format[*i] == ' ' && !params[FLAG_SPACE]) {
-      params[FLAG_SPACE] = true;
-      (*i)++;
-    } else if (format[*i] == '#' && !params[FLAG_HASH]) {
-      params[FLAG_HASH] = true;
-      (*i)++;
-    } else if (format[*i] == '0' && !params[FLAG_ZERO]) {
-      params[FLAG_ZERO] = true;
-      (*i)++;
-    } else
-      b = false;
-  }
-}
 
 static void parse_width(const char *format, int *i, int params[],
                         va_list args) {
@@ -222,32 +185,12 @@ static void parse_width(const char *format, int *i, int params[],
     (*i)++;
   } else if (isdigit(format[*i])) {
     bool b = false;
-    if (format[*i - 1] == '-') {
-      params[FLAG_MINUS] = false;
-      b = true;
-    }
     params[PARAM_WIDTH] = WIDTH_NUMBER;
     params[PARAM_WIDTH_ASTERISK_VALUE] = parse_number(format, i);
     if (b) params[PARAM_WIDTH_ASTERISK_VALUE] *= -1;
   }
 }
 
-static void parse_precision(const char *format, int *i, int params[],
-                            va_list args) {
-  if (format[*i] == '.') {
-    (*i)++;
-    if (format[*i] == '*') {
-      params[PARAM_PRECISION] = PRECISION_ASTERISK;
-      params[PARAM_PRECISION_ASTERISK_VALUE] = va_arg(args, int);
-      (*i)++;
-    } else if (isdigit(format[*i])) {
-      params[PARAM_PRECISION] = PRECISION_NUMBER;
-      params[PARAM_PRECISION_ASTERISK_VALUE] = parse_number(format, i);
-      if (params[PARAM_PRECISION_ASTERISK_VALUE] < 0)
-        params[PARAM_PRECISION_ASTERISK_VALUE] = 0;
-    }
-  }
-}
 
 static void parse_modifier(const char *format, int *i, int *modifier) {
   *modifier = LENGTH_NULL;
@@ -351,7 +294,7 @@ static void parse_float_specifier(int params[], char specifier) {
   }
 }
 
-static int convert_format(char *str, int *str_idx, int params[], va_list args) {
+static int convert_format(const char *str, int *str_idx, int params[], va_list args) {
   switch (params[TYPE]) {
     case TYPE_INT:
     case TYPE_LONG:
@@ -400,26 +343,26 @@ static void handle_integer(const char *str, int *idx, int params[], va_list args
   long long *val;
   switch (params[TYPE]) {
     case TYPE_INT:
-      val = (long long)va_arg(args, int*);
+      val = (long long*)va_arg(args, int*);
       break;
     case TYPE_LONG:
-      val = (long long)va_arg(args, long*);
+      val = (long long*)va_arg(args, long*);
       break;
     default:
       val = va_arg(args, long long *);
       break;
   }
-//   convert_int_to_str(str, idx, val, params);
+  convert_str_to_int(str, idx, val, params);
 }
 
 static void handle_unsigned(const char *str, int *idx, int params[], va_list args) {
   unsigned long long *val;
   switch (params[TYPE]) {
     case TYPE_UINT:
-      val = (unsigned long long)va_arg(args, unsigned int*);
+      val = (unsigned long long*)va_arg(args, unsigned int*);
       break;
     case TYPE_ULONG:
-      val = (unsigned long long)va_arg(args, unsigned long*);
+      val = (unsigned long long*)va_arg(args, unsigned long*);
       break;
     default:
       val = va_arg(args, unsigned long long*);
@@ -441,16 +384,13 @@ static void handle_float(const char *str, int *idx, int params[], va_list args) 
 
 static void handle_char(const char *str, int *idx, int params[], va_list args) {
   char *c = (char*)va_arg(args, int*);
-  char buffer[2] = {c, '\0'};
+  char buffer[2] = {*c, '\0'};
 //   convert_string_buffer_to_str(str, idx, buffer, params);
 }
 
 static void handle_string(const char *str, int *idx, int params[], va_list args) {
   char *s = va_arg(args, char *);
-  if (!s && params[PARAM_PRECISION] != -1) {
-  } else{
-    // convert_string_buffer_to_str(str, idx, s ? s : "(null)", params);
-  }
+  
 }
 
 static int handle_wchar(const char *str, int *idx, int params[], va_list args) {
@@ -461,9 +401,6 @@ static int handle_wchar(const char *str, int *idx, int params[], va_list args) {
 
 static int handle_wstring(const char *str, int *idx, int params[], va_list args) {
   wchar_t *wsval = va_arg(args, wchar_t *);
-  int precision = (params[PARAM_PRECISION] != -1)
-                      ? params[PARAM_PRECISION_ASTERISK_VALUE]
-                      : -1;
 }
 
 static void handle_pointer(const char *str, int *idx, int params[], va_list args) {
@@ -478,4 +415,12 @@ static void handle_count(const char *str, int *idx, int params[], va_list args) 
 static void handle_percent(const char *str, int *idx, va_list args) {
 //   convert_char_to_buffer(str, idx, '%');
 }
+
+static int convert_str_to_int(const char *str, int *idx, long long *val, int params[]){
+  for (int i = 0; str[i] != '\0'; i++){
+        printf("%c", str[i]);
+    }
+
+}
+
 
