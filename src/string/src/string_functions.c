@@ -51,7 +51,7 @@ char *s21_strchr(const char *str, int c) {
     return NULL;
   }
 
-  unsigned char uc = (unsigned char)c;
+  char uc = (char)c;
 
   while (flag == 0 && str[i] != '\0') {
     if (str[i] == uc) {
@@ -229,7 +229,7 @@ char *s21_strrchr(const char *str, int c) {
   int flag = 0;
   int i = 0;
   int len = 0;
-  unsigned char uc = (unsigned char)c;
+  char uc = (char)c;
   if (str == NULL) {
     return NULL;
   }
@@ -327,28 +327,25 @@ char *s21_strtok(char *str, const char *delim) {
     if (token_end != NULL) {
       last_pos = token_end + 1;
       *token_end = '\0';
+    } else {  // пока думаем что здесь делать
+      last_pos = NULL;
     }
-    // else {                                       // пока думаем что здесь
-    // делать
-    //   token_start = NULL;
-    // }
   }
 
-  if (last_pos != NULL && *last_pos != '\0') {
-    if (str == NULL) {
-      token_start = last_pos;
+
+  if (last_pos != NULL && *last_pos != '\0' && str == NULL) {
+    token_start = last_pos;
+    token_end = s21_strpbrk(token_start, delim);
+    while (token_start == token_end) {
+      token_start++;
       token_end = s21_strpbrk(token_start, delim);
-      while (token_start == token_end) {
-        token_start++;
-        token_end = s21_strpbrk(token_start, delim);
-      }
-      if (token_end != NULL) {
-        last_pos = token_end + 1;
-        *token_end = '\0';
-      } else {  // пока думаем что здесь делать
-        token_start = last_pos;
-        last_pos = NULL;
-      }
+    }
+    if (token_end != NULL) {
+      last_pos = token_end + 1;
+      *token_end = '\0';
+    } else {  // пока думаем что здесь делать
+      token_start = last_pos;
+      last_pos = NULL;
     }
   }
 

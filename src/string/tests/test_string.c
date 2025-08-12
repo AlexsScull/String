@@ -173,7 +173,7 @@ START_TEST(test_strncmp_zero_length) {
 }
 
 START_TEST(test_strncmp_null_ptr) {
-  ck_assert_int_eq(s21_strncmp(NULL, "Hello", 5), NULL);  // NULL указатель
+  ck_assert_int_eq(s21_strncmp(NULL, "Hello", 5), 0);  // NULL указатель (ИЗМЕНЕНО)
 }
 
 START_TEST(test_strncmp_unicode) {
@@ -298,7 +298,7 @@ START_TEST(test_strcspn_first_char) {
 
 START_TEST(test_strcspn_null_ptr) {
   ck_assert_int_eq(s21_strcspn(NULL, "abc"),
-                   NULL);  // NULL указатель (ИЗМЕНЕНО)
+                   0);  // NULL указатель (ИЗМЕНЕНО -- АДЕКВАТНО ЛИ??)
 }
 
 START_TEST(test_strcspn_empty_reject) {
@@ -459,6 +459,13 @@ START_TEST(test_strstr_basic) {
   const char *needle = "world";
   ck_assert_ptr_eq(s21_strstr(haystack, needle),
                    strstr(haystack, needle));  // Базовый поиск
+}
+
+START_TEST(test_strstr_basic_register) {
+  const char *haystack = "Hello, world!";
+  const char *needle = "World";
+  ck_assert_ptr_eq(s21_strstr(haystack, needle),
+                   strstr(haystack, needle));  // Чувствительность к регистру
 }
 
 START_TEST(test_strstr_not_found) {
@@ -648,6 +655,7 @@ Suite *sscanf_suite(void) {
 
   // s21_strstr
   tcase_add_test(tc, test_strstr_basic);
+  tcase_add_test(tc, test_strstr_basic_register);
   tcase_add_test(tc, test_strstr_not_found);
   tcase_add_test(tc, test_strstr_empty_needle);
   tcase_add_test(tc, test_strstr_null_ptr);
