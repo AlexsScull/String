@@ -521,8 +521,7 @@ START_TEST(test_strtok_basic) {
 START_TEST(test_strtok_null_str) {
   const char *delim = " ,!";
   char *token = s21_strtok(NULL, delim);
-  char *expected = strtok(NULL, delim);
-  ck_assert_ptr_eq(token, expected);  // Продолжение разбиения
+  ck_assert_ptr_eq(token, NULL);
 }
 
 START_TEST(test_strtok_empty_delim) {

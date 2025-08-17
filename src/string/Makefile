@@ -20,6 +20,7 @@ endif
 SRC_DIR := src
 OBJ_DIR := obj
 TEST_DIR := tests
+TEST_DIR_WW := tests_wish_werror
 TEST_OUT_DIR := obj_tests
 COV_DIR := coverage_report
 
@@ -28,9 +29,11 @@ SRC := $(wildcard $(SRC_DIR)/*.c)
 OBJ := $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRC))
 TEST_SRCS := $(wildcard $(TEST_DIR)/*.c)
 TEST_EXES := $(patsubst $(TEST_DIR)/%.c,$(TEST_OUT_DIR)/%,$(TEST_SRCS))
+TEST_SRCS_WW := $(wildcard $(TEST_DIR_WW)/*.c)
+TEST_EXES_WW := $(patsubst $(TEST_DIR_WW)/%.c,$(TEST_OUT_DIR)/%_ww,$(TEST_SRCS_WW))
 
 # Основные цели
-.PHONY: all clean test gcov_report rebuild style style_fix cppcheck leaks valgrind
+.PHONY: all clean test test_wish_werror gcov_report rebuild style style_fix cppcheck leaks valgrind
 
 # Стандартная сборка
 all: $(LIB)
@@ -54,11 +57,20 @@ $(OBJ_DIR) $(TEST_OUT_DIR) $(COV_DIR):
 # Правило для сборки тестов
 $(TEST_OUT_DIR)/%: $(TEST_DIR)/%.c $(LIB) | $(TEST_OUT_DIR)
 	$(CC) $< $(LIB) -o $@ $(LIB_FLAGS) $(if $(findstring gcov_report,$(MAKECMDGOALS)),$(GCOV_FLAGS))
+	
+$(TEST_OUT_DIR)/%_ww: $(TEST_DIR_WW)/%.c $(LIB) | $(TEST_OUT_DIR)
+	$(CC) $< $(LIB) -o $@ $(LIB_FLAGS) $(if $(findstring gcov_report,$(MAKECMDGOALS)),$(GCOV_FLAGS))
 
 # Сборка и запуск всех тестов
 test: $(TEST_EXES)
 	for test in $(TEST_EXES); do \
 		$$test || exit 1; \
+	done
+
+# Сборка и запуск всех тестов
+test_wish_werror: $(TEST_EXES_WW)
+	for test_wish_werror in $(TEST_EXES_WW); do \
+		$$test_wish_werror || exit 1; \
 	done
 
 # Генерация отчета о покрытии кода

@@ -142,8 +142,8 @@ static void convert_int_to_str(char *str, int *idx, long long value,
                                int params[]);
 static void convert_uint_to_str(char *str, int *idx, unsigned long long value,
                                 int params[]);
-static void convert_string_buffer_to_str(char *str, int *idx, char *buffer,
-                                         int params[]);
+static void convert_string_buffer_to_str(char *str, int *idx,
+                                         const char *buffer, int params[]);
 static void convert_buffer_to_str(char *buffer, char ch, int num_len, char *str,
                                   int *idx, int params[]);
 static void convert_hash_to_buffer(int params[], int *hash, char *str,
@@ -830,8 +830,8 @@ static void convert_hash_to_buffer(int params[], int *hash, char *str,
   *hash = 0;
 }
 
-static void convert_string_buffer_to_str(char *str, int *idx, char *buffer,
-                                         int params[]) {
+static void convert_string_buffer_to_str(char *str, int *idx,
+                                         const char *buffer, int params[]) {
   int width = params[PARAM_WIDTH_ASTERISK_VALUE];
   int precision = params[PARAM_PRECISION_ASTERISK_VALUE];
 
@@ -845,10 +845,8 @@ static void convert_string_buffer_to_str(char *str, int *idx, char *buffer,
     // Для строки: длина либо до \0, либо ограничена точностью
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     output_len = strlen(buffer);
-    if (params[PARAM_PRECISION] != -1 && precision < output_len) {
-      buffer[precision] = '\0';
+    if (params[PARAM_PRECISION] != -1 && precision < output_len)
       output_len = precision;
-    }
   }
 
   int padding = width - output_len;
@@ -858,10 +856,13 @@ static void convert_string_buffer_to_str(char *str, int *idx, char *buffer,
     convert_num_len_pad_char_to_str(str, idx, padding, ' ');
   }
 
-  if (params[TYPE] == TYPE_CHAR)
+  if (params[TYPE] == TYPE_CHAR) {
     convert_char_to_buffer(str, idx, buffer[0]);
-  else
-    convert_string_to_buffer(str, idx, buffer);
+  } else {
+    for (int i = 0; i < output_len; i++) {
+      convert_char_to_buffer(str, idx, buffer[i]);
+    }
+  }
 
   if (left_align) {
     convert_num_len_pad_char_to_str(str, idx, padding, ' ');

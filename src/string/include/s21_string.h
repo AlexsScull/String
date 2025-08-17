@@ -4,8 +4,8 @@
 #include <stdarg.h>  // Для работы с переменным количеством аргументов
 #include <stddef.h>  // Для типа size_t и NULL
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef unsigned long s21_size_t;
 
@@ -348,7 +348,6 @@ static const char *error_messages[] = {
     "State not recoverable",
     "Operation not possible due to RF-kill",
     "Memory page has hardware error"
-    // ... остальные сообщения об ошибках для Linux
 };
 #else
 #define MAX_ERRMSG 0
