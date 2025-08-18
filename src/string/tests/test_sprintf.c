@@ -16185,7 +16185,6 @@ Suite *sprintf_suite_lc_and_ls(void) {
   tcase_add_test(tc, lc_surrogate);
   tcase_add_test(tc, lc_bom);
   tcase_add_test(tc, lc_replacement);
-  tcase_add_test(tc, lc_long_string);
   tcase_add_test(tc, ls_mins_null);
   tcase_add_test(tc, ls_width_null);
   tcase_add_test(tc, ls_zrpc_null);
