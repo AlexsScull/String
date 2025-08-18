@@ -4,6 +4,7 @@ OS := $(shell uname)
 # Компилятор и флаги
 CC := gcc
 CFLAGS := 
+CFLAGS_WW := -w
 # CFLAGS := -Wall -Wextra -Werror -std=c11
 GCOV_FLAGS := -fprofile-arcs -ftest-coverage
 
@@ -56,10 +57,10 @@ $(OBJ_DIR) $(TEST_OUT_DIR) $(COV_DIR):
 
 # Правило для сборки тестов
 $(TEST_OUT_DIR)/%: $(TEST_DIR)/%.c $(LIB) | $(TEST_OUT_DIR)
-	$(CC) $< $(LIB) -o $@ $(LIB_FLAGS) $(if $(findstring gcov_report,$(MAKECMDGOALS)),$(GCOV_FLAGS))
+	$(CC) $(CFLAGS) $< $(LIB) -o $@ $(LIB_FLAGS) $(if $(findstring gcov_report,$(MAKECMDGOALS)),$(GCOV_FLAGS))
 	
 $(TEST_OUT_DIR)/%_ww: $(TEST_DIR_WW)/%.c $(LIB) | $(TEST_OUT_DIR)
-	$(CC) $< $(LIB) -o $@ $(LIB_FLAGS) $(if $(findstring gcov_report,$(MAKECMDGOALS)),$(GCOV_FLAGS))
+	$(CC) $(CFLAGS_WW) $< $(LIB) -o $@ $(LIB_FLAGS) $(if $(findstring gcov_report,$(MAKECMDGOALS)),$(GCOV_FLAGS))
 
 # Сборка и запуск всех тестов
 test: $(TEST_EXES)
