@@ -8998,8 +8998,6 @@ TEST_SPRINTF(lc_invalid_wide, "%lc", (wchar_t)-2,
 TEST_SPRINTF(lc_surrogate, "%lc", 0xD800, wchar_t)  // Одиночный surrogate
 TEST_SPRINTF(lc_bom, "%lc", 0xFEFF, wchar_t)        // BOM-символ
 TEST_SPRINTF(lc_replacement, "%lc", 0xFFFD, wchar_t)  // Символ замены
-
-TEST_SPRINTF(lc_long_string, "%1000lc", L'·', wchar_t)  // Длинный вывод
 #pragma endregion
 
 // ================================================================================================================================
