@@ -37,14 +37,6 @@
   }                                                         \
   END_TEST
 
-#define TEST_SP_NULL(test_name, format_str, type)         \
-  START_TEST(test_name) {                                 \
-    char str_s21[200] = {0};                              \
-    int res_s21 = s21_sprintf(str_s21, format_str, NULL); \
-    ck_assert_str_eq(NULL, str_s21);                      \
-  }                                                       \
-  END_TEST
-
 #define TEST_SPRINTF(test_name, format_str, value, type) \
   START_TEST(test_name) {                                \
     char str_sp[200] = {0};                              \
@@ -352,66 +344,51 @@ TEST_SPRINTF(LG_ng_inf, "%LG", -(long double)INFINITY, long double)
 #pragma endregion
 
 // =========================================================================
-// Вещественные типы NULL и 0
+// Вещественные типы 0
 // =========================================================================
 #pragma region
-TEST_SP_NULL(e_null, "%e", double)
 TEST_SPRINTF(e_zero, "%e", 0.0, double)
 TEST_SPRINTF(e_ng_z, "%e", -0.0, double)
 
-TEST_SP_NULL(E_null, "%E", double)
 TEST_SPRINTF(E_zero, "%E", 0.0, double)
 TEST_SPRINTF(E_ng_z, "%E", -0.0, double)
 
-TEST_SP_NULL(f_null, "%g", double)
 TEST_SPRINTF(f_zero, "%g", 0.0, double)
 TEST_SPRINTF(f_ng_z, "%g", -0.0, double)
 
-TEST_SP_NULL(g_null, "%g", double)
 TEST_SPRINTF(g_zero, "%g", 0.0, double)
 TEST_SPRINTF(g_ng_z, "%g", -0.0, double)
 
-TEST_SP_NULL(G_null, "%G", double)
 TEST_SPRINTF(G_zero, "%G", 0.0, double)
 TEST_SPRINTF(G_ng_z, "%G", -0.0, double)
 
-TEST_SP_NULL(le_null, "%le", double)
 TEST_SPRINTF(le_zero, "%le", 0.0, double)
 TEST_SPRINTF(le_ng_z, "%le", -0.0, double)
 
-TEST_SP_NULL(lE_null, "%lE", double)
 TEST_SPRINTF(lE_zero, "%lE", 0.0, double)
 TEST_SPRINTF(lE_ng_z, "%lE", -0.0, double)
 
-TEST_SP_NULL(lf_null, "%lg", double)
 TEST_SPRINTF(lf_zero, "%lg", 0.0, double)
 TEST_SPRINTF(lf_ng_z, "%lg", -0.0, double)
 
-TEST_SP_NULL(lg_null, "%lg", double)
 TEST_SPRINTF(lg_zero, "%lg", 0.0, double)
 TEST_SPRINTF(lg_ng_z, "%lg", -0.0, double)
 
-TEST_SP_NULL(lG_null, "%lG", double)
 TEST_SPRINTF(lG_zero, "%lG", 0.0, double)
 TEST_SPRINTF(lG_ng_z, "%lG", -0.0, double)
 
-TEST_SP_NULL(Le_null, "%Le", long double)
 TEST_SPRINTF(Le_zero, "%Le", 0.0L, long double)
 TEST_SPRINTF(Le_ng_z, "%Le", -0.0L, long double)
 
-TEST_SP_NULL(LE_null, "%LE", long double)
 TEST_SPRINTF(LE_zero, "%LE", 0.0L, long double)
 TEST_SPRINTF(LE_ng_z, "%LE", -0.0L, long double)
 
-TEST_SP_NULL(Lf_null, "%Lg", long double)
 TEST_SPRINTF(Lf_zero, "%Lg", 0.0L, long double)
 TEST_SPRINTF(Lf_ng_z, "%Lg", -0.0L, long double)
 
-TEST_SP_NULL(Lg_null, "%Lg", long double)
 TEST_SPRINTF(Lg_zero, "%Lg", 0.0L, long double)
 TEST_SPRINTF(Lg_ng_z, "%Lg", -0.0L, long double)
 
-TEST_SP_NULL(LG_null, "%LG", long double)
 TEST_SPRINTF(LG_zero, "%LG", 0.0L, long double)
 TEST_SPRINTF(LG_ng_z, "%LG", -0.0L, long double)
 #pragma endregion
@@ -9281,49 +9258,34 @@ Suite *sprintf_suite(void) {
   tcase_add_test(tc, LG_nan);
   tcase_add_test(tc, LG_inf);
   tcase_add_test(tc, LG_ng_inf);
-  tcase_add_test(tc, e_null);
   tcase_add_test(tc, e_zero);
   tcase_add_test(tc, e_ng_z);
-  tcase_add_test(tc, E_null);
   tcase_add_test(tc, E_zero);
   tcase_add_test(tc, E_ng_z);
-  tcase_add_test(tc, f_null);
   tcase_add_test(tc, f_zero);
   tcase_add_test(tc, f_ng_z);
-  tcase_add_test(tc, g_null);
   tcase_add_test(tc, g_zero);
   tcase_add_test(tc, g_ng_z);
-  tcase_add_test(tc, G_null);
   tcase_add_test(tc, G_zero);
   tcase_add_test(tc, G_ng_z);
-  tcase_add_test(tc, le_null);
   tcase_add_test(tc, le_zero);
   tcase_add_test(tc, le_ng_z);
-  tcase_add_test(tc, lE_null);
   tcase_add_test(tc, lE_zero);
   tcase_add_test(tc, lE_ng_z);
-  tcase_add_test(tc, lf_null);
   tcase_add_test(tc, lf_zero);
   tcase_add_test(tc, lf_ng_z);
-  tcase_add_test(tc, lg_null);
   tcase_add_test(tc, lg_zero);
   tcase_add_test(tc, lg_ng_z);
-  tcase_add_test(tc, lG_null);
   tcase_add_test(tc, lG_zero);
   tcase_add_test(tc, lG_ng_z);
-  tcase_add_test(tc, Le_null);
   tcase_add_test(tc, Le_zero);
   tcase_add_test(tc, Le_ng_z);
-  tcase_add_test(tc, LE_null);
   tcase_add_test(tc, LE_zero);
   tcase_add_test(tc, LE_ng_z);
-  tcase_add_test(tc, Lf_null);
   tcase_add_test(tc, Lf_zero);
   tcase_add_test(tc, Lf_ng_z);
-  tcase_add_test(tc, Lg_null);
   tcase_add_test(tc, Lg_zero);
   tcase_add_test(tc, Lg_ng_z);
-  tcase_add_test(tc, LG_null);
   tcase_add_test(tc, LG_zero);
   tcase_add_test(tc, LG_ng_z);
   tcase_add_test(tc, e_post_small);
