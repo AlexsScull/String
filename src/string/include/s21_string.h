@@ -347,8 +347,7 @@ static const char *error_messages[] = {
     "Owner died",
     "State not recoverable",
     "Operation not possible due to RF-kill",
-    "Memory page has hardware error"
-};
+    "Memory page has hardware error"};
 #else
 #define MAX_ERRMSG 0
 #define MAX_ERRSTR "Unknown error"

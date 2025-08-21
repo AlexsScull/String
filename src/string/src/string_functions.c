@@ -101,8 +101,8 @@ int s21_strncmp(const char *str1, const char *str2, s21_size_t n) {
   } else {
     result = 0;
   }
-    return result;
-    /*ТУТ ЧТО-ТО СТРАННОЕ ПОСМОТРЕТЬ ЕЩЁ РАЗ*/
+  return result;
+  /*ТУТ ЧТО-ТО СТРАННОЕ ПОСМОТРЕТЬ ЕЩЁ РАЗ*/
 }
 char *s21_strncpy(char *dest, const char *src, s21_size_t n) {
   /*Задача:
@@ -331,7 +331,6 @@ char *s21_strtok(char *str, const char *delim) {
       last_pos = NULL;
     }
   }
-
 
   if (last_pos != NULL && *last_pos != '\0' && str == NULL) {
     token_start = last_pos;

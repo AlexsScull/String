@@ -69,10 +69,10 @@ enum SpecifierType {
 enum ParamIndex {
   PARAM_WIDTH,                 ///< Тип ширины
   PARAM_WIDTH_ASTERISK_VALUE,  ///< Значение ширины для '*'
-  PARAM_MODIFIER,                  ///< Модификатор длины
-  PARAM_SPECIFIER,                 ///< Спецификатор типа
-  TYPE,                            ///< Тип данных
-  PARAM_UPPERCASE,  ///< Флаг верхнего регистра
+  PARAM_MODIFIER,              ///< Модификатор длины
+  PARAM_SPECIFIER,             ///< Спецификатор типа
+  TYPE,                        ///< Тип данных
+  PARAM_UPPERCASE,             ///< Флаг верхнего регистра
   PARAM_BASE,       ///< Основание системы счисления
   PARAM_SPEC_CHAR,  ///< Специальный символ формата
   PARAM_COUNT       ///< Количество параметров
@@ -87,8 +87,8 @@ enum FormatChar {
 
 #define MaxUtf8Bytes 4    ///< Макс. байт на UTF-8 символ
 #define MaxBufferSize 65  ///< Максимальный размер буфера
-#define BaseDecimal 10  ///< Десятичное основание
-#define BaseOctal 8     ///< Восьмеричное основание
+#define BaseDecimal 10    ///< Десятичное основание
+#define BaseOctal 8       ///< Восьмеричное основание
 #define BaseHexadecimal 16  ///< Шестнадцатеричное основание
 
 ////////////////////////////////////////////////////////////
@@ -96,33 +96,38 @@ enum FormatChar {
 ////////////////////////////////////////////////////////////
 
 static int parse_number(const char *format, int *i);
-static void parse_width(const char *format, int *i, int params[],
-                        va_list args);
-static void parse_modifier(const char *format, int *i, int *modifier) ;
-static void parse_specifier(const char *format, int *i, int params[]) ;
+static void parse_width(const char *format, int *i, int params[], va_list args);
+static void parse_modifier(const char *format, int *i, int *modifier);
+static void parse_specifier(const char *format, int *i, int params[]);
 static void parse_integer_specifier(int params[]);
-static void parse_unsigned_specifier(int params[], char specifier) ;
+static void parse_unsigned_specifier(int params[], char specifier);
 static void parse_float_specifier(int params[], char specifier);
-static int convert_format(const char *str, int *str_idx, int params[], va_list args);
-static void handle_integer(const char *str, int *idx, int params[], va_list args);
-static void handle_unsigned(const char *str, int *idx, int params[], va_list args);
+static int convert_format(const char *str, int *str_idx, int params[],
+                          va_list args);
+static void handle_integer(const char *str, int *idx, int params[],
+                           va_list args);
+static void handle_unsigned(const char *str, int *idx, int params[],
+                            va_list args);
 static void handle_float(const char *str, int *idx, int params[], va_list args);
-static void handle_char(const char *str, int *idx, int params[], va_list args) ;
-static void handle_string(const char *str, int *idx, int params[], va_list args);
+static void handle_char(const char *str, int *idx, int params[], va_list args);
+static void handle_string(const char *str, int *idx, int params[],
+                          va_list args);
 static int handle_wchar(const char *str, int *idx, int params[], va_list args);
-static int handle_wstring(const char *str, int *idx, int params[], va_list args);
-static void handle_pointer(const char *str, int *idx, int params[], va_list args);
-static void handle_count(const char *str, int *idx, int params[], va_list args) ;
+static int handle_wstring(const char *str, int *idx, int params[],
+                          va_list args);
+static void handle_pointer(const char *str, int *idx, int params[],
+                           va_list args);
+static void handle_count(const char *str, int *idx, int params[], va_list args);
 static void handle_percent(const char *str, int *idx, va_list args);
 
-static int convert_str_to_int(const char *str, int *idx, long long *val, int params[]);
-
+static int convert_str_to_int(const char *str, int *idx, long long *val,
+                              int params[]);
 
 ////////////////////////////////////////////////////////////
 //                Основная функция sprintf                //
 ////////////////////////////////////////////////////////////
 
-int s21_sscanf(const char *str, const char *format, ...){
+int s21_sscanf(const char *str, const char *format, ...) {
   if (!str) return -1;
   if (!setlocale(LC_ALL, "en_US.UTF-8")) {
     setlocale(LC_ALL, "C.UTF-8");
@@ -137,8 +142,7 @@ int s21_sscanf(const char *str, const char *format, ...){
       i++;
       if (format[i] == '\0') break;
 
-      int params[PARAM_COUNT] = {
-                                 [PARAM_WIDTH] = -1,
+      int params[PARAM_COUNT] = {[PARAM_WIDTH] = -1,
                                  [PARAM_WIDTH_ASTERISK_VALUE] = 0,
                                  [PARAM_MODIFIER] = LENGTH_NULL,
                                  [PARAM_SPECIFIER] = -1,
@@ -166,7 +170,6 @@ int s21_sscanf(const char *str, const char *format, ...){
 //             Функции парсинга формата                   //
 ////////////////////////////////////////////////////////////
 
-
 static int parse_number(const char *format, int *i) {
   int num = 0;
   while (isdigit(format[*i])) {
@@ -175,7 +178,6 @@ static int parse_number(const char *format, int *i) {
   }
   return num;
 }
-
 
 static void parse_width(const char *format, int *i, int params[],
                         va_list args) {
@@ -190,7 +192,6 @@ static void parse_width(const char *format, int *i, int params[],
     if (b) params[PARAM_WIDTH_ASTERISK_VALUE] *= -1;
   }
 }
-
 
 static void parse_modifier(const char *format, int *i, int *modifier) {
   *modifier = LENGTH_NULL;
@@ -294,7 +295,8 @@ static void parse_float_specifier(int params[], char specifier) {
   }
 }
 
-static int convert_format(const char *str, int *str_idx, int params[], va_list args) {
+static int convert_format(const char *str, int *str_idx, int params[],
+                          va_list args) {
   switch (params[TYPE]) {
     case TYPE_INT:
     case TYPE_LONG:
@@ -339,14 +341,15 @@ static int convert_format(const char *str, int *str_idx, int params[], va_list a
 //             Обработчики типов данных                   //
 ////////////////////////////////////////////////////////////
 
-static void handle_integer(const char *str, int *idx, int params[], va_list args) {
+static void handle_integer(const char *str, int *idx, int params[],
+                           va_list args) {
   long long *val;
   switch (params[TYPE]) {
     case TYPE_INT:
-      val = (long long*)va_arg(args, int*);
+      val = (long long *)va_arg(args, int *);
       break;
     case TYPE_LONG:
-      val = (long long*)va_arg(args, long*);
+      val = (long long *)va_arg(args, long *);
       break;
     default:
       val = va_arg(args, long long *);
@@ -355,72 +358,75 @@ static void handle_integer(const char *str, int *idx, int params[], va_list args
   convert_str_to_int(str, idx, val, params);
 }
 
-static void handle_unsigned(const char *str, int *idx, int params[], va_list args) {
+static void handle_unsigned(const char *str, int *idx, int params[],
+                            va_list args) {
   unsigned long long *val;
   switch (params[TYPE]) {
     case TYPE_UINT:
-      val = (unsigned long long*)va_arg(args, unsigned int*);
+      val = (unsigned long long *)va_arg(args, unsigned int *);
       break;
     case TYPE_ULONG:
-      val = (unsigned long long*)va_arg(args, unsigned long*);
+      val = (unsigned long long *)va_arg(args, unsigned long *);
       break;
     default:
-      val = va_arg(args, unsigned long long*);
+      val = va_arg(args, unsigned long long *);
       break;
   }
 
-//   convert_uint_to_str(str, idx, val, params);
+  //   convert_uint_to_str(str, idx, val, params);
 }
 
-static void handle_float(const char *str, int *idx, int params[], va_list args) {
+static void handle_float(const char *str, int *idx, int params[],
+                         va_list args) {
   long double *val = (params[TYPE] == TYPE_FLOAT)
-                        ? (long double*)va_arg(args, double*)
-                        : va_arg(args, long double*);
+                         ? (long double *)va_arg(args, double *)
+                         : va_arg(args, long double *);
 
-//   if (!convert_special_float(str, idx, val, params)) {
-    // convert_float_to_str(str, idx, val, params);
-//   }
+  //   if (!convert_special_float(str, idx, val, params)) {
+  // convert_float_to_str(str, idx, val, params);
+  //   }
 }
 
 static void handle_char(const char *str, int *idx, int params[], va_list args) {
-  char *c = (char*)va_arg(args, int*);
+  char *c = (char *)va_arg(args, int *);
   char buffer[2] = {*c, '\0'};
-//   convert_string_buffer_to_str(str, idx, buffer, params);
+  //   convert_string_buffer_to_str(str, idx, buffer, params);
 }
 
-static void handle_string(const char *str, int *idx, int params[], va_list args) {
+static void handle_string(const char *str, int *idx, int params[],
+                          va_list args) {
   char *s = va_arg(args, char *);
-  
 }
 
 static int handle_wchar(const char *str, int *idx, int params[], va_list args) {
   wchar_t wcval = va_arg(args, wchar_t);
   char utf8_buffer[MaxUtf8Bytes + 1] = {0};
-//   int utf8_len = wchar_to_utf8(utf8_buffer, wcval);
+  //   int utf8_len = wchar_to_utf8(utf8_buffer, wcval);
 }
 
-static int handle_wstring(const char *str, int *idx, int params[], va_list args) {
+static int handle_wstring(const char *str, int *idx, int params[],
+                          va_list args) {
   wchar_t *wsval = va_arg(args, wchar_t *);
 }
 
-static void handle_pointer(const char *str, int *idx, int params[], va_list args) {
+static void handle_pointer(const char *str, int *idx, int params[],
+                           va_list args) {
   void *ptr = va_arg(args, void *);
 }
 
-static void handle_count(const char *str, int *idx, int params[], va_list args) {
+static void handle_count(const char *str, int *idx, int params[],
+                         va_list args) {
   int *ptr = va_arg(args, int *);
   *ptr = *idx;
 }
 
 static void handle_percent(const char *str, int *idx, va_list args) {
-//   convert_char_to_buffer(str, idx, '%');
+  //   convert_char_to_buffer(str, idx, '%');
 }
 
-static int convert_str_to_int(const char *str, int *idx, long long *val, int params[]){
-  for (int i = 0; str[i] != '\0'; i++){
-        printf("%c", str[i]);
-    }
-
+static int convert_str_to_int(const char *str, int *idx, long long *val,
+                              int params[]) {
+  for (int i = 0; str[i] != '\0'; i++) {
+    printf("%c", str[i]);
+  }
 }
-
-
