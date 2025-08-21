@@ -525,6 +525,20 @@ START_TEST(test_strtok_basic) {
   ck_assert_ptr_eq(token, expected);  // Базовая работа
 }
 
+START_TEST(test_strtok_basic_whitespace) {
+  char str[] = "Hello, world! This is a cat.";
+  const char *delim = " ";
+  char *token = s21_strtok(str, delim);
+  char *expected = strtok(str, delim);
+  while (token != NULL && expected != NULL) {
+    ck_assert_str_eq(token, expected);
+    token = s21_strtok(NULL, delim);
+    expected = strtok(NULL, delim);
+  }
+  ck_assert_ptr_eq(token, expected);  // Базовая работа, просто пробел
+}
+
+
 START_TEST(test_strtok_null_str) {
   const char *delim = " ,!";
   char *token = s21_strtok(NULL, delim);
@@ -663,6 +677,7 @@ Suite *sscanf_suite(void) {
 
   // s21_strtok
   tcase_add_test(tc, test_strtok_basic);
+  tcase_add_test(tc, test_strtok_basic_whitespace);
   tcase_add_test(tc, test_strtok_null_str);
   tcase_add_test(tc, test_strtok_empty_delim);
   tcase_add_test(tc, test_strtok_null_ptr);
