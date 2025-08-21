@@ -656,7 +656,11 @@ static int handle_wstring(char *str, int *idx, int params[], va_list args) {
 static void handle_pointer(char *str, int *idx, int params[], va_list args) {
   void *ptr = va_arg(args, void *);
   if (ptr == NULL) {
-    convert_string_to_buffer(str, idx, "(nil)");
+    params[FLAG_HASH] = false;
+    params[FLAG_ZERO] = false;
+    params[PARAM_PRECISION] = -1;
+    params[PARAM_PRECISION_ASTERISK_VALUE] = 0;
+    convert_buffer_to_str("(nil)", 0, strlen("(nil)"), str, idx, params);
   } else {
     char buffer[MaxBufferSize];
     int num_len = 0;
@@ -950,20 +954,31 @@ static int wchar_to_utf8(char *dest, wchar_t wc) {
 
 static bool convert_special_float(char *str, int *idx, long double value,
                                   int params[]) {
+  char sign_char = 0;
+  int num_len = strlen("nan");
+  bool fl = false;
+
+  add_sign(&sign_char, value < 0, params);
+
   if (isnanl(value)) {
-    convert_string_to_buffer(str, idx, params[PARAM_UPPERCASE] ? "NAN" : "nan");
-    return true;
+    params[FLAG_HASH] = false;
+    params[FLAG_ZERO] = false;
+    params[PARAM_PRECISION] = -1;
+    params[PARAM_PRECISION_ASTERISK_VALUE] = 0;
+    convert_buffer_to_str(params[PARAM_UPPERCASE] ? "NAN" : "nan", sign_char,
+                          strlen("nan"), str, idx, params);
+    fl = true;
   } else if (isinfl(value)) {
-    if (signbit(value)) {
-      convert_string_to_buffer(str, idx,
-                               params[PARAM_UPPERCASE] ? "-INF" : "-inf");
-    } else {
-      convert_string_to_buffer(str, idx,
-                               params[PARAM_UPPERCASE] ? "INF" : "inf");
-    }
-    return true;
+    params[FLAG_HASH] = false;
+    params[FLAG_ZERO] = false;
+    params[PARAM_PRECISION] = -1;
+    params[PARAM_PRECISION_ASTERISK_VALUE] = 0;
+    convert_buffer_to_str(params[PARAM_UPPERCASE] ? "INF" : "inf", sign_char,
+                          strlen("inf"), str, idx, params);
+    fl = true;
   }
-  return false;
+
+  return fl;
 }
 
 static void convert_float_to_str(char *str, int *idx, long double dval,
