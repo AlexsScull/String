@@ -166,11 +166,11 @@ static void format_float_value(char *buf, int *idx_buf, long double frac_part,
 
 static int parse_format(const char *format, int *i, int params[],
                         va_list args) {
-      parse_flag(format, i, params);
-      parse_width(format, i, params, args);
-      parse_precision(format, i, params, args);
-      parse_modifier(format, i, &params[PARAM_MODIFIER]);
-      parse_specifier(format, i, params);
+  parse_flag(format, i, params);
+  parse_width(format, i, params, args);
+  parse_precision(format, i, params, args);
+  parse_modifier(format, i, &params[PARAM_MODIFIER]);
+  parse_specifier(format, i, params);
 }
 
 int s21_sprintf(char *str, const char *format, ...) {
@@ -178,7 +178,6 @@ int s21_sprintf(char *str, const char *format, ...) {
   if (!setlocale(LC_ALL, "en_US.UTF-8")) {
     setlocale(LC_ALL, "C.UTF-8");
   }
-
 
   va_list args;
   va_start(args, format);
@@ -193,7 +192,7 @@ int s21_sprintf(char *str, const char *format, ...) {
         continue;
       }
 
-            int params[PARAM_COUNT] = {[FLAG_MINUS] = false,
+      int params[PARAM_COUNT] = {[FLAG_MINUS] = false,
                                  [FLAG_PLUS] = false,
                                  [FLAG_SPACE] = false,
                                  [FLAG_HASH] = false,

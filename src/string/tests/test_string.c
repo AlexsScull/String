@@ -539,7 +539,6 @@ START_TEST(test_strtok_basic_whitespace) {
   ck_assert_ptr_eq(token, expected);  // Базовая работа, просто пробел
 }
 
-
 START_TEST(test_strtok_null_str) {
   const char *delim = " ,!";
   char *token = s21_strtok(NULL, delim);
