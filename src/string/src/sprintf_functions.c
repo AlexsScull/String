@@ -164,22 +164,36 @@ static void format_float_value(char *buf, int *idx_buf, long double frac_part,
 //                Основная функция sprintf                //
 ////////////////////////////////////////////////////////////
 
+static int parse_format(const char *format, int *i, int params[],
+                        va_list args) {
+      parse_flag(format, i, params);
+      parse_width(format, i, params, args);
+      parse_precision(format, i, params, args);
+      parse_modifier(format, i, &params[PARAM_MODIFIER]);
+      parse_specifier(format, i, params);
+}
+
 int s21_sprintf(char *str, const char *format, ...) {
-  if (!str) return -1;
+  if (!str || !format) return -1;
   if (!setlocale(LC_ALL, "en_US.UTF-8")) {
     setlocale(LC_ALL, "C.UTF-8");
   }
 
+
   va_list args;
   va_start(args, format);
   int idx = 0;
+  bool error = false;
 
-  for (int i = 0; format[i];) {
+  for (int i = 0; format[i] && !error;) {
     if (format[i] == '%') {
       i++;
-      if (format[i] == '\0') break;
+      if (format[i] == '\0') {
+        error = true;
+        continue;
+      }
 
-      int params[PARAM_COUNT] = {[FLAG_MINUS] = false,
+            int params[PARAM_COUNT] = {[FLAG_MINUS] = false,
                                  [FLAG_PLUS] = false,
                                  [FLAG_SPACE] = false,
                                  [FLAG_HASH] = false,
@@ -195,25 +209,16 @@ int s21_sprintf(char *str, const char *format, ...) {
                                  [PARAM_BASE] = BaseDecimal,
                                  [PARAM_SPEC_CHAR] = -1};
 
-      parse_flag(format, &i, params);
-      parse_width(format, &i, params, args);
-      parse_precision(format, &i, params, args);
-      parse_modifier(format, &i, &params[PARAM_MODIFIER]);
-      parse_specifier(format, &i, params);
+      parse_format(format, &i, params, args);
+      error = convert_format(str, &idx, params, args);
 
-      if (convert_format(str, &idx, params, args) == -1) {
-        str[idx] = '\0';
-        va_end(args);
-        return -1;
-      }
-    } else {
-      str[idx++] = format[i++];
-    }
+    } else
+      str[idx++] = format[i], i++;
   }
 
   str[idx] = '\0';
   va_end(args);
-  return idx;
+  return error ? -1 : idx;
 }
 
 ////////////////////////////////////////////////////////////

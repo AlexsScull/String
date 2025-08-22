@@ -78,41 +78,37 @@ enum FormatChar {
 #define BaseOctal 8     ///< Восьмеричное основание
 #define BaseHexadecimal 16  ///< Шестнадцатеричное основание
 
-int s21_sprintf(char *str, const char *format, ...) {
-  if (!str) return -1;
+#define PRIMARY_LOCALE "en_US.UTF-8"
+#define FALLBACK_LOCALE "C.UTF-8"
 
-  if (!setlocale(LC_ALL, "en_US.UTF-8")) {
-    setlocale(LC_ALL, "C.UTF-8");
-  }
+int s21_sprintf(char *str, const char *format, ...) {
+  if (!str || !format) return -1;
+  setlocale(LC_ALL, PRIMARY_LOCALE) || setlocale(LC_ALL, FALLBACK_LOCALE);
 
   va_list args;
   va_start(args, format);
   int idx = 0;
-  bool error_flag = false;
+  bool error = false;
 
-  for (int i = 0; format[i] && !error_flag; i++) {
+  for (int i = 0; format[i] && !error;) {
     if (format[i] == '%') {
       i++;
       if (format[i] == '\0') {
-        error_flag = 1;
-        break;
+        error = true;
+        continue;
       }
 
       FormatParams params = init_format_params();
       parse_format(format, &i, &params, args);
+      error = process_format_conversion(str, &idx, params, args);
 
-      if (process_format_conversion(str, &idx, params, args) == -1) {
-        error_flag = 1;
-      }
-    } else {
-      str[idx++] = format[i];
-    }
+    } else
+      str[idx++] = format[i], i++;
   }
 
   str[idx] = '\0';
   va_end(args);
-
-  return error_flag ? -1 : idx;
+  return error ? -1 : idx;
 }
 
 static FormatParams init_format_params() {
@@ -251,7 +247,6 @@ static void set_float_type(FormatParams *params) {
     params->type = TYPE_FLOAT;
 }
 
-// Обработчики спецификаторов
 static void handle_di_specifier(FormatParams *params) {
   set_signed_type(params);
 }
