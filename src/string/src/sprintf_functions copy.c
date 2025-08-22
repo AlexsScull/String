@@ -23,12 +23,16 @@ enum ModifierType {
 /** Спецификаторы формата */
 enum SpecifierType {
   // Целочисленные знаковые
-  TYPE_INT,       ///< %d, %i, %hd, %hhd
+  TYPE_INT,  ///< %d, %i, %hd, %hhd
+  TYPE_SHORT,
+  TYPE_SCHAR,
   TYPE_LONG,      ///< %ld, %li
   TYPE_LONGLONG,  ///< %lld, %lli
 
   // Целочисленные беззнаковые
-  TYPE_UINT,       ///< %u, %o, %x, %X, %hu, %hhu
+  TYPE_UINT,  ///< %u, %o, %x, %X, %hu, %hhu
+  TYPE_USHORT,
+  TYPE_UCHAR,
   TYPE_ULONG,      ///< %lu, %lo, %lx, %lX
   TYPE_ULONGLONG,  ///< %llu, %llo, %llx, %llX
 
@@ -45,7 +49,11 @@ enum SpecifierType {
   // Специальные типы
   TYPE_POINTER,  ///< %p (void*)
   TYPE_PERCENT,  ///< %%
-  TYPE_PTR,      ///< %n (int*)
+  TYPE_N_INT,    ///< %n (int*)
+  TYPE_N_SCHAR,
+  TYPE_N_SHORT,
+  TYPE_N_LONG,
+  TYPE_N_LONGLONG
 };
 
 typedef struct {
@@ -73,6 +81,23 @@ enum FormatChar {
   CHAR_G   ///< Формат 'g'
 };
 
+typedef struct {
+  const char symbol;
+  int *flag;
+} FlagMapping;
+
+typedef struct {
+  const char *str;
+  int mod;
+} ModifierMapping;
+
+typedef struct {
+  char specifier;
+  void (*handler)(FormatParams *);
+} SpecifierMapping;
+
+#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
+
 // Константы форматирования
 #define BaseDecimal 10  ///< Десятичное основание
 #define BaseOctal 8     ///< Восьмеричное основание
@@ -92,8 +117,7 @@ int s21_sprintf(char *str, const char *format, ...) {
 
   for (int i = 0; format[i] && !error;) {
     if (format[i] == '%') {
-      i++;
-      if (format[i] == '\0') {
+      if (format[i++] == '\0') {
         error = true;
         continue;
       }
@@ -130,8 +154,8 @@ static FormatParams init_format_params() {
   return params;
 }
 
-static int parse_format(const char *format, int *i, FormatParams *params,
-                        va_list args) {
+static void parse_format(const char *format, int *i, FormatParams *params,
+                         va_list args) {
   parse_flags(format, i, params);
   parse_width(format, i, params, args);
   parse_precision(format, i, params, args);
@@ -140,30 +164,23 @@ static int parse_format(const char *format, int *i, FormatParams *params,
 }
 
 static void parse_flags(const char *format, int *i, FormatParams *params) {
-  typedef struct {
-    char symbol;
-    bool *flag;
-  } FlagMapping;
-
   FlagMapping mappings[] = {{'-', &params->flag_minus},
                             {'+', &params->flag_plus},
                             {' ', &params->flag_space},
                             {'#', &params->flag_hash},
                             {'0', &params->flag_zero}};
-  size_t num_mappings = sizeof(mappings) / sizeof(mappings[0]);
 
   bool continue_parsing = true;
   while (continue_parsing) {
     bool flag_found = false;
 
-    for (size_t j = 0; j < num_mappings && !flag_found; j++) {
+    for (size_t j = 0; j < ARRAY_SIZE(mappings) && !flag_found; j++) {
       if (format[*i] == mappings[j].symbol && !(*mappings[j].flag)) {
         *mappings[j].flag = true;
         (*i)++;
         flag_found = true;
       }
     }
-
     continue_parsing = flag_found;
   }
 }
@@ -194,120 +211,28 @@ static void parse_precision(const char *format, int *i, FormatParams *p,
                             va_list args) {
   if (format[*i] != '.') return;
   (*i)++;
-  p->precision_type = true;  // При "%.q" точность по умолчанию -> 0
+  p->precision_type = true;  // При "%.[type]" точность по умолчанию -> 0
   parse_numeric_value(format, i, args, &p->precision_type, &p->precision_value);
 }
 
-static void parse_modifier(const char *format, int *i, FormatParams *params) {
-  typedef struct {
-    const char *sequence;
-    int length;
-    int modifier;
-  } ModifierMapping;
+static void parse_modifier(const char *format, int *idx, FormatParams *params) {
+  ModifierMapping modifiers[] = {{"hh", LENGTH_HH},
+                                 {"h", LENGTH_H},
+                                 {"ll", LENGTH_LL},
+                                 {"l", LENGTH_L},
+                                 {"L", LENGTH_CAP_L}};
 
-  ModifierMapping mappings[] = {{"hh", 2, LENGTH_HH},
-                                {"h", 1, LENGTH_H},
-                                {"ll", 2, LENGTH_LL},
-                                {"l", 1, LENGTH_L},
-                                {"L", 1, LENGTH_CAP_L}};
-  size_t num_mappings = sizeof(mappings) / sizeof(mappings[0]);
-
-  for (size_t idx = 0; idx < num_mappings; idx++) {
-    if (strncmp(format + *i, mappings[idx].sequence, mappings[idx].length) ==
-        0) {
-      params->modifier = mappings[idx].modifier;
-      *i += mappings[idx].length;
+  for (size_t i = 0; i < ARRAY_SIZE(modifiers); i++) {
+    size_t len = strlen(modifiers[i].str);
+    if (strncmp(format + *idx, modifiers[i].str, len) == 0) {
+      params->modifier = modifiers[i].mod;
+      *idx += len;
       return;
     }
   }
 }
 
-static void set_signed_type(FormatParams *params) {
-  if (params->modifier == LENGTH_LL)
-    params->type = TYPE_LONGLONG;
-  else if (params->modifier == LENGTH_L)
-    params->type = TYPE_LONG;
-  else
-    params->type = TYPE_INT;
-}
-
-static void set_unsigned_type(FormatParams *params) {
-  if (params->modifier == LENGTH_LL)
-    params->type = TYPE_ULONGLONG;
-  else if (params->modifier == LENGTH_L)
-    params->type = TYPE_ULONG;
-  else
-    params->type = TYPE_UINT;
-}
-
-static void set_float_type(FormatParams *params) {
-  if (params->modifier == LENGTH_CAP_L)
-    params->type = TYPE_LONGDOUBLE;
-  else
-    params->type = TYPE_FLOAT;
-}
-
-static void handle_di_specifier(FormatParams *params) {
-  set_signed_type(params);
-}
-
-static void handle_u_specifier(FormatParams *params) {
-  set_unsigned_type(params);
-  params->base = BaseDecimal;
-}
-
-static void handle_o_specifier(FormatParams *params) {
-  set_unsigned_type(params);
-  params->base = BaseOctal;
-}
-
-static void handle_x_specifier(FormatParams *params) {
-  set_unsigned_type(params);
-  params->base = BaseHexadecimal;
-}
-
-static void handle_f_specifier(FormatParams *params) {
-  set_float_type(params);
-  params->spec_char = CHAR_F;
-}
-
-static void handle_e_specifier(FormatParams *params) {
-  set_float_type(params);
-  params->spec_char = CHAR_E;
-}
-
-static void handle_g_specifier(FormatParams *params) {
-  set_float_type(params);
-  params->spec_char = CHAR_G;
-}
-
-static void handle_c_specifier(FormatParams *params) {
-  params->type = (params->modifier == LENGTH_L) ? TYPE_WCHAR : TYPE_CHAR;
-}
-
-static void handle_s_specifier(FormatParams *params) {
-  params->type = (params->modifier == LENGTH_L) ? TYPE_WSTRING : TYPE_STRING;
-}
-
-static void handle_p_specifier(FormatParams *params) {
-  params->type = TYPE_POINTER;
-  params->base = BaseHexadecimal;
-}
-
-static void handle_percent_specifier(FormatParams *params) {
-  params->type = TYPE_PERCENT;
-}
-
-static void handle_n_specifier(FormatParams *params) {
-  params->type = TYPE_PTR;
-}
-
 static void parse_specifier(const char *format, int *i, FormatParams *params) {
-  typedef struct {
-    char specifier;
-    void (*handler)(FormatParams *);
-  } SpecifierMapping;
-
   char original_spec = format[*i];
   params->specifier = original_spec;
   params->uppercase = isupper(original_spec);
@@ -322,22 +247,107 @@ static void parse_specifier(const char *format, int *i, FormatParams *params) {
       {'p', handle_p_specifier},  {'%', handle_percent_specifier},
       {'n', handle_n_specifier}};
 
-  size_t num_mappings = sizeof(mappings) / sizeof(mappings[0]);
   bool found = false;
 
-  for (size_t idx = 0; idx < num_mappings && !found; idx++) {
+  for (size_t idx = 0; idx < ARRAY_SIZE(mappings) && !found; idx++) {
     if (mappings[idx].specifier == spec) {
       mappings[idx].handler(params);
       found = true;
     }
   }
 
-  (*i)++;
+  if (found) (*i)++;
 }
 
-static int process_format_conversion(char *str, int *str_idx,
+static void handle_di_specifier(FormatParams *params) {
+  set_signed_type(params);
+}
+static void handle_u_specifier(FormatParams *params) {
+  set_unsigned_type(params);
+  params->base = BaseDecimal;
+}
+static void handle_o_specifier(FormatParams *params) {
+  set_unsigned_type(params);
+  params->base = BaseOctal;
+}
+static void handle_x_specifier(FormatParams *params) {
+  set_unsigned_type(params);
+  params->base = BaseHexadecimal;
+}
+static void handle_f_specifier(FormatParams *params) {
+  set_float_type(params);
+  params->spec_char = CHAR_F;
+}
+static void handle_e_specifier(FormatParams *params) {
+  set_float_type(params);
+  params->spec_char = CHAR_E;
+}
+static void handle_g_specifier(FormatParams *params) {
+  set_float_type(params);
+  params->spec_char = CHAR_G;
+}
+static void handle_c_specifier(FormatParams *params) {
+  params->type = (params->modifier == LENGTH_L) ? TYPE_WCHAR : TYPE_CHAR;
+}
+static void handle_s_specifier(FormatParams *params) {
+  params->type = (params->modifier == LENGTH_L) ? TYPE_WSTRING : TYPE_STRING;
+}
+static void handle_p_specifier(FormatParams *params) {
+  params->type = TYPE_POINTER;
+  params->base = BaseHexadecimal;
+}
+static void handle_percent_specifier(FormatParams *params) {
+  params->type = TYPE_PERCENT;
+}
+static void handle_n_specifier(FormatParams *params) {
+  handle_n_specifier(params);
+}
+static void set_signed_type(FormatParams *params) {
+  if (params->modifier == LENGTH_LL)
+    params->type = TYPE_LONGLONG;
+  else if (params->modifier == LENGTH_L)
+    params->type = TYPE_LONG;
+  else if (params->modifier == LENGTH_H)
+    params->type = TYPE_SHORT;
+  else if (params->modifier == LENGTH_HH)
+    params->type = TYPE_SCHAR;
+  else
+    params->type = TYPE_INT;
+}
+static void set_unsigned_type(FormatParams *params) {
+  if (params->modifier == LENGTH_LL)
+    params->type = TYPE_ULONGLONG;
+  else if (params->modifier == LENGTH_L)
+    params->type = TYPE_ULONG;
+  else if (params->modifier == LENGTH_H)
+    params->type = TYPE_USHORT;
+  else if (params->modifier == LENGTH_HH)
+    params->type = TYPE_UCHAR;
+  else
+    params->type = TYPE_UINT;
+}
+static void set_float_type(FormatParams *params) {
+  if (params->modifier == LENGTH_CAP_L)
+    params->type = TYPE_LONGDOUBLE;
+  else
+    params->type = TYPE_FLOAT;
+}
+static void handle_n_specifier(FormatParams *params) {
+  if (params->modifier == LENGTH_HH)
+    params->type = TYPE_N_SCHAR;
+  else if (params->modifier == LENGTH_H)
+    params->type = TYPE_N_SHORT;
+  else if (params->modifier == LENGTH_L)
+    params->type = TYPE_N_LONG;
+  else if (params->modifier == LENGTH_LL)
+    params->type = TYPE_N_LONGLONG;
+  else
+    params->type = TYPE_N_INT;
+}
+
+static bool process_format_conversion(char *str, int *str_idx,
                                      FormatParams params, va_list args) {
-  int result = 0;
+  bool result = true;
 
   if (params.type <= TYPE_LONGLONG)
     handle_integer(str, str_idx, params, args);
@@ -355,10 +365,10 @@ static int process_format_conversion(char *str, int *str_idx,
     result = handle_wstring(str, str_idx, params, args);
   else if (params.type == TYPE_POINTER)
     handle_pointer(str, str_idx, params, args);
-  else if (params.type == TYPE_PTR)
-    handle_count(str, str_idx, params, args);
   else if (params.type == TYPE_PERCENT)
     handle_percent(str, str_idx);
+  else if (params.type <= TYPE_N_LONGLONG)
+    handle_count(str, str_idx, params, args);
 
   return result;
 }
