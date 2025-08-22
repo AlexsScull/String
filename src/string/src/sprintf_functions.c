@@ -174,7 +174,7 @@ int s21_sprintf(char *str, const char *format, ...) {
   va_start(args, format);
   int idx = 0;
 
-  for (int i = 0; format[i]; ) {
+  for (int i = 0; format[i];) {
     if (format[i] == '%') {
       i++;
       if (format[i] == '\0') break;
@@ -272,6 +272,7 @@ static void parse_precision(const char *format, int *i, int params[],
                             va_list args) {
   if (format[*i] != '.') return;
   (*i)++;
+  params[PARAM_PRECISION] = true;
   if (format[*i] == '*')
     params[PARAM_PRECISION] = true,
     params[PARAM_PRECISION_ASTERISK_VALUE] = abs(va_arg(args, int)), (*i)++;
@@ -316,7 +317,7 @@ static void parse_specifier(const char *format, int *i, int params[]) {
   else if (spec == 'n')
     params[TYPE] = TYPE_PTR;
 
-    (*i)++;
+  (*i)++;
 }
 
 static void parse_integer_specifier(int params[]) {
