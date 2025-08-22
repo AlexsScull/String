@@ -14,18 +14,6 @@
 //                 Перечисления и константы               //
 ////////////////////////////////////////////////////////////
 
-/** Типы ширины форматирования */
-enum WidthType {
-  WIDTH_NUMBER,   ///< (number) for width
-  WIDTH_ASTERISK  ///< '*' for width
-};
-
-/** Типы точности форматирования */
-enum PrecisionType {
-  PRECISION_NUMBER,   ///< (number) for precision
-  PRECISION_ASTERISK  ///< '.*' for precision
-};
-
 /** Модификаторы длины */
 enum ModifierType {
   LENGTH_NULL,  ///< ' '
@@ -186,7 +174,7 @@ int s21_sprintf(char *str, const char *format, ...) {
   va_start(args, format);
   int idx = 0;
 
-  for (int i = 0; format[i]; i++) {
+  for (int i = 0; format[i]; ) {
     if (format[i] == '%') {
       i++;
       if (format[i] == '\0') break;
@@ -219,7 +207,7 @@ int s21_sprintf(char *str, const char *format, ...) {
         return -1;
       }
     } else {
-      str[idx++] = format[i];
+      str[idx++] = format[i++];
     }
   }
 
@@ -242,116 +230,93 @@ static int parse_number(const char *format, int *i) {
 }
 
 static void parse_flag(const char *format, int *i, int params[]) {
-  bool b = true;
-  while (b) {
-    if (format[*i] == '-' && !params[FLAG_MINUS]) {
-      params[FLAG_MINUS] = true;
-      (*i)++;
-    } else if (format[*i] == '+' && !params[FLAG_PLUS]) {
-      params[FLAG_PLUS] = true;
-      (*i)++;
-    } else if (format[*i] == ' ' && !params[FLAG_SPACE]) {
-      params[FLAG_SPACE] = true;
-      (*i)++;
-    } else if (format[*i] == '#' && !params[FLAG_HASH]) {
-      params[FLAG_HASH] = true;
-      (*i)++;
-    } else if (format[*i] == '0' && !params[FLAG_ZERO]) {
-      params[FLAG_ZERO] = true;
-      (*i)++;
-    } else
-      b = false;
+  typedef struct {
+    char symbol;
+    int *flag_ptr;
+  } FlagMapping;
+
+  FlagMapping mappings[] = {{'-', &params[FLAG_MINUS]},
+                            {'+', &params[FLAG_PLUS]},
+                            {' ', &params[FLAG_SPACE]},
+                            {'#', &params[FLAG_HASH]},
+                            {'0', &params[FLAG_ZERO]}};
+
+  size_t num_mappings = sizeof(mappings) / sizeof(mappings[0]);
+
+  bool continue_parsing = true;
+  while (continue_parsing) {
+    bool flag_found = false;
+
+    for (size_t j = 0; j < num_mappings && !flag_found; j++) {
+      if (format[*i] == mappings[j].symbol && !(*mappings[j].flag_ptr)) {
+        *mappings[j].flag_ptr = true;
+        (*i)++;
+        flag_found = true;
+      }
+    }
+    continue_parsing = flag_found;
   }
 }
 
 static void parse_width(const char *format, int *i, int params[],
                         va_list args) {
-  if (format[*i] == '*') {
-    params[PARAM_WIDTH] = WIDTH_ASTERISK;
-    params[PARAM_WIDTH_ASTERISK_VALUE] = va_arg(args, int);
-    (*i)++;
-  } else if (isdigit(format[*i])) {
-    bool b = false;
-    if (format[*i - 1] == '-') {
-      params[FLAG_MINUS] = false;
-      b = true;
-    }
-    params[PARAM_WIDTH] = WIDTH_NUMBER;
+  if (format[*i] == '*')
+    params[PARAM_WIDTH] = true,
+    params[PARAM_WIDTH_ASTERISK_VALUE] = abs(va_arg(args, int)), (*i)++;
+  else if (isdigit(format[*i]))
+    params[PARAM_WIDTH] = true,
     params[PARAM_WIDTH_ASTERISK_VALUE] = parse_number(format, i);
-    if (b) params[PARAM_WIDTH_ASTERISK_VALUE] *= -1;
-  }
 }
 
 static void parse_precision(const char *format, int *i, int params[],
                             va_list args) {
-  if (format[*i] == '.') {
-    (*i)++;
-    if (format[*i] == '*') {
-      params[PARAM_PRECISION] = PRECISION_ASTERISK;
-      params[PARAM_PRECISION_ASTERISK_VALUE] = va_arg(args, int);
-      (*i)++;
-    } else if (isdigit(format[*i])) {
-      params[PARAM_PRECISION] = PRECISION_NUMBER;
-      params[PARAM_PRECISION_ASTERISK_VALUE] = parse_number(format, i);
-      if (params[PARAM_PRECISION_ASTERISK_VALUE] < 0)
-        params[PARAM_PRECISION_ASTERISK_VALUE] = 0;
-    }
-  }
+  if (format[*i] != '.') return;
+  (*i)++;
+  if (format[*i] == '*')
+    params[PARAM_PRECISION] = true,
+    params[PARAM_PRECISION_ASTERISK_VALUE] = abs(va_arg(args, int)), (*i)++;
+  else if (isdigit(format[*i]))
+    params[PARAM_PRECISION] = true,
+    params[PARAM_PRECISION_ASTERISK_VALUE] = parse_number(format, i);
 }
 
 static void parse_modifier(const char *format, int *i, int *modifier) {
-  *modifier = LENGTH_NULL;
-  if (format[*i] == 'h') {
-    *modifier = (format[*i + 1] == 'h') ? LENGTH_HH : LENGTH_H;
-    *i += (*modifier == LENGTH_HH) ? 2 : 1;
-  } else if (format[*i] == 'l') {
-    *modifier = (format[*i + 1] == 'l') ? LENGTH_LL : LENGTH_L;
-    *i += (*modifier == LENGTH_LL) ? 2 : 1;
-  } else if (format[*i] == 'L') {
-    *modifier = LENGTH_CAP_L;
-    (*i)++;
-  }
+  char c = format[*i];
+  char n = format[*i + 1];
+
+  if (c == 'h')
+    *modifier = (n == 'h') ? (*i += 2, LENGTH_HH) : (*i += 1, LENGTH_H);
+  else if (c == 'l')
+    *modifier = (n == 'l') ? (*i += 2, LENGTH_LL) : (*i += 1, LENGTH_L);
+  else if (c == 'L')
+    *modifier = LENGTH_CAP_L, (*i)++;
 }
 
 static void parse_specifier(const char *format, int *i, int params[]) {
-  params[PARAM_SPECIFIER] = format[*i];
-  switch (params[PARAM_SPECIFIER]) {
-    case 'd':
-    case 'i':
-      parse_integer_specifier(params);
-      break;
-    case 'u':
-    case 'o':
-    case 'x':
-    case 'X':
-      parse_unsigned_specifier(params, params[PARAM_SPECIFIER]);
-      break;
-    case 'f':
-    case 'e':
-    case 'E':
-    case 'g':
-    case 'G':
-      parse_float_specifier(params, params[PARAM_SPECIFIER]);
-      break;
-    case 'c':
-      params[TYPE] =
-          (params[PARAM_MODIFIER] == LENGTH_L) ? TYPE_WCHAR : TYPE_CHAR;
-      break;
-    case 's':
-      params[TYPE] =
-          (params[PARAM_MODIFIER] == LENGTH_L) ? TYPE_WSTRING : TYPE_STRING;
-      break;
-    case 'p':
-      params[TYPE] = TYPE_POINTER;
-      params[PARAM_BASE] = BaseHexadecimal;
-      break;
-    case '%':
-      params[TYPE] = TYPE_PERCENT;
-      break;
-    case 'n':
-      params[TYPE] = TYPE_PTR;
-      break;
-  }
+  char spec = params[PARAM_SPECIFIER] = format[*i];
+  if (isupper(spec)) params[PARAM_UPPERCASE] = true;
+  spec = tolower(spec);
+
+  if (spec == 'd' || spec == 'i')
+    parse_integer_specifier(params);
+  else if (spec == 'u' || spec == 'o' || spec == 'x')
+    parse_unsigned_specifier(params, spec);
+  else if (spec == 'f' || spec == 'e' || spec == 'g')
+    parse_float_specifier(params, spec);
+  else if (spec == 'c')
+    params[TYPE] =
+        (params[PARAM_MODIFIER] == LENGTH_L) ? TYPE_WCHAR : TYPE_CHAR;
+  else if (spec == 's')
+    params[TYPE] =
+        (params[PARAM_MODIFIER] == LENGTH_L) ? TYPE_WSTRING : TYPE_STRING;
+  else if (spec == 'p')
+    params[TYPE] = TYPE_POINTER, params[PARAM_BASE] = BaseHexadecimal;
+  else if (spec == '%')
+    params[TYPE] = TYPE_PERCENT;
+  else if (spec == 'n')
+    params[TYPE] = TYPE_PTR;
+
+    (*i)++;
 }
 
 static void parse_integer_specifier(int params[]) {
@@ -373,11 +338,8 @@ static void parse_unsigned_specifier(int params[], char specifier) {
 
   if (specifier == 'o') {
     params[PARAM_BASE] = BaseOctal;
-  } else if (specifier == 'x' || specifier == 'X') {
+  } else if (specifier == 'x') {
     params[PARAM_BASE] = BaseHexadecimal;
-    if (specifier == 'X') {
-      params[PARAM_UPPERCASE] = true;
-    }
   }
 }
 
@@ -387,17 +349,12 @@ static void parse_float_specifier(int params[], char specifier) {
   else
     params[TYPE] = TYPE_FLOAT;
 
-  char base_char = tolower(specifier);
-  if (base_char == 'e') {
+  if (specifier == 'e') {
     params[PARAM_SPEC_CHAR] = CHAR_E;
-  } else if (base_char == 'g') {
+  } else if (specifier == 'g') {
     params[PARAM_SPEC_CHAR] = CHAR_G;
-  } else {
+  } else if (specifier == 'f') {
     params[PARAM_SPEC_CHAR] = CHAR_F;
-  }
-
-  if (isupper(specifier)) {
-    params[PARAM_UPPERCASE] = true;
   }
 }
 
@@ -779,7 +736,7 @@ static void convert_uint_to_str(char *str, int *idx, unsigned long long value,
 static void convert_buffer_to_str(char *buffer, char sign_char, int num_len,
                                   char *str, int *idx, int params[]) {
   int width = params[PARAM_WIDTH_ASTERISK_VALUE];
-  bool left_align = (width < 0);
+  bool left_align = params[FLAG_MINUS];
   width = abs(width);
 
   int precision = params[PARAM_PRECISION_ASTERISK_VALUE];
@@ -839,7 +796,7 @@ static void convert_string_buffer_to_str(char *str, int *idx,
   int width = params[PARAM_WIDTH_ASTERISK_VALUE];
   int precision = params[PARAM_PRECISION_ASTERISK_VALUE];
 
-  bool left_align = (width < 0);
+  bool left_align = params[FLAG_MINUS];
   if (width < 0) width = -width;
 
   int output_len;
@@ -880,7 +837,7 @@ static void convert_float_buffer_to_str(char *buffer, char sign_char,
   int precision = params[PARAM_PRECISION_ASTERISK_VALUE];
   int sign_len = (sign_char != 0) ? 1 : 0;
 
-  bool left_align = (width < 0);
+  bool left_align = params[FLAG_MINUS];
   if (width < 0) width = -width;
 
   int padding = width - (num_len + sign_len);
