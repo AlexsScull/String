@@ -245,6 +245,9 @@ char *s21_strrchr(const char *str, int c) {
   }
   return ptr;
 }
+
+/* Разбираемся с Unicode*/
+
 char *s21_strstr(const char *haystack, const char *needle) {
   /*Задача:
   Найти первое вхождение подстроки needle в haystack.
@@ -291,6 +294,53 @@ char *s21_strstr(const char *haystack, const char *needle) {
 
   return ptr;
 }
+
+// char *s21_strstr(const char *haystack, const char *needle) {
+//   /*Задача:
+//   Найти первое вхождение подстроки needle в haystack.
+//   Обратить внимание:
+
+//   Если needle = "", возвращает haystack.
+
+//   Чувствителен к регистру.*/
+
+//   if (haystack == S21_NULL) {
+//     return S21_NULL;
+//   }
+
+//   char *ptr = S21_NULL;
+//   if (*needle == '\0' || needle == S21_NULL) {
+//     ptr = (char *)&haystack[0];
+//   }
+//   int i = 0;
+//   int j = 0;
+//   int flag = 0;
+//   int flag2 = 0;
+//   while (haystack[i] != '\0' && flag == 0 && ptr == S21_NULL) {
+//     if (haystack[i] == needle[j]) {
+//       ptr = (char *)&haystack[i];
+//       flag = 1;
+//     }
+//     if (flag == 1) {
+//       while (needle[j] != '\0') {
+//         if (haystack[i] != needle[j]) {
+//           flag2 = 1;
+//         }
+//         j++;
+//         i++;
+//       }
+//       if (flag2 == 1) {
+//         flag = 0;
+//         j = 0;
+//         ptr = S21_NULL;
+//         flag2 = 0;
+//       }
+//     }
+//     i++;
+//   }
+
+//   return ptr;
+// }
 char *s21_strtok(char *str, const char *delim) {
   /*Задача:
   Разбить строку str на токены по разделителям из delim.
@@ -302,33 +352,36 @@ char *s21_strtok(char *str, const char *delim) {
 
   Модифицирует исходную строку (заменяет разделители на \0).*/
 
-  static char *last_pos = S21_NULL;  // объявляем все штучки что нужны
+  static char *last_pos = S21_NULL;
   char *token_start = S21_NULL;
   char *token_end = S21_NULL;
 
-  if (str != S21_NULL) {  // первый вызов
-    token_start = str;
-    token_end = s21_strpbrk(token_start, delim);
-    while (token_start == token_end) {
-      token_start++;
-      token_end = s21_strpbrk(token_start, delim);
-    }
-    // if (i != 0){
-    //   token_end = token_end + i;
-    // }
-    if (token_end != S21_NULL) {
-      last_pos = token_end + 1;
-      *token_end = '\0';
-    } else {  // пока думаем что здесь делать
-      last_pos = S21_NULL;
-    }
-  }
+  // if (str != S21_NULL) {  // первый вызов
+  //   token_start = str;
+  //   token_end = s21_strpbrk(token_start, delim);
+  //   while (token_start == token_end) {
+  //     token_start++;
+  //     token_end = s21_strpbrk(token_start, delim);
+  //   }
+  //   // if (i != 0){
+  //   //   token_end = token_end + i;
+  //   // }
+  //   if (token_end != S21_NULL) {
+  //     last_pos = token_end + 1;
+  //     *token_end = '\0';
+  //   } else {  // пока думаем что здесь делать
+  //     last_pos = S21_NULL;
+  //   }
+  // }
 
   // if (last_pos == NULL && str == NULL){
   //   return NULL;
   // }
+  if (str != NULL) {
+    last_pos = str;
+  }
 
-  if (last_pos != S21_NULL && *last_pos != '\0' && str == S21_NULL) {
+  if (last_pos != S21_NULL && *last_pos != '\0') {
     token_start = last_pos;
     token_end = s21_strpbrk(token_start, delim);
     while (token_start == token_end) {
@@ -338,7 +391,7 @@ char *s21_strtok(char *str, const char *delim) {
     if (token_end != S21_NULL) {
       last_pos = token_end + 1;
       *token_end = '\0';
-    } else {  // пока думаем что здесь делать
+    } else {
       token_start = last_pos;
       last_pos = S21_NULL;
     }
@@ -346,68 +399,3 @@ char *s21_strtok(char *str, const char *delim) {
 
   return token_start;
 }
-
-/* это эксперементальная часть */
-// char *s21_strtok(char *str, const char *delim) {
-//   /*Задача:
-//   Разбить строку str на токены по разделителям из delim.
-//   Обратить внимание:
-
-//   При первом вызове str указывает на строку, при последующих — NULL.
-
-//   Сохраняет состояние между вызовами (статическая переменная). (хвост)
-
-//   Модифицирует исходную строку (заменяет разделители на \0).*/
-
-//   static char *last_pos = NULL;  // объявляем все штучки что нужны
-//   char *token_start = NULL;
-//   char *token_end = NULL;
-
-//   if (str != NULL) {  // первый вызов
-//     token_start = str;
-//     while (*token_start != '\0' && s21_strcspn(token_start, delim) == 0){
-//       token_start++;
-//     }
-//     last_pos = token_start;
-//     // token_end = s21_strpbrk(token_start, delim);
-//     // while (token_start == token_end) {
-//     //   token_start++;
-//     //   token_end = s21_strpbrk(token_start, delim);
-//     // }
-//     // if (i != 0){
-//     //   token_end = token_end + i;
-//     // }
-//     // if (token_end != NULL) {
-//     //   last_pos = token_end + 1;
-//     //   *token_end = '\0';
-//     // } else {  // пока думаем что здесь делать
-//     //   last_pos = NULL;
-//     // }
-//   }
-
-//   // if (last_pos == NULL && str == NULL){
-//   //   return NULL;
-//   // }
-
-//   // if (str == NULL){
-//   //   last_pos = NULL;
-//   // }
-
-//   if (last_pos != NULL && *last_pos != '\0' && str == NULL) {
-//     token_start = last_pos;
-//     token_end = s21_strpbrk(token_start, delim);
-//     while (token_start == token_end) {
-//       token_start++;
-//       token_end = s21_strpbrk(token_start, delim);
-//     }
-//     if (token_end != NULL) {
-//       last_pos = token_end + 1;
-//       *token_end = '\0';
-//     } else {  // пока думаем что здесь делать
-//       token_start = last_pos;
-//       last_pos = NULL;
-//     }
-//   }
-
-//   return token_start;
-// }

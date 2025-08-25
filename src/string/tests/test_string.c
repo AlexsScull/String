@@ -515,9 +515,10 @@ START_TEST(test_strstr_long_string) {
 // Основные случаи работы
 START_TEST(test_strtok_basic) {
   char str[] = "Hello, world!";
+  char str2[] = "Hello, world!";
   const char *delim = " ,!";
   char *token = s21_strtok(str, delim);
-  char *expected = strtok(str, delim);
+  char *expected = strtok(str2, delim);
   while (token != NULL && expected != NULL) {
     ck_assert_str_eq(token, expected);
     token = s21_strtok(NULL, delim);
@@ -528,9 +529,10 @@ START_TEST(test_strtok_basic) {
 
 START_TEST(test_strtok_basic_whitespace) {
   char str[] = "Hello, world! This is a cat.";
+  char str2[] = "Hello, world! This is a cat.";
   const char *delim = " ";
   char *token = s21_strtok(str, delim);
-  char *expected = strtok(str, delim);
+  char *expected = strtok(str2, delim);
   while (token != NULL && expected != NULL) {
     ck_assert_str_eq(token, expected);
     token = s21_strtok(NULL, delim);
@@ -560,9 +562,10 @@ START_TEST(test_strtok_null_ptr) {
 
 START_TEST(test_strtok_unicode) {
   char str[] = "Привет,мир!";
+  char str2[] = "Привет,мир!";
   const char *delim = ",!";
   char *token = s21_strtok(str, delim);
-  char *expected = strtok(str, delim);
+  char *expected = strtok(str2, delim);
 
   ck_assert_str_eq(token, expected);  // Unicode символы
 
