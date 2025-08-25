@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <wchar.h>
 
 #include "../include/s21_string.h"
 
@@ -121,7 +122,9 @@ START_TEST(test_strchr_negative_char) {
 
 START_TEST(test_strchr_unicode) {
   const char *str = "Привет";
-  ck_assert_ptr_eq(s21_strchr(str, 'и'), strchr(str, 'и'));  // Unicode символ
+  wchar_t wc = L'и';
+  int c = (int)wc; 
+  ck_assert_ptr_eq(s21_strchr(str, c), strchr(str, c));  // Unicode символ
 }
 
 START_TEST(test_strchr_long_string) {
@@ -435,8 +438,10 @@ START_TEST(test_strrchr_null_ptr) {
 }
 
 START_TEST(test_strrchr_unicode) {
-  const char *str = "Привет";
-  ck_assert_ptr_eq(s21_strrchr(str, 'и'), strrchr(str, 'и'));  // Unicode символ
+  const char *str = "Прииивет";
+  wchar_t wc = L'и';
+  int c = (int)wc; 
+  ck_assert_ptr_eq(s21_strrchr(str, c), strrchr(str, c));  // Unicode символ
 }
 
 START_TEST(test_strrchr_long_string) {

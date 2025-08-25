@@ -41,7 +41,7 @@ char *s21_strchr(const char *str, int c) {
 
   Если c = '\0', возвращает указатель на конец строки.*/
 
-  char *ptr;
+  char *ptr = S21_NULL;
   int flag = 0;
   int i = 0;
   int len = 0;
@@ -98,7 +98,6 @@ int s21_strncmp(const char *str1, const char *str2, s21_size_t n) {
     result = 0;
   }
   return result;
-  /*ТУТ ЧТО-ТО СТРАННОЕ ПОСМОТРЕТЬ ЕЩЁ РАЗ*/
 }
 char *s21_strncpy(char *dest, const char *src, s21_size_t n) {
   /*Задача:
@@ -191,7 +190,7 @@ char *s21_strpbrk(const char *str1, const char *str2) {
 
   int i = 0;
   int j = 0;
-  char *ptr;
+  char *ptr = S21_NULL;
   int flag = 0;
   while (str1[i] != '\0' && flag == 0) {
     while (str2[j] != '\0' && flag == 0) {
@@ -219,7 +218,7 @@ char *s21_strrchr(const char *str, int c) {
   Если c = '\0', возвращает указатель на конец строки.
   Если совпадений нет, возвращает NULL*/
 
-  char *ptr;
+  char *ptr = S21_NULL;
   int flag = 0;
   int i = 0;
   int len = 0;
@@ -270,13 +269,13 @@ char *s21_strstr(const char *haystack, const char *needle) {
   int flag = 0;
   int flag2 = 0;
   while (haystack[i] != '\0' && flag == 0 && ptr == S21_NULL) {
-    if (haystack[i] == needle[j]) {
+    if ((haystack[i] - needle[j]) == 0) {
       ptr = (char *)&haystack[i];
       flag = 1;
     }
     if (flag == 1) {
       while (needle[j] != '\0') {
-        if (haystack[i] != needle[j]) {
+        if ((haystack[i] - needle[j]) != 0) {
           flag2 = 1;
         }
         j++;
