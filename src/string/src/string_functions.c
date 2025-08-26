@@ -24,7 +24,6 @@ char *s21_strncat(char *dest, const char *src, s21_size_t n) {
     n = len_src;
   }
 
-  
   for (int j = 0; j < n; i++, j++) {
     dest[i] = src[j];
   }
@@ -296,32 +295,6 @@ char *s21_strstr(const char *haystack, const char *needle) {
   return ptr;
 }
 
-// char* s21_strstr(const char* haystack, const char* needle) {
-//   char* res = S21_NULL;
-
-//   while (*haystack != '\0') {
-//     const char* h = haystack;
-//     const char* n = needle;
-
-//     while (*h != '\0' && *n != '\0' && *h == *n) {
-//       h++;
-//       n++;
-//     }
-
-//     if (*n == '\0') {
-//       res = (char*)haystack;
-//       break;
-//     }
-
-//     haystack++;
-//   }
-
-//   if (*needle == '\0') {
-//     res = (char*)haystack;
-//   }
-
-//   return res;
-// }
 // char *s21_strstr(const char *haystack, const char *needle) {
 //   /*Задача:
 //   Найти первое вхождение подстроки needle в haystack.
