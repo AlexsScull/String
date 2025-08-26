@@ -24,9 +24,11 @@ char *s21_strncat(char *dest, const char *src, s21_size_t n) {
     n = len_src;
   }
 
+  
   for (int j = 0; j < n; i++, j++) {
     dest[i] = src[j];
   }
+  dest[i] = '\0';
 
   return dest;
 }
@@ -88,9 +90,10 @@ int s21_strncmp(const char *str1, const char *str2, s21_size_t n) {
 
   int result = 0;
   int i = 0;
+
   if (str1 != S21_NULL && str2 != S21_NULL) {
-    while (n > 0 && result == 0 && str1[i] != '\0' && str2[i] != '\0') {
-      result = (unsigned char)str1[i] - (unsigned char)str2[i];
+    while (n > 0 && result == 0) {
+      result = (char)str1[i] - (char)str2[i];
       n--;
       i++;
     }
@@ -269,13 +272,13 @@ char *s21_strstr(const char *haystack, const char *needle) {
   int flag = 0;
   int flag2 = 0;
   while (haystack[i] != '\0' && flag == 0 && ptr == S21_NULL) {
-    if ((haystack[i] - needle[j]) == 0) {
+    if (haystack[i] == needle[j]) {
       ptr = (char *)&haystack[i];
       flag = 1;
     }
     if (flag == 1) {
       while (needle[j] != '\0') {
-        if ((haystack[i] - needle[j]) != 0) {
+        if (haystack[i] != (char)needle[j]) {
           flag2 = 1;
         }
         j++;
@@ -290,10 +293,35 @@ char *s21_strstr(const char *haystack, const char *needle) {
     }
     i++;
   }
-
   return ptr;
 }
 
+// char* s21_strstr(const char* haystack, const char* needle) {
+//   char* res = S21_NULL;
+
+//   while (*haystack != '\0') {
+//     const char* h = haystack;
+//     const char* n = needle;
+
+//     while (*h != '\0' && *n != '\0' && *h == *n) {
+//       h++;
+//       n++;
+//     }
+
+//     if (*n == '\0') {
+//       res = (char*)haystack;
+//       break;
+//     }
+
+//     haystack++;
+//   }
+
+//   if (*needle == '\0') {
+//     res = (char*)haystack;
+//   }
+
+//   return res;
+// }
 // char *s21_strstr(const char *haystack, const char *needle) {
 //   /*Задача:
 //   Найти первое вхождение подстроки needle в haystack.

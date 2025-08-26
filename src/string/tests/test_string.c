@@ -32,6 +32,24 @@ START_TEST(test_strncat_full_copy) {
   ck_assert_str_eq(dest, expected);  // Проверка полного копирования
 }
 
+START_TEST(test_strncat_empty_dest) {
+  char dest[20] = "";
+  const char *src = "Hello, world!";
+  char expected[20] = "";
+  strncat(expected, src, 13);
+  s21_strncat(dest, src, 13);
+  ck_assert_str_eq(dest, expected);  // Пустая строка dest
+}
+
+START_TEST(test_strncat_empty_src) {
+  char dest[20] = "Hello, world!";
+  const char *src = "";
+  char expected[20] = "Hello, world!";
+  strncat(expected, src, 10);
+  s21_strncat(dest, src, 10);
+  ck_assert_str_eq(dest, expected);  // Пустая строка src
+}
+
 START_TEST(test_strncat_zero_length) {
   char dest[20] = "Hello";
   const char *src = ", world!";
@@ -105,8 +123,19 @@ START_TEST(test_strchr_null_char) {
                    strchr(str, '\0'));  // Поиск нуль-терминатора
 }
 
+START_TEST(test_strchr_null_char_end) {
+  const char *str = "Hello, world";
+  ck_assert_ptr_eq(s21_strchr(str, '\0'),
+                   strchr(str, '\0'));  // Поиск нуль-терминатора в конце
+}
+
 START_TEST(test_strchr_null_ptr) {
   ck_assert_ptr_eq(s21_strchr(NULL, 'a'), NULL);  // NULL строка
+}
+
+START_TEST(test_strchr_empty_str) {
+  const char *str = "";
+  ck_assert_ptr_eq(s21_strchr(str, 'o'), strchr(str, 'o'));  // Пустая строка
 }
 
 START_TEST(test_strchr_large_char) {
@@ -149,16 +178,52 @@ START_TEST(test_strncmp_equal) {
   ck_assert_int_eq(s21_strncmp(s1, s2, 5), strncmp(s1, s2, 5));  // Строки равны
 }
 
+START_TEST(test_strncmp_equal_2) {
+  const char *s1 = "Hello";
+  const char *s2 = "Hello";
+  ck_assert_int_eq(s21_strncmp(s1, s2, 10), strncmp(s1, s2, 10));  // Строки равны, но короче n
+}
+
+START_TEST(test_strncmp_partially_equal) {
+  const char *s1 = "Hello";
+  const char *s2 = "Hello, world!";
+  ck_assert_int_eq(s21_strncmp(s1, s2, 5), strncmp(s1, s2, 5));  // Строки равны на n символов, дальше различаются
+}
+
 START_TEST(test_strncmp_less) {
   const char *s1 = "Hello";
   const char *s2 = "Hellz";
   ck_assert_int_eq(s21_strncmp(s1, s2, 5), strncmp(s1, s2, 5));  // s1 < s2
 }
 
+START_TEST(test_strncmp_less_2) {
+  const char *s1 = "Hello";
+  const char *s2 = "Hello, world!";
+  ck_assert_int_eq(s21_strncmp(s1, s2, 10), strncmp(s1, s2, 10));  // s1 < s2
+}
+
+START_TEST(test_strncmp_less_3) {
+  const char *s1 = "cat";
+  const char *s2 = "dog";
+  ck_assert_int_eq(s21_strncmp(s1, s2, 3), strncmp(s1, s2, 3));  // s1 < s2
+}
+
 START_TEST(test_strncmp_greater) {
   const char *s1 = "Hellz";
   const char *s2 = "Hello";
   ck_assert_int_eq(s21_strncmp(s1, s2, 5), strncmp(s1, s2, 5));  // s1 > s2
+}
+
+START_TEST(test_strncmp_greater_2) {
+  const char *s1 = "computer";
+  const char *s2 = "compute";
+  ck_assert_int_eq(s21_strncmp(s1, s2, 8), strncmp(s1, s2, 8));  // сравнение с '\0'
+}
+
+START_TEST(test_strncmp_greater_3) {
+  const char *s1 = "Hello, world!";
+  const char *s2 = "Hel";
+  ck_assert_int_eq(s21_strncmp(s1, s2, 10), strncmp(s1, s2, 10));  // вторая строка короче n
 }
 
 START_TEST(test_strncmp_partial) {
@@ -173,6 +238,20 @@ START_TEST(test_strncmp_zero_length) {
   const char *s2 = "World";
   ck_assert_int_eq(s21_strncmp(s1, s2, 0),
                    strncmp(s1, s2, 0));  // Нулевая длина
+}
+
+START_TEST(test_strncmp_empty_str1) {
+  const char *s1 = "";
+  const char *s2 = "World";
+  ck_assert_int_eq(s21_strncmp(s1, s2, 3),
+                   strncmp(s1, s2, 3));  // Пустая первая строка
+}
+
+START_TEST(test_strncmp_empty_str2) {
+  const char *s1 = "Hello";
+  const char *s2 = "";
+  ck_assert_int_eq(s21_strncmp(s1, s2, 3),
+                   strncmp(s1, s2, 3));  // Пустая вторая строка
 }
 
 START_TEST(test_strncmp_null_ptr) {
@@ -213,6 +292,15 @@ START_TEST(test_strncpy_basic) {
   ck_assert_str_eq(dest, expected);  // Базовое копирование
 }
 
+START_TEST(test_strncpy_basic_2) {
+  char dest[20];
+  const char *src = "Hello";
+  char expected[20];
+  strncpy(expected, src, 10);
+  s21_strncpy(dest, src, 10);
+  ck_assert_str_eq(dest, expected);  // n больше чем src
+}
+
 START_TEST(test_strncpy_partial) {
   char dest[20];
   const char *src = "Hello, world!";
@@ -229,6 +317,15 @@ START_TEST(test_strncpy_zero_length) {
   strncpy(expected, src, 0);
   s21_strncpy(dest, src, 0);
   ck_assert_str_eq(dest, expected);  // Нулевая длина
+}
+
+START_TEST(test_strncpy_empty_srs) {
+  char dest[20] = "Original";
+  const char *src = "";
+  char expected[20] = "Original";
+  strncpy(expected, src, 10);
+  s21_strncpy(dest, src, 10);
+  ck_assert_str_eq(dest, expected);  // Пустой src
 }
 
 START_TEST(test_strncpy_null_src) {
@@ -280,54 +377,67 @@ START_TEST(test_strncpy_large_string) {
 
 // Основные случаи работы
 START_TEST(test_strcspn_basic) {
-  const char *str = "Hello, world!";
-  const char *reject = " ,!";
-  ck_assert_int_eq(s21_strcspn(str, reject),
-                   strcspn(str, reject));  // Базовый случай
+  const char *str1 = "Hello, world!";
+  const char *str2 = " ,!";
+  ck_assert_int_eq(s21_strcspn(str1, str2),
+                   strcspn(str1, str2));  // Базовый случай
+}
+
+START_TEST(test_strcspn_register) {
+  const char *str1 = "Hello, wOrld!";
+  const char *str2 = "O";
+  ck_assert_int_eq(s21_strcspn(str1, str2),
+                   strcspn(str1, str2));  // Регистр
 }
 
 START_TEST(test_strcspn_no_match) {
-  const char *str = "Hello";
-  const char *reject = "xyz";
-  ck_assert_int_eq(s21_strcspn(str, reject),
-                   strcspn(str, reject));  // Нет совпадений
+  const char *str1 = "Hello";
+  const char *str2 = "xyz";
+  ck_assert_int_eq(s21_strcspn(str1, str2),
+                   strcspn(str1, str2));  // Нет совпадений
 }
 
 START_TEST(test_strcspn_first_char) {
-  const char *str = "Hello";
-  const char *reject = "H";
-  ck_assert_int_eq(s21_strcspn(str, reject),
-                   strcspn(str, reject));  // Первый символ
+  const char *str1 = "Hello";
+  const char *str2 = "Hl";
+  ck_assert_int_eq(s21_strcspn(str1, str2),
+                   strcspn(str1, str2));  // Первый символ
 }
 
 START_TEST(test_strcspn_null_ptr) {
   ck_assert_int_eq(s21_strcspn(NULL, "abc"),
-                   0);  // NULL указатель (ИЗМЕНЕНО -- АДЕКВАТНО ЛИ??)
+                   0);  // NULL указатель
 }
 
-START_TEST(test_strcspn_empty_reject) {
-  const char *str = "Hello";
-  const char *reject = "";
-  ck_assert_int_eq(s21_strcspn(str, reject),
-                   strcspn(str, reject));  // Пустая строка reject
+START_TEST(test_strcspn_empty_str2) {
+  const char *str1 = "Hello";
+  const char *str2 = "";
+  ck_assert_int_eq(s21_strcspn(str1, str2),
+                   strcspn(str1, str2));  // Пустая строка str2
+}
+START_TEST(test_strcspn_empty_str1) {
+  const char *str1 = "";
+  const char *str2 = " ,!";
+  ck_assert_int_eq(s21_strcspn(str1, str2),
+                   strcspn(str1, str2));  // Пустая строка str1
 }
 
 START_TEST(test_strcspn_unicode) {
-  const char *str = "Привет мир";
-  const char *reject = " ";
-  ck_assert_int_eq(s21_strcspn(str, reject),
-                   strcspn(str, reject));  // Unicode символы
+  const char *str1 = "Привет мир";
+  const char *str2 = "мир";
+  ck_assert_int_eq(s21_strcspn(str1, str2),
+                   strcspn(str1, str2));  // Unicode символы
 }
 
 START_TEST(test_strcspn_long_string) {
-  char long_str[1024];
-  const char *reject = "X";
+  char str1[1024];
+  const char *str2 = "X";
 
-  memset(long_str, 'A', sizeof(long_str) - 1);
-  long_str[sizeof(long_str) - 1] = 'X';
+  memset(str1, 'A', sizeof(str1) - 1);
+  str1[sizeof(str1) - 1] = 'X';
 
-  ck_assert_int_eq(s21_strcspn(long_str, reject),
-                   strcspn(long_str, reject));  // Очень длинная строка
+  ck_assert_int_eq(s21_strcspn(str1, str2),
+                   strcspn(str1, str2));  // Очень длинная строка
 }
 
 ////////////////////////////////////////////
@@ -339,6 +449,16 @@ START_TEST(test_strcspn_long_string) {
 // Основные случаи работы
 START_TEST(test_strlen_basic) {
   const char *str = "Hello";
+  ck_assert_int_eq(s21_strlen(str), strlen(str));  // Базовая строка
+}
+
+START_TEST(test_strlen_numbers) {
+  const char *str = "Hello 12345";
+  ck_assert_int_eq(s21_strlen(str), strlen(str));  // Базовая строка
+}
+
+START_TEST(test_strlen_one_char) {
+  const char *str = "H";
   ck_assert_int_eq(s21_strlen(str), strlen(str));  // Базовая строка
 }
 
@@ -379,6 +499,20 @@ START_TEST(test_strpbrk_basic) {
                    strpbrk(str, accept));  // Базовый случай
 }
 
+START_TEST(test_strpbrk_first_char) {
+  const char *str = "Hello, world!";
+  const char *accept = "H";
+  ck_assert_ptr_eq(s21_strpbrk(str, accept),
+                   strpbrk(str, accept));  // Совпадение - первый символ
+}
+
+START_TEST(test_strpbrk_last_char) {
+  const char *str = "Hello, world!";
+  const char *accept = "!";
+  ck_assert_ptr_eq(s21_strpbrk(str, accept),
+                   strpbrk(str, accept));  // Совпадение - последний символ
+}
+
 START_TEST(test_strpbrk_not_found) {
   const char *str = "Hello";
   const char *accept = "xyz";
@@ -389,6 +523,13 @@ START_TEST(test_strpbrk_not_found) {
 START_TEST(test_strpbrk_null_ptr) {
   ck_assert_ptr_eq(s21_strpbrk(NULL, "abc"),
                    NULL);  // NULL указатель (ИЗМЕНЕНО)
+}
+
+START_TEST(test_strpbrk_symbol) {
+  const char *str = "&^*$#";
+  const char *accept = "#";
+  ck_assert_ptr_eq(s21_strpbrk(str, accept),
+                   strpbrk(str, accept));  // Базовый случай
 }
 
 START_TEST(test_strpbrk_unicode) {
@@ -437,6 +578,12 @@ START_TEST(test_strrchr_null_ptr) {
   ck_assert_ptr_eq(s21_strrchr(NULL, 'a'), NULL);  // NULL указатель
 }
 
+START_TEST(test_strrchr_empty_str) {
+  const char *str = "";
+  ck_assert_ptr_eq(s21_strrchr(str, 'y'),
+                   strrchr(str, 'y'));  // Пустая str
+}
+
 START_TEST(test_strrchr_unicode) {
   const char *str = "Прииивет";
   wchar_t wc = L'и';
@@ -465,6 +612,13 @@ START_TEST(test_strstr_basic) {
   const char *needle = "world";
   ck_assert_ptr_eq(s21_strstr(haystack, needle),
                    strstr(haystack, needle));  // Базовый поиск
+}
+
+START_TEST(test_strstr_basic_2) {
+  const char *haystack = "Hello, world!";
+  const char *needle = "Hello, world!";
+  ck_assert_ptr_eq(s21_strstr(haystack, needle),
+                   strstr(haystack, needle));  // Полностью одинаковые строки
 }
 
 START_TEST(test_strstr_basic_register) {
@@ -606,6 +760,8 @@ Suite *sscanf_suite(void) {
   // s21_strncat
   tcase_add_test(tc, test_strncat_basic);
   tcase_add_test(tc, test_strncat_full_copy);
+  tcase_add_test(tc, test_strncat_empty_dest);
+  tcase_add_test(tc, test_strncat_empty_src);
   tcase_add_test(tc, test_strncat_zero_length);
   tcase_add_test(tc, test_strncat_null_src);
   tcase_add_test(tc, test_strncat_null_dest);
@@ -617,7 +773,9 @@ Suite *sscanf_suite(void) {
   tcase_add_test(tc, test_strchr_basic);
   tcase_add_test(tc, test_strchr_not_found);
   tcase_add_test(tc, test_strchr_null_char);
+  tcase_add_test(tc, test_strchr_null_char_end);
   tcase_add_test(tc, test_strchr_null_ptr);
+  tcase_add_test(tc, test_strchr_empty_str);
   tcase_add_test(tc, test_strchr_large_char);
   tcase_add_test(tc, test_strchr_negative_char);
   tcase_add_test(tc, test_strchr_unicode);
@@ -625,18 +783,28 @@ Suite *sscanf_suite(void) {
 
   // s21_strncmp
   tcase_add_test(tc, test_strncmp_equal);
+  tcase_add_test(tc, test_strncmp_equal_2);
+  tcase_add_test(tc, test_strncmp_partially_equal);
   tcase_add_test(tc, test_strncmp_less);
+  tcase_add_test(tc, test_strncmp_less_2);
+  tcase_add_test(tc, test_strncmp_less_3);
   tcase_add_test(tc, test_strncmp_greater);
+  tcase_add_test(tc, test_strncmp_greater_2);
+  tcase_add_test(tc, test_strncmp_greater_3);
   tcase_add_test(tc, test_strncmp_partial);
   tcase_add_test(tc, test_strncmp_zero_length);
+  tcase_add_test(tc, test_strncmp_empty_str1);
+  tcase_add_test(tc, test_strncmp_empty_str2);
   tcase_add_test(tc, test_strncmp_null_ptr);
   tcase_add_test(tc, test_strncmp_unicode);
   tcase_add_test(tc, test_strncmp_large_string);
 
   // s21_strncpy
   tcase_add_test(tc, test_strncpy_basic);
+  tcase_add_test(tc, test_strncpy_basic_2);
   tcase_add_test(tc, test_strncpy_partial);
   tcase_add_test(tc, test_strncpy_zero_length);
+  tcase_add_test(tc, test_strncpy_empty_srs);
   tcase_add_test(tc, test_strncpy_null_src);
   tcase_add_test(tc, test_strncpy_null_dest);
   tcase_add_test(tc, test_strncpy_small_buffer);
@@ -645,15 +813,19 @@ Suite *sscanf_suite(void) {
 
   // s21_strcspn
   tcase_add_test(tc, test_strcspn_basic);
+  tcase_add_test(tc, test_strcspn_register);
   tcase_add_test(tc, test_strcspn_no_match);
   tcase_add_test(tc, test_strcspn_first_char);
   tcase_add_test(tc, test_strcspn_null_ptr);
-  tcase_add_test(tc, test_strcspn_empty_reject);
+  tcase_add_test(tc, test_strcspn_empty_str2);
+  tcase_add_test(tc, test_strcspn_empty_str1);
   tcase_add_test(tc, test_strcspn_unicode);
   tcase_add_test(tc, test_strcspn_long_string);
 
   // s21_strlen
   tcase_add_test(tc, test_strlen_basic);
+  tcase_add_test(tc, test_strlen_numbers);
+  tcase_add_test(tc, test_strlen_one_char);
   tcase_add_test(tc, test_strlen_empty);
   tcase_add_test(tc, test_strlen_null_ptr);
   tcase_add_test(tc, test_strlen_unicode);
@@ -661,8 +833,11 @@ Suite *sscanf_suite(void) {
 
   // s21_strpbrk
   tcase_add_test(tc, test_strpbrk_basic);
+  tcase_add_test(tc, test_strpbrk_first_char);
+  tcase_add_test(tc, test_strpbrk_last_char);
   tcase_add_test(tc, test_strpbrk_not_found);
   tcase_add_test(tc, test_strpbrk_null_ptr);
+  tcase_add_test(tc, test_strpbrk_symbol);
   tcase_add_test(tc, test_strpbrk_unicode);
   tcase_add_test(tc, test_strpbrk_long_string);
 
@@ -671,11 +846,13 @@ Suite *sscanf_suite(void) {
   tcase_add_test(tc, test_strrchr_not_found);
   tcase_add_test(tc, test_strrchr_null_char);
   tcase_add_test(tc, test_strrchr_null_ptr);
+  tcase_add_test(tc, test_strrchr_empty_str);
   tcase_add_test(tc, test_strrchr_unicode);
   tcase_add_test(tc, test_strrchr_long_string);
 
   // s21_strstr
   tcase_add_test(tc, test_strstr_basic);
+  tcase_add_test(tc, test_strstr_basic_2);
   tcase_add_test(tc, test_strstr_basic_register);
   tcase_add_test(tc, test_strstr_not_found);
   tcase_add_test(tc, test_strstr_empty_needle);
