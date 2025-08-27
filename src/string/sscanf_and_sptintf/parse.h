@@ -158,4 +158,10 @@ static void set_unsigned_type(FormatParams *params);
 static void set_float_type(FormatParams *params);
 static void set_n_type(FormatParams *params);
 
+// Функции сброса лишних флагов
+void reset_flags_for_char_string(FormatParams *params);
+void reset_flags_for_integer(FormatParams *params);
+void reset_flags_for_unsigned(FormatParams *params);
+void reset_flags_for_pointer(FormatParams *params);
+
 #endif  // PARSE_H_

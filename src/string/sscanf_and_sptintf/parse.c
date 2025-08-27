@@ -170,10 +170,12 @@ static int parse_specifier(const char *format, int *i, FormatParams *params) {
 
 static void handle_di_specifier(FormatParams *params) {
   set_signed_type(params);
+  reset_flags_for_integer(params);
 }
 static void handle_u_specifier(FormatParams *params) {
   set_unsigned_type(params);
   params->base = BaseDecimal;
+  reset_flags_for_unsigned(params);
 }
 static void handle_o_specifier(FormatParams *params) {
   set_unsigned_type(params);
@@ -197,18 +199,22 @@ static void handle_g_specifier(FormatParams *params) {
 }
 static void handle_c_specifier(FormatParams *params) {
   params->type = (params->modifier == LENGTH_L) ? TYPE_WCHAR : TYPE_CHAR;
+  reset_flags_for_char_string(params);
 }
 static void handle_s_specifier(FormatParams *params) {
   params->type = (params->modifier == LENGTH_L) ? TYPE_WSTRING : TYPE_STRING;
+  reset_flags_for_char_string(params);
 }
 static void handle_p_specifier(FormatParams *params) {
   params->type = TYPE_POINTER;
   params->base = BaseHexadecimal;
+  reset_flags_for_pointer(params);
 }
 static void handle_percent_specifier(FormatParams *params) {
   params->type = TYPE_PERCENT;
 }
 static void handle_n_specifier(FormatParams *params) { set_n_type(params); }
+
 static void set_signed_type(FormatParams *params) {
   if (params->modifier == LENGTH_LL)
     params->type = TYPE_LONGLONG;
@@ -250,4 +256,25 @@ static void set_n_type(FormatParams *params) {
     params->type = TYPE_N_LONGLONG;
   else
     params->type = TYPE_N_INT;
+}
+
+void reset_flags_for_char_string(FormatParams *params) {
+  params->flag_plus = 0;
+  params->flag_space = 0;
+  params->flag_zero = 0;
+  params->flag_hash = 0;
+}
+
+void reset_flags_for_integer(FormatParams *params) { params->flag_hash = 0; }
+
+void reset_flags_for_unsigned(FormatParams *params) {
+  if (params->base != 8 && params->base != 16) {
+    params->flag_hash = 0;
+  }
+}
+
+void reset_flags_for_pointer(FormatParams *params) {
+  params->flag_plus = 0;
+  params->flag_space = 0;
+  params->flag_hash = 0;
 }
