@@ -9,7 +9,7 @@
 #include <string.h>
 #include <wchar.h>
 
-#include "../include/s21_string.h"
+// #include "../include/s21_string.h"
 
 ////////////////////////////////////////////////////////////
 //      Перечисления и константы, Нужно поправить!!!      //
@@ -164,6 +164,14 @@ int s21_sscanf(const char *str, const char *format, ...) {
 
   va_end(args);
   return idx;
+}
+
+#include <stdio.h>
+int main(){
+
+  s21_sscanf("1234", "%d");
+  
+  return 0;
 }
 
 ////////////////////////////////////////////////////////////
@@ -356,6 +364,7 @@ static void handle_integer(const char *str, int *idx, int params[],
       break;
   }
   convert_str_to_int(str, idx, val, params);
+  printf("%lld", *val);
 }
 
 static void handle_unsigned(const char *str, int *idx, int params[],
@@ -373,7 +382,7 @@ static void handle_unsigned(const char *str, int *idx, int params[],
       break;
   }
 
-  //   convert_uint_to_str(str, idx, val, params);
+  convert_str_to_uint(str, idx, val, params);
 }
 
 static void handle_float(const char *str, int *idx, int params[],
@@ -382,15 +391,15 @@ static void handle_float(const char *str, int *idx, int params[],
                          ? (long double *)va_arg(args, double *)
                          : va_arg(args, long double *);
 
-  //   if (!convert_special_float(str, idx, val, params)) {
-  // convert_float_to_str(str, idx, val, params);
-  //   }
+    if (!convert_str_to_special_float(str, idx, val, params)) {
+  convert_str_to_float(str, idx, val, params);
+    }
 }
 
 static void handle_char(const char *str, int *idx, int params[], va_list args) {
   char *c = (char *)va_arg(args, int *);
   char buffer[2] = {*c, '\0'};
-  //   convert_string_buffer_to_str(str, idx, buffer, params);
+    convert_str_to_string_buffer(str, idx, buffer, params);
 }
 
 static void handle_string(const char *str, int *idx, int params[],
@@ -424,9 +433,48 @@ static void handle_percent(const char *str, int *idx, va_list args) {
   //   convert_char_to_buffer(str, idx, '%');
 }
 
-static int convert_str_to_int(const char *str, int *idx, long long *val,
-                              int params[]) {
-  for (int i = 0; str[i] != '\0'; i++) {
-    printf("%c", str[i]);
+////////////////////////////////////////////////////////////
+//             Конвертация типов данных                   //
+////////////////////////////////////////////////////////////
+
+static int convert_str_to_int(const char *str, int *idx, long long *val, int params[]){
+  int res = 0;
+  int sign = 1;
+
+  while (*str == ' ' || *str == '\t') {
+    str++;
   }
+
+  if (*str == '-') {
+    sign = -1;
+    str++;
+  } else if (*str == '+') {
+    str++;
+  }
+
+  while (*str && isdigit(*str)) {
+    res = res * 10 + (*str - '0');
+    str++;
+  }
+
+  *val = (res * sign);
+  *idx++;
+
+  return 0;
+}
+
+static int convert_str_to_uint(const char *str, int *idx, unsigned long long *val, int params[]){
+  
+}
+
+static int convert_str_to_special_float(const char *str, int *idx, long double *val, int params[]){
+  
+}
+
+static int convert_str_to_float(const char *str, int *idx, long double *val, int params[]){
+  
+}
+
+static int convert_str_to_string_buffer(const char *str, int *idx, char *val, int params[]){
+  
 }
