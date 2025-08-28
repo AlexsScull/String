@@ -91,7 +91,7 @@ typedef struct {
 
 typedef struct {
   const char symbol;
-  int *flag;
+  bool *flag;
 } FlagMapping;
 
 typedef struct {

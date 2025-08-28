@@ -282,8 +282,6 @@ void reset_flags_for_pointer(FormatParams *params) {
 }
 
 void reset_flags_for_null_inf(FormatParams *params) {
-  params->flag_plus = false;
-  params->flag_space = false;
   params->flag_zero = false;
   params->flag_hash = false;
   params->precision_type = false;

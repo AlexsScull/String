@@ -60,7 +60,7 @@ static void handle_integer(const char *str, int *idx, FormatParams params,
                            va_list args) {
   if (params.type == TYPE_INT) {
     int *val_ptr = va_arg(args, int *);
-    convert_str_to_int(str, idx, val_ptr, params);
+    // *val_ptr = (int)fun(...)
   } else if (params.type == TYPE_SHORT) {
     short *val_ptr = va_arg(args, short *);
     // ...
