@@ -163,5 +163,6 @@ void reset_flags_for_char_string(FormatParams *params);
 void reset_flags_for_integer(FormatParams *params);
 void reset_flags_for_unsigned(FormatParams *params);
 void reset_flags_for_pointer(FormatParams *params);
+void reset_flags_for_null_inf(FormatParams *params);
 
 #endif  // PARSE_H_

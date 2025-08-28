@@ -259,22 +259,33 @@ static void set_n_type(FormatParams *params) {
 }
 
 void reset_flags_for_char_string(FormatParams *params) {
-  params->flag_plus = 0;
-  params->flag_space = 0;
-  params->flag_zero = 0;
-  params->flag_hash = 0;
+  params->flag_plus = false;
+  params->flag_space = false;
+  params->flag_zero = false;
+  params->flag_hash = false;
 }
 
-void reset_flags_for_integer(FormatParams *params) { params->flag_hash = 0; }
+void reset_flags_for_integer(FormatParams *params) {
+  params->flag_hash = false;
+}
 
 void reset_flags_for_unsigned(FormatParams *params) {
   if (params->base != 8 && params->base != 16) {
-    params->flag_hash = 0;
+    params->flag_hash = false;
   }
 }
 
 void reset_flags_for_pointer(FormatParams *params) {
-  params->flag_plus = 0;
-  params->flag_space = 0;
-  params->flag_hash = 0;
+  params->flag_plus = false;
+  params->flag_space = false;
+  params->flag_hash = false;
+}
+
+void reset_flags_for_null_inf(FormatParams *params) {
+  params->flag_plus = false;
+  params->flag_space = false;
+  params->flag_zero = false;
+  params->flag_hash = false;
+  params->precision_type = false;
+  params->precision_value = 0;
 }
