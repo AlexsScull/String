@@ -49,7 +49,7 @@ int s21_memcmp(const void *str1, const void *str2, s21_size_t n) {
     return S21_NULL;
   }
 
-  if(n > str1 || n > str2){                           //вообще такой функционал не предусмотрен в ориг
+  if(n > strlen(str1) || n > strlen(str2)){                           //вообще такой функционал не предусмотрен в ориг
     return S21_NULL;
   }
 
@@ -82,17 +82,23 @@ void *s21_memcpy(void *dest, const void *src, s21_size_t n) {
 
 Если n = 0, копирования не происходит, но dest возвращается.*/
 
+  if(dest == S21_NULL || src == S21_NULL){
+    return S21_NULL;
+  }
+
   unsigned char *str1 = (unsigned char *)dest;
   const unsigned char *str2 = (const unsigned char *)src;
 
   if (n != 0) {
-    for (int i = 0; i < n; i++) {
+    for (s21_size_t i = 0; i < n; i++) {
       str1[i] = str2[i];
     }
   }
 
   return dest;
 }
+
+
 void *s21_memset(void *str, int c, s21_size_t n) {
   /* Задача:
 Заполнить первые n байтов памяти str значением c.

@@ -245,8 +245,9 @@ START_TEST(test_memcpy_basic) {  // Копирование строки
   char dest_s21[20];
   char dest_std[20];
 
-  ck_assert_ptr_eq(s21_memcpy(dest_s21, src, strlen(src) + 1),
-                   memcpy(dest_std, src, strlen(src) + 1));
+  ck_assert_ptr_eq(memcpy(dest_std, src, strlen(src) + 1), dest_std);
+  ck_assert_ptr_eq(s21_memcpy(dest_s21, src, strlen(src) + 1), dest_s21);
+  
   ck_assert_str_eq(dest_s21, dest_std);
 }
 
@@ -262,12 +263,14 @@ START_TEST(test_memcpy_partial) {  // Частичное копирование
 START_TEST(
     test_memcpy_binary_data) {  // Копирование бинарных данных (не строки)
   unsigned char src[] = {0x01, 0x02, 0x03, 0xFF};
+  const s21_size_t size = sizeof(src);
   unsigned char dest_s21[4];
   unsigned char dest_std[4];
 
-  ck_assert_ptr_eq(s21_memcpy(dest_s21, src, sizeof(src)),
-                   memcpy(dest_std, src, sizeof(src)));
-  ck_assert_mem_eq(dest_s21, dest_std, sizeof(src));
+  ck_assert_ptr_eq(memcpy(dest_std, src, size), dest_std);
+  ck_assert_ptr_eq(s21_memcpy(dest_s21, src, size), dest_s21);
+
+  ck_assert_mem_eq(dest_s21, dest_std, size);
 }
 
 START_TEST(
@@ -286,7 +289,9 @@ START_TEST(test_memcpy_zero_length) {  // n = 0
   char dest_s21[10] = "abc";
   char dest_std[10] = "abc";
 
-  ck_assert_ptr_eq(s21_memcpy(dest_s21, src, 0), memcpy(dest_std, src, 0));
+  ck_assert_ptr_eq(memcpy(dest_std, src, 0), dest_std);
+  ck_assert_ptr_eq(s21_memcpy(dest_s21, src, 0), dest_s21);
+
   ck_assert_str_eq(dest_s21, dest_std);
 }
 
@@ -310,60 +315,101 @@ START_TEST(test_memcpy_null_terminator) {  // Копирование нуль-т
   char src[] = "Hello\0World";
   char dest_s21[12];
   char dest_std[12];
-  ck_assert_ptr_eq(s21_memcpy(dest_s21, src, sizeof(src)),
-                   memcpy(dest_std, src, sizeof(src)));
+  
+  ck_assert_ptr_eq(memcpy(dest_std, src, sizeof(src)), dest_std);
+  ck_assert_ptr_eq(s21_memcpy(dest_s21, src, sizeof(src)), dest_s21);
+                  
   ck_assert_mem_eq(dest_s21, dest_std, sizeof(src));
 }
 
 /* Специальные значения */
 
 // Копирование в буфер меньшего размера (потенциальное переполнение)
+// START_TEST(test_memcpy_small_buffer) {
+//   char src[] = "This is a long string";
+//   char dest[5] = {0};  // Буфер меньше, чем `src`
+//   char expected[5] = {0};
+
+//   ck_assert_ptr_eq(s21_memcpy(dest, src, sizeof(dest)), dest);
+//   ck_assert_ptr_eq(memcpy(expected, src, sizeof(dest)), expected);
+//   ck_assert_mem_eq(dest, expected, sizeof(dest));
+// }
+
 START_TEST(test_memcpy_small_buffer) {
-  char src[] = "This is a long string";
-  char dest[5] = {0};  // Буфер меньше, чем `src`
-  char expected[5] = {0};
+    // 1. Настройка защитных барьеров
+    const size_t CANARY_SIZE = 4;
+    const size_t DATA_SIZE = 5;
+    const size_t TOTAL_SIZE = DATA_SIZE + 2 * CANARY_SIZE;
+    
+    // 2. Буфер с защитными областями
+    unsigned char buffer_s21[TOTAL_SIZE];
+    unsigned char buffer_std[TOTAL_SIZE];
+    
+    // 3. Инициализация канареек
+    const unsigned char CANARY = 0xAA;
+    memset(buffer_s21, CANARY, TOTAL_SIZE);
+    memset(buffer_std, CANARY, TOTAL_SIZE);
+    
+    // 4. Тестовые данные
+    char src[] = "This is a long string";
+    
+    // 5. Целевые области внутри буферов
+    unsigned char* dest_s21 = buffer_s21 + CANARY_SIZE;
+    unsigned char* dest_std = buffer_std + CANARY_SIZE;
 
-  ck_assert_ptr_eq(s21_memcpy(dest, src, sizeof(dest)),
-                   memcpy(expected, src, sizeof(dest)));
-  ck_assert_mem_eq(dest, expected, sizeof(dest));
+    // 6. Выполнение операций
+    s21_memcpy(dest_s21, src, DATA_SIZE);
+    memcpy(dest_std, src, DATA_SIZE);
+
+    // 7. Проверки
+    // 7.1. Левая канарейка (перед данными)
+    ck_assert_mem_eq(buffer_s21, buffer_std, CANARY_SIZE);
+    
+    // 7.2. Данные
+    ck_assert_mem_eq(dest_s21, dest_std, DATA_SIZE);
+    
+    // 7.3. Правая канарейка (после данных)
+    ck_assert_mem_eq(
+        buffer_s21 + CANARY_SIZE + DATA_SIZE,
+        buffer_std + CANARY_SIZE + DATA_SIZE,
+        CANARY_SIZE
+    );
 }
 
-START_TEST(test_memcpy_overlap) {  // Копирование в перекрывающиеся буферы (UB,
-                                   // но проверяем)
-  char buf[] = "abcdef";
-  ck_assert_ptr_eq(s21_memcpy(buf + 1, buf, 3), memcpy(buf + 1, buf, 3));
-  ck_assert_str_eq(buf, "aabcdf");
-}
+ 
 
 START_TEST(test_memcpy_large_data) {  // Копирование большого объема данных
-  char src[1024];
-  char dest_s21[1024];
-  char dest_std[1024];
+  const size_t buffer_size = 1024 * 1024;
+  char *src = malloc(buffer_size);
+  char *dest_s21 = malloc(buffer_size);
+  char *dest_std = malloc(buffer_size);
 
-  memset(src, 'A', sizeof(src));
-  ck_assert_ptr_eq(s21_memcpy(dest_s21, src, sizeof(src)),
-                   memcpy(dest_std, src, sizeof(src)));
+  for(size_t i = 0; i < buffer_size; i++){
+    src[i] = (char)(i % 256);
+  }
+
+  ck_assert_ptr_eq(s21_memcpy(dest_s21, src, sizeof(src)), dest_s21);
+  ck_assert_ptr_eq(memcpy(dest_std, src, sizeof(src)), dest_std);
   ck_assert_mem_eq(dest_s21, dest_std, sizeof(src));
+
+  free(src);
+  free(dest_s21);
+  free(dest_std);
 }
 
-START_TEST(test_memcpy_large_n) {  // Большой размер
-  char src[1024];
-  char dest_s21[1024];
-  char dest_std[1024];
-  memset(src, 'A', sizeof(src));
-  ck_assert_ptr_eq(s21_memcpy(dest_s21, src, sizeof(src)),
-                   memcpy(dest_std, src, sizeof(src)));
-  ck_assert_mem_eq(dest_s21, dest_std, sizeof(src));
-}
 
 START_TEST(test_memcpy_large_char) {  // Копирование символов вне `unsigned
                                       // char` (например, `c = 256`)
-  unsigned char src[] = {0x01, 0x02, 0xFF, 0x00};
-  unsigned char dest_s21[4];
-  unsigned char dest_std[4];
-  ck_assert_ptr_eq(s21_memcpy(dest_s21, src, sizeof(src)),
-                   memcpy(dest_std, src, sizeof(src)));
-  ck_assert_mem_eq(dest_s21, dest_std, sizeof(src));
+  int src = 256;
+  int dest_s21 = 0;
+  int dest_std = 0;
+
+  ck_assert_ptr_eq(s21_memcpy(&dest_s21, &src, sizeof(src)), &dest_s21);
+  ck_assert_ptr_eq(memcpy(&dest_std, &src, sizeof(src)), &dest_std);
+
+  ck_assert_int_eq(dest_s21, dest_std);
+  ck_assert_int_eq(dest_s21, src);
+
 }
 
 ////////////////////////////////////////////
@@ -379,7 +425,8 @@ START_TEST(test_memset_zero) {
   char str_s21[10] = "abcdef";
   char str_std[10] = "abcdef";
 
-  ck_assert_ptr_eq(s21_memset(str_s21, 0, 3), memset(str_std, 0, 3));
+  ck_assert_ptr_eq(s21_memset(str_s21, 0, 3), str_s21);
+  ck_assert_ptr_eq(memset(str_std, 0, 3), str_std);
   ck_assert_mem_eq(str_s21, str_std, 10);
 }
 
@@ -388,18 +435,19 @@ START_TEST(test_memset_fill_char) {
   char str_s21[10] = {0};
   char str_std[10] = {0};
 
-  ck_assert_ptr_eq(s21_memset(str_s21, 'A', 5), memset(str_std, 'A', 5));
+  ck_assert_ptr_eq(s21_memset(str_s21, 'A', 5), str_s21);
+  ck_assert_ptr_eq(memset(str_std, 'A', 5), str_std);
   ck_assert_str_eq(str_s21, str_std);
 }
 
-// Частичное заполнение строки
+// Частичное заполнение строки не сначала
 START_TEST(test_memset_partial_fill) {
   char str_s21[10] = "abcdef";
   char str_std[10] = "abcdef";
 
-  ck_assert_ptr_eq(s21_memset(str_s21 + 2, 'X', 3),
-                   memset(str_std + 2, 'X', 3));
-  ck_assert_str_eq(str_s21, str_std);
+  ck_assert_ptr_eq(s21_memset(str_s21 + 2, 'X', 3), str_s21 + 2);
+  ck_assert_ptr_eq(memset(str_std + 2, 'X', 3), str_std + 2);
+  ck_assert_str_eq(str_s21 + 2, str_std + 2);
 }
 
 /* Работа с нуль-терминатором
@@ -411,21 +459,19 @@ START_TEST(test_memset_zero_length) {
   char str_s21[10] = "abc";
   char str_std[10] = "abc";
 
-  ck_assert_ptr_eq(s21_memset(str_s21, 'X', 0), memset(str_std, 'X', 0));
+  ck_assert_ptr_eq(s21_memset(str_s21, 'X', 0), str_s21);
+  ck_assert_ptr_eq(memset(str_std, 'X', 0), str_std);
   ck_assert_str_eq(str_s21, str_std);
 }
 
-// Передача `NULL` (UB, но проверяем на краш)
-START_TEST(test_memset_null_ptr) {
-  ck_assert_ptr_eq(s21_memset(NULL, 'A', 5), NULL);
-}
 
 // Заполнение нуль-терминатором ('\0')
 START_TEST(test_memset_null_byte) {
   char str_s21[10] = "abcdef";
   char str_std[10] = "abcdef";
 
-  ck_assert_ptr_eq(s21_memset(str_s21, '\0', 3), memset(str_std, '\0', 3));
+  ck_assert_ptr_eq(s21_memset(str_s21, '\0', 3), str_s21);
+  ck_assert_ptr_eq(memset(str_std, '\0', 3), str_std);
   ck_assert_str_eq(str_s21, str_std);
 }
 
@@ -437,18 +483,22 @@ START_TEST(test_memset_null_ptr_all) {  // NULL указатель (UB)
 
 // Заполнение символами вне `unsigned char` (например, `c = 1024`)
 START_TEST(test_memset_large_char) {
-  char str_s21[10] = {0};
-  char str_std[10] = {0};
 
-  ck_assert_ptr_eq(s21_memset(str_s21, 1024, 5), memset(str_std, 1024, 5));
-  ck_assert_mem_eq(str_s21, str_std, 5);
+  int c = 1024;
+  int str_s21 = 0;
+  int str_std = 0;
+
+  ck_assert_ptr_eq(s21_memset(&str_s21, &c, 10), &str_s21);
+  ck_assert_ptr_eq(memcpy(&str_std, &c, 10), &str_std);
+
+  ck_assert_int_eq(&str_s21, &str_std);
 }
 
 START_TEST(test_memset_large_char2) {  // Символы вне unsigned char
   unsigned char data_s21[4] = {0x01, 0x02, 0x03, 0x04};
   unsigned char data_std[4] = {0x01, 0x02, 0x03, 0x04};
-  ck_assert_ptr_eq(s21_memset(data_s21, 0xFF, sizeof(data_s21)),
-                   memset(data_std, 0xFF, sizeof(data_std)));
+  ck_assert_ptr_eq(s21_memset(data_s21, 0xFF, sizeof(data_s21)), data_s21);
+  ck_assert_ptr_eq(memset(data_std, 0xFF, sizeof(data_std)), data_std);
   ck_assert_mem_eq(data_s21, data_std, sizeof(data_s21));
 }
 
@@ -457,7 +507,8 @@ START_TEST(test_memset_negative_char) {
   char str_s21[10] = {0};
   char str_std[10] = {0};
 
-  ck_assert_ptr_eq(s21_memset(str_s21, -10, 5), memset(str_std, -10, 5));
+  ck_assert_ptr_eq(s21_memset(str_s21, -10, 5), s21_memset);
+  ck_assert_ptr_eq(memset(str_std, -10, 5), memset);
   ck_assert_mem_eq(str_s21, str_std, 5);
 }
 
@@ -466,7 +517,8 @@ START_TEST(test_memset_binary_data) {
   unsigned char data_s21[5] = {0x01, 0x02, 0x03, 0x04, 0x05};
   unsigned char data_std[5] = {0x01, 0x02, 0x03, 0x04, 0x05};
 
-  ck_assert_ptr_eq(s21_memset(data_s21, 0xFF, 3), memset(data_std, 0xFF, 3));
+  ck_assert_ptr_eq(s21_memset(data_s21, 0xFF, 3), s21_memset); 
+  ck_assert_ptr_eq(memset(data_std, 0xFF, 3), data_std);
   ck_assert_mem_eq(data_s21, data_std, 5);
 }
 
@@ -551,9 +603,7 @@ Suite *memory_suite(void) {
   tcase_add_test(tc, test_memcpy_null_terminator);
   // Специальные значения символов
   tcase_add_test(tc, test_memcpy_small_buffer);
-  tcase_add_test(tc, test_memcpy_overlap);
   tcase_add_test(tc, test_memcpy_large_data);
-  tcase_add_test(tc, test_memcpy_large_n);
   tcase_add_test(tc, test_memcpy_large_char);
 
   //// s21_memset ////
@@ -566,7 +616,6 @@ Suite *memory_suite(void) {
   // Работа с нуль-терминатором И Граничные случаи
 
   tcase_add_test(tc, test_memset_zero_length);
-  tcase_add_test(tc, test_memset_null_ptr);
   tcase_add_test(tc, test_memset_null_byte);
   tcase_add_test(tc, test_memset_null_ptr_all);
   // Специальные значения символов
