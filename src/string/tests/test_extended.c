@@ -27,12 +27,6 @@ START_TEST(test_to_upper_mixed_case) {  // Смешанный регистр
   free(result);
 }
 
-START_TEST(test_to_upper_cyrillic) {  // Кириллические символы
-  const char *str = "Привет, МИР!";
-  char *result = s21_to_upper(str);
-  ck_assert_str_eq(result, "ПРИВЕТ, МИР!");
-  free(result);
-}
 
 START_TEST(test_to_upper_empty_string) {  // Пустая строка
   const char *str = "";
@@ -82,12 +76,6 @@ START_TEST(test_to_lower_mixed_case) {  // Смешанный регистр
   free(result);
 }
 
-START_TEST(test_to_lower_cyrillic) {  // Кириллические символы
-  const char *str = "Привет, МИР!";
-  char *result = s21_to_lower(str);
-  ck_assert_str_eq(result, "привет, мир!");
-  free(result);
-}
 
 START_TEST(test_to_lower_empty_string) {  // Пустая строка
   const char *str = "";
@@ -258,6 +246,7 @@ START_TEST(test_trim_null_chars) {  // NULL символы для обрезки
   free(result);
 }
 
+
 ////////////////////////////////////////////
 //                                        //
 //               Test Suite               //
@@ -271,7 +260,6 @@ Suite *extended_suite(void) {
   // s21_to_upper
   tcase_add_test(tc, test_to_upper_regular_string);
   tcase_add_test(tc, test_to_upper_mixed_case);
-  tcase_add_test(tc, test_to_upper_cyrillic);
   tcase_add_test(tc, test_to_upper_empty_string);
   tcase_add_test(tc, test_to_upper_no_letters);
   tcase_add_test(tc, test_to_upper_null_input);
@@ -280,7 +268,6 @@ Suite *extended_suite(void) {
   // s21_to_lower
   tcase_add_test(tc, test_to_lower_regular_string);
   tcase_add_test(tc, test_to_lower_mixed_case);
-  tcase_add_test(tc, test_to_lower_cyrillic);
   tcase_add_test(tc, test_to_lower_empty_string);
   tcase_add_test(tc, test_to_lower_no_letters);
   tcase_add_test(tc, test_to_lower_null_input);

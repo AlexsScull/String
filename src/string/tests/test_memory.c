@@ -205,7 +205,7 @@ START_TEST(test_memcmp_large_char) {  // Сравнение символов в�
 START_TEST(test_memcmp_negative_chars) {  // Отрицательные значения
   const char s1[] = {-1, -2, -3};
   const char s2[] = {-1, -2, -4};
-  ck_assert_int_eq(s21_memcmp(s1, s2, strlen(s1)), memcmp(s1, s2, strlen(s1)));
+  ck_assert_int_eq(s21_memcmp(s1, s2, 3), memcmp(s1, s2, 3));
 }
 
 /* Бинарные данные */
@@ -485,13 +485,13 @@ START_TEST(test_memset_null_ptr_all) {  // NULL указатель (UB)
 START_TEST(test_memset_large_char) {
 
   int c = 1024;
-  int str_s21 = 0;
-  int str_std = 0;
+  char str_s21[10];
+  char str_std[10];
 
-  ck_assert_ptr_eq(s21_memset(&str_s21, &c, 10), &str_s21);
-  ck_assert_ptr_eq(memcpy(&str_std, &c, 10), &str_std);
+  ck_assert_ptr_eq(s21_memset(str_s21, c, 10), str_s21);
+  ck_assert_ptr_eq(memset(str_std, c, 10), str_std);
 
-  ck_assert_int_eq(&str_s21, &str_std);
+  ck_assert_mem_eq(str_s21, str_std, 10);
 }
 
 START_TEST(test_memset_large_char2) {  // Символы вне unsigned char
@@ -507,8 +507,8 @@ START_TEST(test_memset_negative_char) {
   char str_s21[10] = {0};
   char str_std[10] = {0};
 
-  ck_assert_ptr_eq(s21_memset(str_s21, -10, 5), s21_memset);
-  ck_assert_ptr_eq(memset(str_std, -10, 5), memset);
+  ck_assert_ptr_eq(s21_memset(str_s21, -10, 5), str_s21);
+  ck_assert_ptr_eq(memset(str_std, -10, 5), str_std);
   ck_assert_mem_eq(str_s21, str_std, 5);
 }
 
@@ -517,10 +517,11 @@ START_TEST(test_memset_binary_data) {
   unsigned char data_s21[5] = {0x01, 0x02, 0x03, 0x04, 0x05};
   unsigned char data_std[5] = {0x01, 0x02, 0x03, 0x04, 0x05};
 
-  ck_assert_ptr_eq(s21_memset(data_s21, 0xFF, 3), s21_memset); 
+  ck_assert_ptr_eq(s21_memset(data_s21, 0xFF, 3), data_s21); 
   ck_assert_ptr_eq(memset(data_std, 0xFF, 3), data_std);
   ck_assert_mem_eq(data_s21, data_std, 5);
 }
+
 
 ////////////////////////////////////////////
 //                                        //
