@@ -1,6 +1,4 @@
-// #include "../include/s21_string.h"
-#include <stdio.h>
-
+#include "../include/s21_string.h"
 #include "parse.h"
 
 static long long convert_str_to_int(const char *str, int *idx,
@@ -41,7 +39,7 @@ static unsigned long long convert_str_to_unsigned(const char *str, int *idx,
 }
 
 static long double convert_str_to_float(const char *str, int *idx,
-                                               FormatParams params) {
+                                        FormatParams params) {
   float res = 0.0f;
   float sign = 1.0f;
   float fraction = 0.1f;
@@ -79,70 +77,69 @@ static long double convert_str_to_float(const char *str, int *idx,
 }
 
 static char convert_str_to_char(const char *str, int *idx,
-                                               FormatParams params) {
-    char res = '\0';
+                                FormatParams params) {
+  char res = '\0';
+  while (*str == ' ' || *str == '\t') {
+    str++;
+  }
+
+  if (*str != '\0') {
+    res = *str;
+    str++;
     while (*str == ' ' || *str == '\t') {
-        str++;
+      str++;
     }
-
     if (*str != '\0') {
-        res = *str;  
-        str++;
-        while (*str == ' ' || *str == '\t') {
-            str++;
-        }        if (*str != '\0') {
-            res = '\0';
-        }
+      res = '\0';
     }
+  }
 
-    return res;
+  return res;
 }
 
 static char convert_str_to_wchar(const char *str, int *idx,
-                                               FormatParams params) {
-    wchar_t res = L'\0';
+                                 FormatParams params) {
+  wchar_t res = L'\0';
+  while (*str == L' ' || *str == L'\t') {
+    str++;
+  }
+
+  if (*str != L'\0') {
+    res = *str;
+    str++;
     while (*str == L' ' || *str == L'\t') {
-        str++;
+      str++;
     }
-
     if (*str != L'\0') {
-        res = *str;  
-        str++;
-        while (*str == L' ' || *str == L'\t') {
-            str++;
-        }
-        if (*str != L'\0') {
-            res = L'\0';
-        }
+      res = L'\0';
     }
+  }
 
-    return res;
+  return res;
 }
 
 static long long convert_str_to_count(const char *str, int *idx,
-                                               FormatParams params) {
-    long long result = 0;
+                                      FormatParams params) {
+  long long result = 0;
 
-    if (str != NULL) {
-  
-        while (*str == ' ' || *str == '\t') {
-            str++;
-        }
+  if (str != NULL) {
+    while (*str == ' ' || *str == '\t') {
+      str++;
+    }
 
-        const char *end = str;
-        while (*end != '\0') {
-            end++;
-        }
+    const char *end = str;
+    while (*end != '\0') {
+      end++;
+    }
 
-        while (end > str && (*(end - 1) == ' ' || *(end - 1) == '\t')) {
-            end--;
-        }
+    while (end > str && (*(end - 1) == ' ' || *(end - 1) == '\t')) {
+      end--;
+    }
 
-        result = (long long)(end - str);
-      return result;
-    } 
+    result = (long long)(end - str);
+    return result;
+  }
 }
-
 
 static void handle_integer(const char *str, int *idx, FormatParams params,
                            va_list args) {
@@ -314,11 +311,4 @@ int s21_sscanf(const char *str, const char *format, ...) {
 
   va_end(args);
   return error ? -1 : idx;
-}
-
-int main() {
-  int popa = 0;
-  s21_sscanf("1234", "%d", &popa);
-  printf("\n%d", popa);
-  return 0;
 }
