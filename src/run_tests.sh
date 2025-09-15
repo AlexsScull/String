@@ -3,7 +3,7 @@
 # Массив с именами тестов
 tests=("Memory" "String" "Sprintf" "Sscanf" "Extended" "Error")
 
-# Массив с командами для запуска
+# Массив с командами для запуска тестов
 commands=(
     "./obj_tests/test_memory"
     "./obj_tests/test_string"
@@ -25,6 +25,7 @@ for arg in "$@"; do
         # Нормализуем аргумент (убираем ./ и путь)
         clean_arg="${arg#./}"
         clean_arg="${clean_arg##*/}"
+        clean_arg="${clean_arg%_ww}"  # Убираем суффикс _ww если есть
         
         # Добавляем в список выбранных тестов
         selected_tests+=("$clean_arg")
@@ -42,7 +43,7 @@ for test_name in "${selected_tests[@]}"; do
     # Находим команду по имени теста
     found=false
     for i in "${!tests[@]}"; do
-        if [[ "${tests[$i]}" == "$test_name" || "$(basename "${commands[$i]}")" == "$test_name" ]]; then
+        if [[ "${tests[$i]}" == "$test_name" ]]; then
             if [ ! -f "${commands[$i]}" ]; then
                 echo "Ошибка: Тестовая программа '${commands[$i]}' не найдена"
                 all_exist=false
@@ -66,7 +67,7 @@ fi
 # Переменная для хранения общего результата
 all_success=true
 
-echo "Запуск выбранных тестов..."
+echo "Запуск тестов..."
 echo "----------------------------------------"
 
 # Временный файл для хранения вывода тестов
@@ -93,8 +94,8 @@ color_print() {
 for test_name in "${selected_tests[@]}"; do
     # Находим команду по имени теста
     for i in "${!tests[@]}"; do
-        if [[ "${tests[$i]}" == "$test_name" || "$(basename "${commands[$i]}")" == "$test_name" ]]; then
-            echo "Тестируем ${tests[$i]} функции..."
+        if [[ "${tests[$i]}" == "$test_name" ]]; then
+            echo "Тестируем ${test_name} функции..."
             echo "----------------------------------------"
             
             # Формируем команду для запуска
@@ -109,9 +110,9 @@ for test_name in "${selected_tests[@]}"; do
             
             # Проверяем результат выполнения теста
             if [ $test_result -eq 0 ]; then
-                echo -e "\e[32mТест ${tests[$i]} пройден успешно\e[0m"
+                echo -e "\e[32mТест ${test_name} пройден успешно\e[0m"
             else
-                echo -e "\e[31mТест ${tests[$i]} завершился с ошибкой\e[0m"
+                echo -e "\e[31mТест ${test_name} завершился с ошибкой\e[0m"
                 all_success=false
             fi
             

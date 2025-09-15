@@ -1,5 +1,5 @@
-#ifndef PARSE_H_
-#define PARSE_H_
+#ifndef S21_STRING_PARSER_H_
+#define S21_STRING_PARSER_H_
 
 #include <ctype.h>
 #include <limits.h>
@@ -39,6 +39,7 @@ enum SpecifierType {
 
   // Плавающая точка
   TYPE_FLOAT,       ///< %f, %e, %E, %g, %G (float/double)
+  TYPE_DOUBLE,      ///< %lf, %le, %lE, %lg, %lG (float/double)
   TYPE_LONGDOUBLE,  ///< %Lf, %Le, %LE, %Lg, %LG
 
   // Символы и строки
@@ -66,6 +67,9 @@ enum FormatChar {
 };
 
 enum ParseErrorCode {
+  PARSE_ERROR = -5,                // Критическая ошибка
+  PARSE_ERROR_END_OF_STRING = -4,  // Достигнут конец строки
+  PARSE_ERROR_INVALID_DATA = -3,   // Неверные данные
   PARSE_ERROR_END_OF_FORMAT = -2,  // Конец строки формата (критическая ошибка)
   PARSE_ERROR_INVALID_SPEC = -1,  // Некор. спецификатор (продолжение работы)
   PARSE_SUCCESS = 0,  // Успешное выполнение
@@ -79,6 +83,7 @@ typedef struct {
   bool flag_zero;       ///< '0' (zero-padding)
   bool width_type;      ///< Тип ширины
   int width_value;      ///< Значение ширины
+  bool ssc_ignore;      ///< Тип ширины
   bool precision_type;  ///< Тип точности
   int precision_value;  ///< Значение точности
   int modifier;         ///< Модификатор длины
@@ -89,21 +94,6 @@ typedef struct {
   int spec_char;  ///< Специальный символ формата
 } FormatParams;
 
-typedef struct {
-  const char symbol;
-  bool *flag;
-} FlagMapping;
-
-typedef struct {
-  const char *str;
-  int mod;
-} ModifierMapping;
-
-typedef struct {
-  char specifier;
-  void (*handler)(FormatParams *);
-} SpecifierMapping;
-
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
 
 // Константы форматирования
@@ -112,57 +102,17 @@ typedef struct {
 #define BaseHexadecimal 16  ///< Шестнадцатеричное основание
 
 // Функции инициализации
-extern FormatParams init_format_params(void);
+FormatParams s21_init_format_params(void);
 
 // Функции парсинга
-extern int parse_format_spr(const char *format, int *i, FormatParams *params,
-                            va_list args);
-extern int parse_format_ssc(const char *format, int *i, FormatParams *params);
-
-// Функции парсинга для sprintf
-static void parse_flags_spr(const char *format, int *i, FormatParams *params);
-static void parse_width_spr(const char *format, int *i, FormatParams *p,
-                            va_list args);
-static void parse_precision_spr(const char *format, int *i, FormatParams *p,
-                                va_list args);
-
-// Функции парсинга для sscanf
-static void parse_width_ssc(const char *format, int *i, FormatParams *p);
-
-// Общие функции парсинга
-static int parse_number(const char *format, int *i);
-static void parse_numeric_value_spr(const char *format, int *i, va_list args,
-                                    bool *type_flag, int *value);
-static void parse_numeric_value_ssc(const char *format, int *i, bool *type_flag,
-                                    int *value);
-static void parse_modifier(const char *format, int *idx, FormatParams *params);
-static int parse_specifier(const char *format, int *i, FormatParams *params);
-
-// Обработчики спецификаторов
-static void handle_di_specifier(FormatParams *params);
-static void handle_u_specifier(FormatParams *params);
-static void handle_o_specifier(FormatParams *params);
-static void handle_x_specifier(FormatParams *params);
-static void handle_f_specifier(FormatParams *params);
-static void handle_e_specifier(FormatParams *params);
-static void handle_g_specifier(FormatParams *params);
-static void handle_c_specifier(FormatParams *params);
-static void handle_s_specifier(FormatParams *params);
-static void handle_p_specifier(FormatParams *params);
-static void handle_percent_specifier(FormatParams *params);
-static void handle_n_specifier(FormatParams *params);
-
-// Функции установки типа
-static void set_signed_type(FormatParams *params);
-static void set_unsigned_type(FormatParams *params);
-static void set_float_type(FormatParams *params);
-static void set_n_type(FormatParams *params);
+int s21_parse_format_spr(const char *format, int *i, FormatParams *params,
+                         va_list *args);
+int s21_parse_format_ssc(const char *format, int *i, FormatParams *params);
 
 // Функции сброса лишних флагов
-void reset_flags_for_char_string(FormatParams *params);
-void reset_flags_for_integer(FormatParams *params);
-void reset_flags_for_unsigned(FormatParams *params);
-void reset_flags_for_pointer(FormatParams *params);
-void reset_flags_for_null_inf(FormatParams *params);
-
-#endif  // PARSE_H_
+void s21_reset_flags_for_char_string(FormatParams *params);
+void s21_reset_flags_for_u_integer(FormatParams *params);
+void s21_reset_flags_for_pointer(FormatParams *params);
+void s21_reset_flags_for_special(FormatParams *params);
+void s21_reset_flags_for_zero(FormatParams *params);
+#endif  // S21_STRING_PARSER_H_
